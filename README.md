@@ -15,7 +15,10 @@ Työnjako
 Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa.
 
 ## Työtavat
-Tässä kä
+ - Tee uusi issue tarvittavalle ominaisuudelle
+ - Joku tekee issuesta uuden branchin, kehittää siellä
+ - Pusketaan sitten develop-haaraan
+ - Testauksen jälkeen pusketaan main-haaraan
 
 ## Ryhmän jäsenet
  - Antton Selkänen
