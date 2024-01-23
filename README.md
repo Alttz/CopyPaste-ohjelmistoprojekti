@@ -18,3 +18,7 @@ Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on
 Tässä kä
 
 ## Ryhmän jäsenet
+ - Antton Selkänen
+ - Nikolai Ylänne
+ - Topi-Veikko Tuusa
+ - Rehwald Christoph
