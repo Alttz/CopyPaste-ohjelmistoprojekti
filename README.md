@@ -16,3 +16,5 @@ Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on
 
 ## Työtavat
 Tässä kä
+
+## Ryhmän jäsenet
