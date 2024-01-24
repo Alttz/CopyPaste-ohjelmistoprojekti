@@ -7,9 +7,7 @@ Sprintteihin jaetaan tehtävät henkilöiden osaamisen, vapaan ajan sekä halukk
 Työnjako
  - Muistiinpanot:
  - Kokouksen vetäjä:
- - adad
- - adad
- - adad
+
 
 ## Kokoukset
 Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa.
@@ -18,7 +16,8 @@ Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on
  - Tee uusi issue tarvittavalle ominaisuudelle
  - Joku tekee issuesta uuden branchin, kehittää siellä
  - Pusketaan sitten develop-haaraan
- - Testauksen jälkeen pusketaan main-haaraan
+ - Testauksen jälkeen laitetaan Pull requesti mainiin
+ - Kun koodimuutokset on tarkistettu Pull requesti hyväksytään
 
 ## Ryhmän jäsenet
  - Antton Selkänen
