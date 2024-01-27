@@ -28,9 +28,12 @@ Työjonot ovat siis keskeinen työkalu Scrum-projektien onnistuneessa hallinnass
 *Työjonojen toteutuksen suunnittelu on tiimillä vielä kesken, emmekä ole vielä päättäneet sen tarkkaa toteutustapaa.*
 ## Työnjako / Roolit
 Työnjako
- - Muistiinpanot:
- - Kokouksen vetäjä:
+ - Muistiinpanot
+ - Kokouksen vetäjä
 
+Projektin **tuoteomistajana** toimii kurssin opettaja.<br>
+**Kehittäjinä** toimivat ryhmämme jäsenet.<br>
+**Scrum-mestaria** emme ole ryhmälle määrittäneet.
 
 ## Kokoukset
 Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa.
@@ -39,8 +42,10 @@ Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on
  - Tee uusi issue tarvittavalle ominaisuudelle
  - Joku tekee issuesta uuden branchin, kehittää siellä
  - Pusketaan sitten develop-haaraan
- - Testauksen jälkeen laitetaan Pull requesti mainiin
- - Kun koodimuutokset on tarkistettu Pull requesti hyväksytään
+ - Testauksen jälkeen pusketaan main-haaraan
+
+## Miksi Scrum toimii?
+Scrum toimii, koska se tarjoaa joustavan, iteroivan lähestymistavan projektinhallintaan, korostaen tiimityötä, avoimuutta, ja jatkuvaa parantamista. Tämä mahdollistaa nopean tuotteen toimittamisen ja kyvyn sopeutua muutoksiin.
 
 ## Ryhmän jäsenet
  - Antton Selkänen
