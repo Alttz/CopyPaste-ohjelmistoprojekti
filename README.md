@@ -42,7 +42,8 @@ Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on
  - Tee uusi issue tarvittavalle ominaisuudelle
  - Joku tekee issuesta uuden branchin, kehittää siellä
  - Pusketaan sitten develop-haaraan
- - Testauksen jälkeen pusketaan main-haaraan
+ - Testauksen jälkeen laitetaan Pull requesti mainiin
+ - Kun koodimuutokset on tarkistettu Pull requesti hyväksytään
 
 ## Miksi Scrum toimii?
 Scrum toimii, koska se tarjoaa joustavan, iteroivan lähestymistavan projektinhallintaan, korostaen tiimityötä, avoimuutta, ja jatkuvaa parantamista. Tämä mahdollistaa nopean tuotteen toimittamisen ja kyvyn sopeutua muutoksiin.
@@ -51,4 +52,4 @@ Scrum toimii, koska se tarjoaa joustavan, iteroivan lähestymistavan projektinha
  - Antton Selkänen
  - Nikolai Ylänne
  - Topi-Veikko Tuusa
- - Rehwald Christoph
+ - Rehwald Christophgi
