@@ -52,4 +52,4 @@ Scrum toimii, koska se tarjoaa joustavan, iteroivan lähestymistavan projektinha
  - Antton Selkänen
  - Nikolai Ylänne
  - Topi-Veikko Tuusa
- - Rehwald Christophgi
+ - Rehwald Christoph
