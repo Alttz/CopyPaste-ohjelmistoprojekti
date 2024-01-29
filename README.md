@@ -38,14 +38,14 @@ Projektin **tuoteomistajana** toimii kurssin opettaja.<br>
 **Scrum-mestaria** emme ole ryhmälle määrittäneet.
 
 ## Kokoukset
-Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa.
+Kokouksia pyritään pitämään säännöllisesti projektin aikana. Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa. 
 
 ## Työtavat
  - Tee uusi issue tarvittavalle ominaisuudelle
  - Joku tekee issuesta uuden branchin, kehittää siellä
  - Pusketaan sitten develop-haaraan
- - Testauksen jälkeen laitetaan Pull requesti mainiin
- - Kun koodimuutokset on tarkistettu Pull requesti hyväksytään
+ - Testauksen jälkeen laitetaan Pull request mainiin
+ - Kun koodimuutokset on tarkistettu Pull request hyväksytään
 
 ## Miksi Scrum toimii?
 Scrum toimii, koska se tarjoaa joustavan, iteroivan lähestymistavan projektinhallintaan, korostaen tiimityötä, avoimuutta, ja jatkuvaa parantamista. Tämä mahdollistaa nopean tuotteen toimittamisen ja kyvyn sopeutua muutoksiin.
