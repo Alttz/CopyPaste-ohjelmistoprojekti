@@ -5,8 +5,10 @@ Sprintteihin jaetaan tehtävät henkilöiden osaamisen, vapaan ajan sekä halukk
 
 ## Työnjako / Roolit
 Työnjako
- - Muistiinpanot:
- - Kokouksen vetäjä:
+ - Toimeksiantaja
+ - Scrum-master
+ - Kehitystiimi
+ 
 
 
 ## Kokoukset
