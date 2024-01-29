@@ -13,7 +13,7 @@ Tässä ohjeessa käsitellään eri työ sekä menettely tapoja scrum työmenete
 ## Sprintit
 Sprintteihin jaetaan tehtävät henkilöiden osaamisen, vapaan ajan sekä halukkuuden mukaan. Jos sprinteiltä on jäänyt joitain asioita tekemättä katsotaan aina sprintin kokouksessa mitä näille pitää tehdä, että laitetaanko vain eteenpäin seuraavalle sprintille.
 ## Työnjonot
-Työjonot ovat keskeinen osa Scrum-menetelmää ja projektinhallintaa yleisesti. Ne toimivat tehokkaana tapana hallita projektin tehtäviä ja pitää tiimi keskittyneenä tärkeisiin asioihin.<br> 
+Työjonot ovat keskeinen osa Scrum-menetelmää ja projektinhallintaa yleisesti. Ne toimivat tehokkaana tapana hallita projektin tehtäviä ja pitää tiimi keskittyneenä tärkeisiin asioihin.<br>
 Työjonot ovat osa tuotteen backlogia, ja ne auttavat organisoimaan ja priorisoimaan kaikki projektin vaatimukset, ominaisuudet ja tehtävät.<br>
 
 Scrumissa on yleensä kolme erilaista työjonoa:
@@ -28,8 +28,10 @@ Työjonot ovat siis keskeinen työkalu Scrum-projektien onnistuneessa hallinnass
 *Työjonojen toteutuksen suunnittelu on tiimillä vielä kesken, emmekä ole vielä päättäneet sen tarkkaa toteutustapaa.*
 ## Työnjako / Roolit
 Työnjako
- - Muistiinpanot
- - Kokouksen vetäjä
+ - Toimeksiantaja
+ - Scrum-master
+ - Kehitystiimi
+ 
 
 Projektin **tuoteomistajana** toimii kurssin opettaja.<br>
 **Kehittäjinä** toimivat ryhmämme jäsenet.<br>
