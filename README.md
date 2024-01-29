@@ -38,7 +38,7 @@ Projektin **tuoteomistajana** toimii kurssin opettaja.<br>
 **Scrum-mestaria** emme ole ryhmälle määrittäneet.
 
 ## Kokoukset
-Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa.
+Kokouksia pyritään pitämään säännöllisesti projektin aikana. Jokainen ottaa kokouksista joitain omia muistiinpanoja vaikka tietty henkilö on määritetty ottamaan pääasiassa kaikki muistiinpanot. Pidetään muistiinpanot varastossa Teamsissa. 
 
 ## Työtavat
  - Tee uusi issue tarvittavalle ominaisuudelle
