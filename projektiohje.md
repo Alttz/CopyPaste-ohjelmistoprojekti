@@ -1,6 +1,6 @@
 # TicketGuru
 
-Tiimi: Topi-Veikko Tuusa, Christoph Regwald, Antton Selkänen, Nikolai Ylänne
+Tiimi: Topi-Veikko Tuusa, Christoph Rehwald, Antton Selkänen, Nikolai Ylänne
 
 ## Johdanto
 
