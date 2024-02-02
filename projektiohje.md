@@ -25,9 +25,21 @@ käyttäjäryhmät.
 Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
 tietoa ja keskittyä siihen.
 
+### Mitä järjestelmän pitäisi tehdä?
+- Käyttäjille (myyjille)
+    - Tapahtumien lisääminen
+    - Lipputyyppien lisääminen ja muokkaus eri tapahtumiin
+    - Lippujen myynti tiettyyn tapahtumiin
+    - Mahdollisuus tulostaa ostetut liput
+    - Mahdollisuus tarkastaa tietyn tapahtuman myyntituloksia
+    - Mahdollisuus tulostaa tapahtuman myyntitulokset
+- Ylläpidolle
+    - Joku tapa päästä tietokantaan käsiksi?
+
+
 ## Käyttöliittymä
 
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
+Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
 
 Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
