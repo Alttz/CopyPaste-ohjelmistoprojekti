@@ -14,9 +14,14 @@ public class TicketController {
 	private EventRepository repository;
 	
 	@RequestMapping("/eventlist")
-	public String showMainPage(Model model) {
+	public String showEventlist(Model model) {
 		model.addAttribute("events", repository.findAll());
 		return "eventlist";
+	}
+	
+	@RequestMapping("/hello")
+	public String showMainPage() {
+		return "hello";
 	}
 
 
