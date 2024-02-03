@@ -4,15 +4,12 @@ Tiimi: Topi-Veikko Tuusa, Christoph Rehwald, Antton Selkänen, Nikolai Ylänne
 
 ## Johdanto
 
-Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
-kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
-tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
+Projektin aiheena on lipunmyyntijärjestelmä lipputoimiston myyntipisteihin. Lipputoimisto tarvitsee järjestelmältä tavan lipun myyntiin, tulostamiseen sekä tarkastamiseen.
+Projektin lopputuloksena pyritään tuottamaan järjestelmä, joka toteuttaa lipputoimiston tarpeet.
 
--   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
--   Toteutus- ja toimintaympäristö lyhyesti:  
-    -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
-    -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
-    täppäri, desktop)
+Päätelaitteina toimivat lipputoimiston tietokoneet.
+
+Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä MySQLia.
 
 ## Järjestelmän määrittely
 
@@ -28,9 +25,21 @@ käyttäjäryhmät.
 Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
 tietoa ja keskittyä siihen.
 
+### Mitä järjestelmän pitäisi tehdä?
+- Käyttäjille (myyjille)
+    - Tapahtumien lisääminen
+    - Lipputyyppien lisääminen ja muokkaus eri tapahtumiin
+    - Lippujen myynti tiettyyn tapahtumiin
+    - Mahdollisuus tulostaa ostetut liput
+    - Mahdollisuus tarkastaa tietyn tapahtuman myyntituloksia
+    - Mahdollisuus tulostaa tapahtuman myyntitulokset
+- Ylläpidolle
+    - Joku tapa päästä tietokantaan käsiksi?
+
+
 ## Käyttöliittymä
 
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
+Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
 
 Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
