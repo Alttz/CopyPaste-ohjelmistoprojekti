@@ -13,9 +13,51 @@ Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä My
 
 ## Järjestelmän määrittely
 
-Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
+## Käyttäjäroolit ja tarinat
+
+###  Ylläpitäjä
+- *kuvaus:* Vastuussa lipunmyyntijärjestelmän hallinnasta ja ylläpidosta.
+- *Vaaditut toiminnot:*
+    - Tapahtuman lisääminen
+    - Käyttäjien hallinta
+    - Järjestelmän päivitys
+
+Ylläpitäjänä haluan:
+- *Lisätä tapahtumia järjestelmään, määritellä lipputyypit ja asettaa ennakkomyynnin päivämäärän, jotta asiakkaat voivat ostaa lippuja tuleviin tapahtumiin.*
+- *Hallinnoida käyttäjiä* ja lippuja
+- *Päivittää lipunmyyntijärjestelmän varmistaakseni sen optimaalisen ja katkottoman toiminnan.*
+<!-- Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
 toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
-käyttäjäryhmät.
+käyttäjäryhmät.-->
+
+###  Lipunmyyjä
+- *kuvaus:* Myy lippuja lipunmyyntipisteessä ja huolehtii tapahtumien sujuvasta etenemisestä.
+- *Vaaditut toiminnot::*
+    - Lipunmyynti myyntipisteessä
+    - Ovella myytävien lippujen hallinta
+    - Käytettyjen lippujen merkitseminen
+
+Lipunmyyjänä haluan:
+- *Myydä lippuja asiakkaille fyysisessä myyntipisteessä ja tulostaa ne, jotta asiakkaat saavat saumattoman kokemuksen.*
+- *Seurata ennakkomyynnin tilannetta, tulostaa jäljellä olevat liput ovelle myytäviksi ja helposti merkitä käytetyt liput sisäänkäynnillä.*
+
+
+###  Asiakas
+- *kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
+- *Vaaditut toiminnot:*
+    - Lipun ostaminen verkkokaupasta
+    - Tietojen tallentaminen profiiliin
+    - Aiempien ostojen tarkastelu <br/>
+
+Asiakkaana haluan:
+- *Ostaa lippuja verkkokaupasta, valita lipputyypin ja suorittaa maksutapahtuman.*
+- *Tallentaa tietoni profiiliin, jotta voin tehdä tulevia ostoksia kätevämmin.*
+- *Tarkastella aiempia ostoksiani ja saada tietoa eri tapahtumista.*
+
+
+## Käyttäjätarinat
+
+
 
 -   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
 -   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
