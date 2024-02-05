@@ -16,7 +16,7 @@ Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä My
 ## Käyttäjäroolit ja tarinat
 
 ###  Ylläpitäjä
-- *kuvaus:* Vastuussa lipunmyyntijärjestelmän hallinnasta ja ylläpidosta.
+- *Kuvaus:* Vastuussa lipunmyyntijärjestelmän hallinnasta ja ylläpidosta.
 - *Vaaditut toiminnot:*
     - Tapahtuman lisääminen
     - Käyttäjien hallinta
@@ -31,7 +31,7 @@ toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja ku
 käyttäjäryhmät.-->
 
 ###  Lipunmyyjä
-- *kuvaus:* Myy lippuja lipunmyyntipisteessä ja huolehtii tapahtumien sujuvasta etenemisestä.
+- *Kuvaus:* Myy lippuja lipunmyyntipisteessä ja huolehtii tapahtumien sujuvasta etenemisestä.
 - *Vaaditut toiminnot::*
     - Lipunmyynti myyntipisteessä
     - Ovella myytävien lippujen hallinta
@@ -43,7 +43,7 @@ Lipunmyyjänä haluan:
 
 
 ###  Asiakas
-- *kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
+- *Kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
 - *Vaaditut toiminnot:*
     - Lipun ostaminen verkkokaupasta
     - Tietojen tallentaminen profiiliin
@@ -53,21 +53,6 @@ Asiakkaana haluan:
 - *Ostaa lippuja verkkokaupasta, valita lipputyypin ja suorittaa maksutapahtuman.*
 - *Tallentaa tietoni profiiliin, jotta voin tehdä tulevia ostoksia kätevämmin.*
 - *Tarkastella aiempia ostoksiani ja saada tietoa eri tapahtumista.*
-
-
-
-
-### Mitä järjestelmän pitäisi tehdä?
-- Käyttäjille (myyjille)
-    - Tapahtumien lisääminen
-    - Lipputyyppien lisääminen ja muokkaus eri tapahtumiin
-    - Lippujen myynti tiettyyn tapahtumiin
-    - Mahdollisuus tulostaa ostetut liput
-    - Mahdollisuus tarkastaa tietyn tapahtuman myyntituloksia
-    - Mahdollisuus tulostaa tapahtuman myyntitulokset
-- Ylläpidolle
-    - Joku tapa päästä tietokantaan käsiksi?
-
 
 ## Käyttöliittymä
 
