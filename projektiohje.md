@@ -58,8 +58,7 @@ Asiakkaana haluan:
 
 Ohessa yksinkertainen kuvaus lipunmyyntijärjestelmän käyttöliittymäkaaviosta.
 
-    ![Lipunmyyntijärjestelmän käyttöliittymäkaavio](/assets/images/Use_case_model.png)
-
+<img src="assets\images\Use_case_model.png" alt="Käyttöliittymäkaavio" style="height: 600px;"/>
 
 ## Tietokanta
 
