@@ -55,17 +55,7 @@ Asiakkaana haluan:
 - *Tarkastella aiempia ostoksiani ja saada tietoa eri tapahtumista.*
 
 
-## Käyttäjätarinat
 
-
-
--   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
--   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
-    (use case diagram) tai käyttäjätarinoina.
--   Lyhyt kuvaus käyttötapauksista tai käyttäjätarinat
-
-Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
-tietoa ja keskittyä siihen.
 
 ### Mitä järjestelmän pitäisi tehdä?
 - Käyttäjille (myyjille)
