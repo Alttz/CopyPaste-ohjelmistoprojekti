@@ -1,4 +1,4 @@
-package copypaste.ticketguru.domain;
+package copypaste.ticketguru.domain.Event;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
