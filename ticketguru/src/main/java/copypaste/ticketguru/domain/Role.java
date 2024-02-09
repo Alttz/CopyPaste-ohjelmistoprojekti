@@ -37,7 +37,6 @@ public class Role {
 	}
 
 	public Role(Long role_id, String role_name, Set<AppUser> users, Set<Permission> permissions) {
-		this.role_id = role_id;
 		this.role_name = role_name;
 		this.users = users;
 		this.permissions = permissions;

@@ -10,7 +10,7 @@ public class Permission {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long permission_id;
 
     private String permission_name;
     
@@ -22,11 +22,11 @@ public class Permission {
 	}
 
 	public Long getId() {
-		return id;
+		return permission_id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.permission_id = id;
 	}
 
 	public String getPermission_name() {
@@ -39,6 +39,6 @@ public class Permission {
 
 	@Override
 	public String toString() {
-		return "Permission [id=" + id + ", permission_name=" + permission_name + "]";
+		return "Permission [id=" + permission_id + ", permission_name=" + permission_name + "]";
 	}
 }
