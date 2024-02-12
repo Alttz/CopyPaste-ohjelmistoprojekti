@@ -23,6 +23,8 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket")
     private Set<PurchaseRow> purchaseRows;
 
+	private boolean isUsed = false;
+
 	public Ticket() {
 	}
 
@@ -31,6 +33,7 @@ public class Ticket {
 		this.price = price;
 		this.event = event;
 		this.purchaseRows = purchaseRows;
+		this.isUsed = false; // No reason to create an already used ticket
 	}
 
 	public Long getId() {
@@ -55,6 +58,14 @@ public class Ticket {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public boolean getUsed() {
+		return this.isUsed;
+	}
+
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
 	}
 
 	public Event getEvent() {
