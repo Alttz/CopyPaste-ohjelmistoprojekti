@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import copypaste.ticketguru.domain.Event.Event;
-import copypaste.ticketguru.domain.Event.EventRepository;
+import copypaste.ticketguru.domain.Event;
+import copypaste.ticketguru.domain.EventRepository;
 
 @SpringBootApplication
 public class TicketguruApplication {

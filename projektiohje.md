@@ -13,10 +13,10 @@ Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä My
 
 ## Järjestelmän määrittely
 
-## Käyttäjäroolit ja tarinat
+### Käyttäjäroolit ja tarinat
 
-###  Ylläpitäjä
-- *Kuvaus:* Vastuussa lipunmyyntijärjestelmän hallinnasta ja ylläpidosta.
+####  Ylläpitäjä
+- *kuvaus:* Vastuussa lipunmyyntijärjestelmän hallinnasta ja ylläpidosta.
 - *Vaaditut toiminnot:*
     - Tapahtuman lisääminen
     - Käyttäjien hallinta
@@ -30,8 +30,8 @@ Ylläpitäjänä haluan:
 toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
 käyttäjäryhmät.-->
 
-###  Lipunmyyjä
-- *Kuvaus:* Myy lippuja lipunmyyntipisteessä ja huolehtii tapahtumien sujuvasta etenemisestä.
+####  Lipunmyyjä
+- *kuvaus:* Myy lippuja lipunmyyntipisteessä ja huolehtii tapahtumien sujuvasta etenemisestä.
 - *Vaaditut toiminnot::*
     - Lipunmyynti myyntipisteessä
     - Ovella myytävien lippujen hallinta
@@ -42,8 +42,8 @@ Lipunmyyjänä haluan:
 - *Seurata ennakkomyynnin tilannetta, tulostaa jäljellä olevat liput ovelle myytäviksi ja helposti merkitä käytetyt liput sisäänkäynnillä.*
 
 
-###  Asiakas
-- *Kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
+####  Asiakas
+- *kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
 - *Vaaditut toiminnot:*
     - Lipun ostaminen verkkokaupasta
     - Tietojen tallentaminen profiiliin
@@ -56,9 +56,9 @@ Asiakkaana haluan:
 
 ## Käyttöliittymä
 
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona.
+Ohessa yksinkertainen kuvaus lipunmyyntijärjestelmän käyttöliittymäkaaviosta.
 
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
+<img src="assets\images\Use_case_model.png" alt="Käyttöliittymäkaavio" style="height: 600px;"/>
 
 ## Tietokanta
 
@@ -70,15 +70,49 @@ Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 
-> ### _Tilit_
-> _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
+> ### app_user
+> _app_user-taulu sisältää tiedon palvelun käyttäjätileistä._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> user_id | int PK | Käyttäjätilin id
+> username | varchar(30) |  Käyttäjätilin nimimerkki
+> passwordhash | varchar(128) | Tilin salasana muunnettuna
+>
+> ### user_roles
+> _user_roles-taulu on app_user ja role-taulun välitaulu, joka mahdollistaa sen, että käyttäjällä voi olla useampi rooli ja roolilla voi olla useampia käyttäjiä._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > id | int PK | Tilin id
-> nimimerkki | varchar(30) |  Tilin nimimerkki
-> avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
-> kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
+> user_id | int FK |  Käyttäjätilin id
+> role_id | int FK | Roolin id
+>
+> ### role
+> Role-taulu sisältää eri roolit, joita käyttäjillä voi olla._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> role_id | int PK | Roolin id
+> role_name | varchar(50) |  Roolin nimi
+>
+> ### role_permissions
+> _role_permissions-taulu on role ja permission-taulun välitaulu, joka mahdollistaa sen, että roolilla voi olla useampia eri oikeuksia ja oikeuksia pystytään jakamaan useammalle eri roolille._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> id | int PK | Tilin id
+> role_id | int FK |  Roolin id
+> permission_id | int FK |  Oikeuden id
+>
+> ### permission
+> _Permission-taulu sisältää tiedot eri oikeuksista, joita eri rooleilla voi olla.
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> permission_id | int PK | Oikeuden id
+> permission_name | varchar(50) |  Oikeuden nimi
+
 
 ## Tekninen kuvaus
 
