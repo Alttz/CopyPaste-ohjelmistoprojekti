@@ -12,16 +12,20 @@ public class Event {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	private String date;
+	private String place;
+	private String city;
 	private String name;
 	private int ticketCount;
 	
 	public Event() {
 	}
 
-	public Event(String date, String name, int ticketCount) {
+	public Event(String date, String place, String city, String name, int ticketCount) {
 		super();
 		this.date = date;
+		this.place = place;
 		this.name = name;
+		this.city = city;
 		this.ticketCount = ticketCount;
 	}
 
@@ -32,6 +36,14 @@ public class Event {
 	public void setId(long id) {
 		this.id = id;
 	}
+
+	public String getPlace() {return place; }
+
+	public void setPlace(String place) {this.place = place;}
+
+	public String getCity() {return city; }
+
+	public void setCity() {this.city = city;}
 
 	public String getDate() {
 		return date;
@@ -59,6 +71,6 @@ public class Event {
 
 	@Override
 	public String toString() {
-		return "Event [id=" + id + ", date=" + date + ", name=" + name + ", ticketCount=" + ticketCount + "]";
+		return "Event [id=" + id + ", date=" + date + ", name=" + name + ", ticketCount=" + ticketCount + "] vonkale?";
 	}
 }

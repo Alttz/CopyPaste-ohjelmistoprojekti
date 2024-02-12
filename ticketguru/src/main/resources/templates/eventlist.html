@@ -12,6 +12,7 @@
 		<tbody>
 			<tr th:each = "event : ${events}">
 				<td th:text="${event.name}"></td>
+				<td th:text="${event.place}"></td>
 				<td th:text="${event.date}"></td>
 				<td th:text="${event.ticketCount}"></td>
 			</tr>

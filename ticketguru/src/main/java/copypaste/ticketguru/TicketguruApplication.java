@@ -18,13 +18,16 @@ public class TicketguruApplication {
 	@Bean
 	public CommandLineRunner demo(EventRepository repository) {
 		return (args) -> {
-			Event e1 = new Event("25.11.2024", "Apulanta", 1000);
-			Event e2 = new Event("5.6.2024", "Käärijä", 2000);
-			Event e3 = new Event("6.1.2025", "Antti Tuisku", 1500);
-			
-			repository.save(e1);
-			repository.save(e2);
-			repository.save(e3);
+
+			Event e4 = new Event("28.9.2023","Hartwallareena","Helsinki","Lordi",1000);
+			Event e5 = new Event("1.4.2024","PubiTarmo","Turku","Apulanta",1000);
+			Event e6 = new Event("18.7.2024","Kansallisteatteri","Pasila","Käärijä",1000);
+			Event e7 = new Event("5.5.2024","Koulun musaluokka","Luhanka","Antti Tuisku",1000);
+
+			repository.save(e4);
+			repository.save(e5);
+			repository.save(e6);
+			repository.save(e7);
 		};
 	}
 
