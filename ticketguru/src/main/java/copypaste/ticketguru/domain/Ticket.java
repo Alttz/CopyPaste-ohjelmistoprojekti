@@ -21,7 +21,6 @@ public class Ticket {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    // Constructors, getters, setters, and other methods
 
     public Ticket() {
     }
@@ -64,6 +63,5 @@ public class Ticket {
         this.event = event;
     }
 
-    // Other methods if needed
 }
 
