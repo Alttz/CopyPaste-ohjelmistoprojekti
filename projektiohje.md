@@ -1,3 +1,4 @@
+
 # TicketGuru
 
 Tiimi: Topi-Veikko Tuusa, Christoph Rehwald, Antton Selkänen, Nikolai Ylänne
@@ -70,6 +71,8 @@ Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 
+<img src="assets\images\tietokantarelaatiot.png" alt="Tietokantarelaatiot" style="height: 600px;"/>
+
 > ### app_user
 > _app_user-taulu sisältää tiedon palvelun käyttäjätileistä._
 >
@@ -112,7 +115,33 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > ------ | ------ | ------
 > permission_id | int PK | Oikeuden id
 > permission_name | varchar(50) |  Oikeuden nimi
+> ### tapahtumat
+> tapahtumat taulu sisältää tiedot tämän hetkisistä, tulevista sekä menneistä tapahtumista.
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> id| int PK | datan id
+> place | varchar(255) | tapahtumapaikka
+> date | varchar(255) | tapahtuman päivämäärä
+> city | varchar(255) | tapahtuman kaupunki
+> ticketCount | int(10000) | saatavilla olevien lippujen maksimi määrä
+>
+>### ostotapahtumat
+>adadadad
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> id| int PK | datan id
+> kayttaja_id | int FK | Käyttäjätilin id
+> paivamaara | varchar(255) | ostotapahtuman päivämäärä
+>
+>### ostotapahtuma_liput
+>Tämä taulu sisältää kaikki ostotapahtumaan liitetyt liput. Tämä johtuu siitä, että yhdessä ostotapahtumassa voidaan ostaa monta lippua kerrallaan
 
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> id| int PK | datan id
+> osotapahtuma_id | int FK | referenssi ostotapahtumaan
+> lippu_id | int FK | referenssi lippuun
 
 ## Tekninen kuvaus
 
