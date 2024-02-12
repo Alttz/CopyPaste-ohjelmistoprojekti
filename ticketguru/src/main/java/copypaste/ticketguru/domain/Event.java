@@ -1,25 +1,28 @@
+// Event.java
 package copypaste.ticketguru.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Event {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
 	private String date;
 	private String name;
 	private int ticketCount;
-	
+
+	@OneToMany(mappedBy = "event")
+	private List<Ticket> tickets;
+
 	public Event() {
 	}
 
 	public Event(String date, String name, int ticketCount) {
-		super();
 		this.date = date;
 		this.name = name;
 		this.ticketCount = ticketCount;
@@ -55,6 +58,14 @@ public class Event {
 
 	public void setTicketCount(int ticketCount) {
 		this.ticketCount = ticketCount;
+	}
+
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
 	}
 
 	@Override
