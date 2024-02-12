@@ -1,7 +1,5 @@
-package copypaste.ticketguru.domain.PurchaseRow;
+package copypaste.ticketguru.domain;
 
-import copypaste.ticketguru.domain.Purchase.Purchase;
-import copypaste.ticketguru.domain.Ticket.Ticket;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

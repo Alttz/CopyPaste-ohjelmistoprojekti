@@ -1,4 +1,4 @@
-package copypaste.ticketguru.domain.Purchase;
+package copypaste.ticketguru.domain;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
