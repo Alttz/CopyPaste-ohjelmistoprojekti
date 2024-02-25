@@ -56,16 +56,17 @@ public class TicketguruRestController {
 	    return ResponseEntity.ok(events);
 	}
 
-	// Since we are already passing the event in, no need to care too much about passing a separate eventid I guess?
-	@PutMapping(value = "api/events/update")
-	public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
-		if(!erepository.existsById(event.getId())) {
+	@PutMapping(value = "api/event/{id}")
+	public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
+		Optional<Event> event = erepository.findById(id);
+
+		if(!event.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		erepository.save(event);
+		updatedEvent.setId(event.get().getId());
 
-		return ResponseEntity.ok(event);
+		return ResponseEntity.ok(erepository.save(updatedEvent));
 	}
 
 

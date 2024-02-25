@@ -125,18 +125,18 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 ```
 
 ### Päivitä tapahtumaa
-- **URL**: `api/events/update`
+- **URL**: `api/event/{id}`
 - **Metodi**: `PUT`
 - **Kuvaus**: Päivittää tiettyä tapahtumaa pyynnon bodyssä sisältyvän tapahtuman IDn perusteella, jos tapahtuma on olemassa tietokannassa.
-- **Kyselyparametrit**: Pyynnön bodyssä oleva tapahtumaobjekti JSON-muodossa.
-- **Vastaus**: Jos tapahtumaa ei ole olemassa, palauttaa 404 Not Found. Jos tapahtuman muokkaus onnistuu, palauttaa 200 OK sekä muokatun objektin.
+- **Kyselyparametrit**: `id=[Long]`, missä id on tarvittavan tapahtuman ID, sekä pyynnön bodyssä oleva uusi tapahtumaobjekti JSON-muodossa.
+- **Vastaus**: Jos id:n mukaista tapahtumaa ei ole olemassa, palauttaa 404 Not Found. Jos tapahtuman muokkaus onnistuu, palauttaa 200 OK sekä muokatun objektin.
 
 **Käytön esimerkki**
 ```
-curl --location --request PUT 'http://localhost:8080/api/events/update' \
+curl --location --request PUT 'http://localhost:8080/api/event/1' \
 --header 'Content-Type: application/json' \
 --data '{
-    "id": 1,
+    "id": 0,
     "date": "1.8.2024",
     "place": "Messukeskus",
     "city": "Helsinki",
