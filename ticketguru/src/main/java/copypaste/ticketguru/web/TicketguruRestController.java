@@ -22,7 +22,7 @@ public class TicketguruRestController {
 	}
 
 	//Delete
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("api/delete/{id}")
 	public ResponseEntity<Void> deleteEvent(@PathVariable long id) {
 		if(!erepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
