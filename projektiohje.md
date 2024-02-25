@@ -109,39 +109,52 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > permission_id | int FK |  Oikeuden id
 >
 > ### permission
-> _Permission-taulu sisältää tiedot eri oikeuksista, joita eri rooleilla voi olla.
+> Permission-taulu sisältää tiedot eri oikeuksista, joita eri rooleilla voi olla.
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > permission_id | int PK | Oikeuden id
 > permission_name | varchar(50) |  Oikeuden nimi
-> ### tapahtumat
-> tapahtumat taulu sisältää tiedot tämän hetkisistä, tulevista sekä menneistä tapahtumista.
+>
+> ### event
+> Event-taulu sisältää tiedot tämän hetkisistä, tulevista sekä menneistä tapahtumista.
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id| int PK | datan id
+> id | int PK | datan id
 > place | varchar(255) | tapahtumapaikka
 > date | varchar(255) | tapahtuman päivämäärä
 > city | varchar(255) | tapahtuman kaupunki
-> ticketCount | int(10000) | saatavilla olevien lippujen maksimi määrä
+> ticketCount | int | saatavilla olevien lippujen maksimi määrä
 >
->### ostotapahtumat
->adadadad
+> ### tickets
+> Tickets-taulu sisältää tiedot lipuista, mihin tapahtumiin ne on tarkoitettu, mikä niiden lipputyyppi on, hinta ja onko kyseinen lippu jo käytetty.
+>
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id| int PK | datan id
-> kayttaja_id | int FK | Käyttäjätilin id
-> paivamaara | varchar(255) | ostotapahtuman päivämäärä
+> id | int PK | datan id
+> event_id | int FK | referenssi ostotapahtumaan
+> type | varchar(255) | lipputyyppi
+> price | double | lipun hinta
+> isUsed | boolean | Tieto onko lippu käytetty vai ei
 >
->### ostotapahtuma_liput
->Tämä taulu sisältää kaikki ostotapahtumaan liitetyt liput. Tämä johtuu siitä, että yhdessä ostotapahtumassa voidaan ostaa monta lippua kerrallaan
-
+> ### purchase
+> Purchase-taulu sisältää tiedot ostotapahtumasta, koska se on tehty ja kuka sen on tehnyt.
+>
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id| int PK | datan id
-> osotapahtuma_id | int FK | referenssi ostotapahtumaan
-> lippu_id | int FK | referenssi lippuun
+> id | int PK | datan id
+> user_id | int FK | Käyttäjätilin id
+> purchase_date | Date | ostotapahtuman päivämäärä
+>
+> ### purchase_row
+> Tämä taulu sisältää kaikki ostotapahtumaan liitetyt liput. Tämä johtuu siitä, että yhdessä ostotapahtumassa voidaan ostaa monta lippua kerrallaan
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> id | int PK | datan id
+> purchase_id | int FK | referenssi ostotapahtumaan
+> ticket_id | int FK | referenssi lippuun
 
 ## TicketGuru Tapahtuma-API Dokumentaatio
 
