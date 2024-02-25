@@ -143,6 +143,57 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > osotapahtuma_id | int FK | referenssi ostotapahtumaan
 > lippu_id | int FK | referenssi lippuun
 
+## TicketGuru Tapahtuma-API Dokumentaatio
+
+TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation hakemiseen ja selaamiseen. Tässä dokumentaatiossa kerrotaan, miten kutakin päätepistettä käytetään tapahtumien hakuun TicketGuru-järjestelmästä.
+
+### Päätepisteet
+
+#### Hae Kaikki Tapahtumat
+
+- **URL**: `/events`
+- **Metodi**: `GET`
+- **Kuvaus**: Palauttaa listan kaikista tapahtumista.
+- **Vastaus**: Lista tapahtumista JSON-muodossa.
+
+#### Hae Tapahtuma ID:n Perusteella
+
+- **URL**: `/event/{id}`
+- **Metodi**: `GET`
+- **Kuvaus**: Hakee tietyn tapahtuman sen ID:n perusteella.
+- **URL-parametrit**: `id=[Long]`, missä `id` on haettavan tapahtuman ID.
+- **Vastaus**: Yksittäinen tapahtuma JSON-muodossa. Palauttaa 404 Not Found, jos annetulla ID:llä ei löydy tapahtumaa.
+
+#### Etsi Tapahtumia Nimen Perusteella
+
+- **URL**: `/events/search/byName`
+- **Metodi**: `GET`
+- **Kuvaus**: Etsii tapahtumia, jotka sisältävät määritetyn nimen.
+- **Kyselyparametrit**: `name=[String]`, missä `name` on tapahtuman nimi (tai osa nimestä), jota haetaan.
+- **Vastaus**: Lista hakuehtoja vastaavista tapahtumista JSON-muodossa. Palauttaa 204 No Content, jos hakuehtoja vastaavia tapahtumia ei löydy.
+
+#### Etsi Tapahtumia Kaupungin Perusteella
+
+- **URL**: `/events/search/byCity`
+- **Metodi**: `GET`
+- **Kuvaus**: Etsii tapahtumia kaupungin perusteella, jossa ne sijaitsevat.
+- **Kyselyparametrit**: `city=[String]`, missä `city` on kaupunki, jossa tapahtumaa etsitään.
+- **Vastaus**: Lista hakuehtoja vastaavista tapahtumista JSON-muodossa. Palauttaa 204 No Content, jos hakuehtoja vastaavia tapahtumia ei löydy.
+
+### Käyttö
+
+Näiden päätepisteiden käyttämiseksi lähetä HTTP GET -pyyntöjä määriteltyihin URL-osoitteisiin asianmukaisilla parametreilla.
+
+### Esimerkit
+
+- **Hae Kaikki Tapahtumat**: `GET /events`
+- **Hae Tapahtuma ID:n Perusteella**: `GET /event/1`
+- **Etsi Tapahtumia Nimen Perusteella**: `GET /events/search/byName?name=Konsertti`
+- **Etsi Tapahtumia Kaupungin Perusteella**: `GET /events/search/byCity?city=Helsinki`
+
+Huomioithan, että haku päätepisteissä ei ole kirjainkoosta riippuvainen ja se löytää kaikki hakutermejä vastaavat tapahtumat.
+
+
 ## Tekninen kuvaus
 
 Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
