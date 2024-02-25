@@ -82,34 +82,16 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > username | varchar(30) |  Käyttäjätilin nimimerkki
 > passwordhash | varchar(128) | Tilin salasana muunnettuna
 >
-> ### user_roles
-> _user_roles-taulu on app_user ja role-taulun välitaulu, joka mahdollistaa sen, että käyttäjällä voi olla useampi rooli ja roolilla voi olla useampia käyttäjiä._
->
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> id | int PK | Tilin id
-> user_id | int FK |  Käyttäjätilin id
-> role_id | int FK | Roolin id
->
 > ### role
-> Role-taulu sisältää eri roolit, joita käyttäjillä voi olla._
+> _Role-taulu sisältää eri roolit, joita käyttäjillä voi olla._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > role_id | int PK | Roolin id
 > role_name | varchar(50) |  Roolin nimi
 >
-> ### role_permissions
-> _role_permissions-taulu on role ja permission-taulun välitaulu, joka mahdollistaa sen, että roolilla voi olla useampia eri oikeuksia ja oikeuksia pystytään jakamaan useammalle eri roolille._
->
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> id | int PK | Tilin id
-> role_id | int FK |  Roolin id
-> permission_id | int FK |  Oikeuden id
->
 > ### permission
-> Permission-taulu sisältää tiedot eri oikeuksista, joita eri rooleilla voi olla.
+> _Permission-taulu sisältää tiedot eri oikeuksista, joita eri rooleilla voi olla._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -117,7 +99,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > permission_name | varchar(50) |  Oikeuden nimi
 >
 > ### event
-> Event-taulu sisältää tiedot tämän hetkisistä, tulevista sekä menneistä tapahtumista.
+> _Event-taulu sisältää tiedot tämän hetkisistä, tulevista sekä menneistä tapahtumista._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -128,7 +110,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > ticketCount | int | saatavilla olevien lippujen maksimi määrä
 >
 > ### tickets
-> Tickets-taulu sisältää tiedot lipuista, mihin tapahtumiin ne on tarkoitettu, mikä niiden lipputyyppi on, hinta ja onko kyseinen lippu jo käytetty.
+> _Tickets-taulu sisältää tiedot lipuista, mihin tapahtumiin ne on tarkoitettu, mikä niiden lipputyyppi on, hinta ja onko kyseinen lippu jo käytetty._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -139,7 +121,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > isUsed | boolean | Tieto onko lippu käytetty vai ei
 >
 > ### purchase
-> Purchase-taulu sisältää tiedot ostotapahtumasta, koska se on tehty ja kuka sen on tehnyt.
+> _Purchase-taulu sisältää tiedot ostotapahtumasta, koska se on tehty ja kuka sen on tehnyt._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -148,7 +130,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > purchase_date | Date | ostotapahtuman päivämäärä
 >
 > ### purchase_row
-> Tämä taulu sisältää kaikki ostotapahtumaan liitetyt liput. Tämä johtuu siitä, että yhdessä ostotapahtumassa voidaan ostaa monta lippua kerrallaan
+> _Tämä taulu sisältää kaikki ostotapahtumaan liitetyt liput. Tämä johtuu siitä, että yhdessä ostotapahtumassa voidaan ostaa monta lippua kerrallaan._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
