@@ -19,13 +19,13 @@ public class TicketguruRestController {
 	private EventRepository erepository;
 	
 	// hae kaikki tapahtumat
-	@GetMapping(value = "/events")
+	@GetMapping(value = "/api/events")
 	public List<Event> getAllEvents() {
 		return (List<Event>) erepository.findAll();
 	}
 	
 	// hae yksi tapahtuma ID:llä
-	@GetMapping(value = "/event/{id}")
+	@GetMapping(value = "/api/event/{id}")
 	public ResponseEntity<Event> getEventById(@PathVariable Long id) {
 		Optional<Event> eventOpt = erepository.findById(id);
         if (!eventOpt.isPresent()) {
@@ -35,7 +35,7 @@ public class TicketguruRestController {
 	}
 	
 	// hae tapahtumat kaupungin mukaan
-	@GetMapping(value = "/events/search/byName")
+	@GetMapping(value = "/api/events/search/byName")
 	public ResponseEntity<List<Event>> findEventsByName(@RequestParam("name") String name) {
 	    List<Event> events = erepository.findByNameContainingIgnoreCase(name);
 	    if (events.isEmpty()) {
@@ -45,7 +45,7 @@ public class TicketguruRestController {
 	}
 	
 	// hae tapahtumat tapahtuman nimen mukaan
-	@GetMapping(value = "/events/search/byCity")
+	@GetMapping(value = "/api/events/search/byCity")
 	public ResponseEntity<List<Event>> findEventsByCity(@RequestParam("city") String city) {
 	    List<Event> events = erepository.findByCityIgnoreCase(city);
 	    if (events.isEmpty()) {

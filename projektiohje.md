@@ -151,7 +151,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 #### Hae Kaikki Tapahtumat
 
-- **URL**: `/events`
+- **URL**: `api/events`
 - **Metodi**: `GET`
 - **Kuvaus**: Palauttaa listan kaikista tapahtumista.
 - **Vastaus**: Lista tapahtumista JSON-muodossa.
