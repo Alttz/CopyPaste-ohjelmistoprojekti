@@ -156,6 +156,49 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **Kuvaus**: Palauttaa listan kaikista tapahtumista.
 - **Vastaus**: Lista tapahtumista JSON-muodossa.
 
+**Esimerkki vastaus**
+
+```json
+[
+    {
+        "id": 1,
+        "date": "28.9.2023",
+        "place": "Hartwallareena",
+        "city": "Helsinki",
+        "name": "Lordi",
+        "ticketCount": 1000,
+        "tickets": []
+    },
+    {
+        "id": 2,
+        "date": "1.4.2024",
+        "place": "PubiTarmo",
+        "city": "Turku",
+        "name": "Apulanta",
+        "ticketCount": 1000,
+        "tickets": []
+    },
+    {
+        "id": 3,
+        "date": "18.7.2024",
+        "place": "Kansallisteatteri",
+        "city": "Pasila",
+        "name": "Käärijä",
+        "ticketCount": 1000,
+        "tickets": []
+    },
+    {
+        "id": 4,
+        "date": "5.5.2024",
+        "place": "Koulun musaluokka",
+        "city": "Luhanka",
+        "name": "Antti Tuisku",
+        "ticketCount": 1000,
+        "tickets": []
+    }
+]
+```
+
 #### Hae Tapahtuma ID:n Perusteella
 
 - **URL**: `/event/{id}`
@@ -163,6 +206,20 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **Kuvaus**: Hakee tietyn tapahtuman sen ID:n perusteella.
 - **URL-parametrit**: `id=[Long]`, missä `id` on haettavan tapahtuman ID.
 - **Vastaus**: Yksittäinen tapahtuma JSON-muodossa. Palauttaa 404 Not Found, jos annetulla ID:llä ei löydy tapahtumaa.
+
+**Esimerkki vastaus**
+
+```json
+{
+    "id": 1,
+    "date": "28.9.2023",
+    "place": "Hartwallareena",
+    "city": "Helsinki",
+    "name": "Lordi",
+    "ticketCount": 1000,
+    "tickets": []
+}
+```
 
 #### Etsi Tapahtumia Nimen Perusteella
 
@@ -172,6 +229,22 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **Kyselyparametrit**: `name=[String]`, missä `name` on tapahtuman nimi (tai osa nimestä), jota haetaan.
 - **Vastaus**: Lista hakuehtoja vastaavista tapahtumista JSON-muodossa. Palauttaa 204 No Content, jos hakuehtoja vastaavia tapahtumia ei löydy.
 
+**Esimerkki vastaus**
+
+```json
+[
+    {
+        "id": 1,
+        "date": "28.9.2023",
+        "place": "Hartwallareena",
+        "city": "Helsinki",
+        "name": "Lordi",
+        "ticketCount": 1000,
+        "tickets": []
+    }
+]
+```
+
 #### Etsi Tapahtumia Kaupungin Perusteella
 
 - **URL**: `/events/search/byCity`
@@ -179,6 +252,22 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **Kuvaus**: Etsii tapahtumia kaupungin perusteella, jossa ne sijaitsevat.
 - **Kyselyparametrit**: `city=[String]`, missä `city` on kaupunki, jossa tapahtumaa etsitään.
 - **Vastaus**: Lista hakuehtoja vastaavista tapahtumista JSON-muodossa. Palauttaa 204 No Content, jos hakuehtoja vastaavia tapahtumia ei löydy.
+
+**Esimerkki vastaus**
+
+```json
+[
+    {
+        "id": 1,
+        "date": "28.9.2023",
+        "place": "Hartwallareena",
+        "city": "Helsinki",
+        "name": "Lordi",
+        "ticketCount": 1000,
+        "tickets": []
+    }
+]
+```
 
 ### Käyttö
 
