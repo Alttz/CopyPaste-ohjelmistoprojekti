@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +56,18 @@ public class TicketguruRestController {
 	    return ResponseEntity.ok(events);
 	}
 
+	@PutMapping(value = "api/event/{id}")
+	public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
+		Optional<Event> event = erepository.findById(id);
 
+		if(!event.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		updatedEvent.setId(event.get().getId());
+
+		return ResponseEntity.ok(erepository.save(updatedEvent));
+	}
 
 
 }

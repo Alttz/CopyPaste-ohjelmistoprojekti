@@ -124,9 +124,44 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 ]
 ```
 
+### Päivitä tapahtumaa
+- **URL**: `api/event/{id}`
+- **Metodi**: `PUT`
+- **Kuvaus**: Päivittää tiettyä tapahtumaa pyynnon bodyssä sisältyvän tapahtuman IDn perusteella, jos tapahtuma on olemassa tietokannassa.
+- **Kyselyparametrit**: `id=[Long]`, missä id on tarvittavan tapahtuman ID, sekä pyynnön bodyssä oleva uusi tapahtumaobjekti JSON-muodossa.
+- **Vastaus**: Jos id:n mukaista tapahtumaa ei ole olemassa, palauttaa 404 Not Found. Jos tapahtuman muokkaus onnistuu, palauttaa 200 OK sekä muokatun objektin.
+
+**Käytön esimerkki**
+```
+curl --location --request PUT 'http://localhost:8080/api/event/1' \
+--header 'Content-Type: application/json' \
+--data '{
+    "id": 0,
+    "date": "1.8.2024",
+    "place": "Messukeskus",
+    "city": "Helsinki",
+    "name": "Assembly Summer 2024",
+    "ticketCount": 0,
+    "tickets": []
+}'
+```
+
+```
+200 OK
+{
+    "id": 1,
+    "date": "1.8.2024",
+    "place": "Messukeskus",
+    "city": "Helsinki",
+    "name": "Assembly Summer 2024",
+    "ticketCount": 0,
+    "tickets": []
+}
+```
+
 ## Käyttö
 
-Näiden päätepisteiden käyttämiseksi lähetä HTTP GET -pyyntöjä määriteltyihin URL-osoitteisiin asianmukaisilla parametreilla.
+Näiden päätepisteiden käyttämiseksi lähetä dokumentaation mukaisia kysyttyjä HTTP-pyyntöjä määriteltyihin URL-osoitteisiin asianmukaisilla parametreilla.
 
 ## Esimerkit
 
