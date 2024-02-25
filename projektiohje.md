@@ -201,7 +201,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 #### Hae Tapahtuma ID:n Perusteella
 
-- **URL**: `/event/{id}`
+- **URL**: `api/event/{id}`
 - **Metodi**: `GET`
 - **Kuvaus**: Hakee tietyn tapahtuman sen ID:n perusteella.
 - **URL-parametrit**: `id=[Long]`, missä `id` on haettavan tapahtuman ID.
@@ -223,7 +223,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 #### Etsi Tapahtumia Nimen Perusteella
 
-- **URL**: `/events/search/byName`
+- **URL**: `api/events/search/byName`
 - **Metodi**: `GET`
 - **Kuvaus**: Etsii tapahtumia, jotka sisältävät määritetyn nimen.
 - **Kyselyparametrit**: `name=[String]`, missä `name` on tapahtuman nimi (tai osa nimestä), jota haetaan.
@@ -247,7 +247,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 #### Etsi Tapahtumia Kaupungin Perusteella
 
-- **URL**: `/events/search/byCity`
+- **URL**: `api/events/search/byCity`
 - **Metodi**: `GET`
 - **Kuvaus**: Etsii tapahtumia kaupungin perusteella, jossa ne sijaitsevat.
 - **Kyselyparametrit**: `city=[String]`, missä `city` on kaupunki, jossa tapahtumaa etsitään.
@@ -275,10 +275,10 @@ Näiden päätepisteiden käyttämiseksi lähetä HTTP GET -pyyntöjä määrite
 
 ### Esimerkit
 
-- **Hae Kaikki Tapahtumat**: `GET /events`
-- **Hae Tapahtuma ID:n Perusteella**: `GET /event/1`
-- **Etsi Tapahtumia Nimen Perusteella**: `GET /events/search/byName?name=Konsertti`
-- **Etsi Tapahtumia Kaupungin Perusteella**: `GET /events/search/byCity?city=Helsinki`
+- **Hae Kaikki Tapahtumat**: `GET api/events`
+- **Hae Tapahtuma ID:n Perusteella**: `GET api/event/1`
+- **Etsi Tapahtumia Nimen Perusteella**: `GET api/events/search/byName?name=Konsertti`
+- **Etsi Tapahtumia Kaupungin Perusteella**: `GET api/events/search/byCity?city=Helsinki`
 
 Huomioithan, että haku päätepisteissä ei ole kirjainkoosta riippuvainen ja se löytää kaikki hakutermejä vastaavat tapahtumat.
 
