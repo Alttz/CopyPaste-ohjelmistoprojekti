@@ -1,5 +1,6 @@
 package copypaste.ticketguru.domain;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -11,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -41,19 +43,23 @@ public class AppUser {
       name = "user_roles",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
-	
     private Set<Role> roles;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Purchase> purchases;
 
 	public AppUser() {
+		super();
 	}
 
 	public AppUser(Long user_id,
 			@NotNull(message = "Käyttäjätunnus ei saa olla tyhjä") @NotEmpty(message = "Käyttäjätunnus ei saa olla tyhjä") String username,
 			@NotNull(message = "Salasana ei saa olla tyhjä") @NotEmpty(message = "Salasana ei saa olla tyhjä") @Size(min = 4, message = "Salasanassa tulee olla vähintään 4 merkkiä") String passwordHash,
-			Set<Role> roles) {
-		this.user_id = user_id;
+			List<Purchase> purchases, Set<Role> roles) {
+		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
+		this.purchases = purchases;
 		this.roles = roles;
 	}
 
@@ -81,6 +87,14 @@ public class AppUser {
 		this.passwordHash = passwordHash;
 	}
 
+	public List<Purchase> getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(List<Purchase> purchases) {
+		this.purchases = purchases;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -91,7 +105,9 @@ public class AppUser {
 
 	@Override
 	public String toString() {
-		return "AppUser [user_id=" + user_id + ", username=" + username + ", passwordHash=" + passwordHash + ", roles="
-				+ roles + "]";
+		return "AppUser [user_id=" + user_id + ", username=" + username + ", passwordHash=" + passwordHash
+				+ ", purchases=" + purchases + ", roles=" + roles + "]";
 	}
+
+	
 }
