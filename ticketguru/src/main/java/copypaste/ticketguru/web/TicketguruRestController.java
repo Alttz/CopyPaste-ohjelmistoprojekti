@@ -4,13 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import copypaste.ticketguru.domain.Event;
 import copypaste.ticketguru.domain.EventRepository;
 
@@ -19,6 +15,8 @@ public class TicketguruRestController {
 	
 	@Autowired
 	private EventRepository erepository;
+
+
 	
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
@@ -68,6 +66,15 @@ public class TicketguruRestController {
 
 		return ResponseEntity.ok(erepository.save(updatedEvent));
 	}
+
+	// Luo uusi tapahtuma
+	@PostMapping(value = "/api/event")
+	public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
+
+		Event savedEvent = erepository.save(newEvent);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
+	}
+
 
 
 }
