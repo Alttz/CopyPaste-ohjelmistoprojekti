@@ -3,6 +3,26 @@
 TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation hakemiseen ja selaamiseen. Tässä dokumentaatiossa kerrotaan, miten kutakin päätepistettä käytetään tapahtumien hakuun TicketGuru-järjestelmästä.
 
 ## Päätepisteet
+### Lisää tapahtuma
+
+- **URL**: `api/event`
+- **Metodi**: `POST`
+- **Kuvaus**: Lisää tapahtuman.
+- **Vastaus**: 201 Created.
+
+**esimerkkisyöte**
+```json
+[
+  {
+    "date": "6.6.2024",
+    "place": "Korjaamo",
+    "city": "Helsinki",
+    "name": "Pyhimys",
+    "ticketCount": 500,
+    "tickets": []
+  }
+]
+```
 
 ### Hae Kaikki Tapahtumat
 
