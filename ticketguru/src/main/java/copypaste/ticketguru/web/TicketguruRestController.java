@@ -76,5 +76,33 @@ public class TicketguruRestController {
 	}
 
 
+	//Delete
+	@DeleteMapping("api/delete/{id}")
+	public ResponseEntity<Void> deleteEvent(@PathVariable long id) {
+		if(!erepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		Event item = erepository.findById(id).get();
+		erepository.delete(item);
+		//erepository.deleteById(id);
+		return ResponseEntity.ok().build();
+	}
+
+	/*
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteEvent(@PathVariable long id) {
+		if(!erepository.existsById(id)) {
+			return new ResponseEntity<>("HELLO",HttpStatus.NO_CONTENT);
+		}
+		//Tried using responseEntity differently to get an output.
+		if(!erepository.existsById(id)) {
+			return new ResponseEntity<>("HELLO",HttpStatus.NO_CONTENT);
+		}
+		erepository.delete(erepository.findById(id).get());
+		return new ResponseEntity<>("HELLO", HttpStatus.OK);
+	}
+	*/
+
+
 
 }
