@@ -1,3 +1,4 @@
+
 # TicketGuru Tapahtuma-API Dokumentaatio
 
 TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation hakemiseen ja selaamiseen. Tässä dokumentaatiossa kerrotaan, miten kutakin päätepistettä käytetään tapahtumien hakuun TicketGuru-järjestelmästä.
@@ -12,7 +13,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 **esimerkkisyöte**
 ```json
-[
+
   {
     "date": "6.6.2024",
     "place": "Korjaamo",
@@ -21,7 +22,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
     "ticketCount": 500,
     "tickets": []
   }
-]
+
 ```
 
 ### Hae Kaikki Tapahtumat
@@ -178,6 +179,23 @@ curl --location --request PUT 'http://localhost:8080/api/event/1' \
     "tickets": []
 }
 ```
+### Poista tapahtumia
+- **URL**: `api/event/{id}`
+- **Metodi**: `DELETE`
+- **Kuvaus**: Poista annettu resurssi palvelimelta.
+- **Vastaus**: Jos id:n mukaista tapahtumaa ei ole olemassa, palauttaa 404 Not Found. Jos tapahtuman poistaminen onnistuu, palauttaa 200 OK sekä muokatun objektin.
+
+```
+200 OK
+{
+    "date": "5.5.2024",
+    "place": "Koulun musaluokka",
+    "city": "Luhanka",
+    "name": "Antti Tuisku",
+    "ticketCount": 1000,
+}
+```
+
 
 ## Käyttö
 
