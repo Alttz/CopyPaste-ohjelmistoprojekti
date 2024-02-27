@@ -13,7 +13,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 **esimerkkisyöte**
 ```json
-[
+
   {
     "date": "6.6.2024",
     "place": "Korjaamo",
@@ -22,7 +22,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
     "ticketCount": 500,
     "tickets": []
   }
-]
+
 ```
 
 ### Hae Kaikki Tapahtumat
