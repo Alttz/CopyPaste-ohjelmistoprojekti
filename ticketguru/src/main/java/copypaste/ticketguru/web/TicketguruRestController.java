@@ -54,16 +54,14 @@ public class TicketguruRestController {
 	    return ResponseEntity.ok(events);
 	}
 
-	@PutMapping(value = "api/event/{id}")
+	@PutMapping(value = "/api/event/{id}")
 	public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
 		Optional<Event> event = erepository.findById(id);
 
 		if(!event.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-
 		updatedEvent.setId(event.get().getId());
-
 		return ResponseEntity.ok(erepository.save(updatedEvent));
 	}
 
