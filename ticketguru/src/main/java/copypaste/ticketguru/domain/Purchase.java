@@ -20,11 +20,6 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private AppUser user;
 
     private Date purchaseDate;
     
@@ -36,9 +31,8 @@ public class Purchase {
 		super();
 	}
 
-	public Purchase(AppUser user, Date purchaseDate, List<Ticket> tickets) {
+	public Purchase(Date purchaseDate, List<Ticket> tickets) {
 		super();
-		this.user = user;
 		this.purchaseDate = purchaseDate;
 		this.tickets = tickets;
 	}
@@ -49,14 +43,6 @@ public class Purchase {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public AppUser getUser() {
-		return user;
-	}
-
-	public void setUser(AppUser user) {
-		this.user = user;
 	}
 
 	public Date getPurchaseDate() {
@@ -77,7 +63,7 @@ public class Purchase {
 
 	@Override
 	public String toString() {
-		return "Purchase [id=" + id + ", user=" + user + ", purchaseDate=" + purchaseDate + ", tickets=" + tickets
+		return "Purchase [id=" + id + ", purchaseDate=" + purchaseDate + ", tickets=" + tickets
 				+ "]";
 	}
 

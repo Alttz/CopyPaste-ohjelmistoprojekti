@@ -20,7 +20,7 @@ public class UserRepositoryTest {
     public void testCreateReadDelete() {
         AppUser user = new AppUser();
         user.setUsername("testUser");
-        user.setPasswordHash("testPass");
+        user.setPassword("testPass");
         // Assuming roles are set up correctly and added to the user if needed
 
         // Create and save the user
@@ -38,12 +38,12 @@ public class UserRepositoryTest {
     public void testUniqueUsernameConstraint() {
         AppUser user1 = new AppUser();
         user1.setUsername("uniqueUser");
-        user1.setPasswordHash("pass1");
+        user1.setPassword("pass1");
         userRepository.save(user1);
 
         AppUser user2 = new AppUser();
         user2.setUsername("uniqueUser"); // Same username as user1
-        user2.setPasswordHash("pass2");
+        user2.setPassword("pass2");
 
         // This should throw an exception due to the unique constraint on the username column
         assertThrows(DataIntegrityViolationException.class, () -> {

@@ -49,14 +49,14 @@ public class TicketguruApplication {
 			trepository.save(t6);
 			trepository.save(t7);
 			
-			AppUser u1 = new AppUser("TeppoTestaaja", null, null);
-			AppUser u2 = new AppUser("Masa", null, null);
+			AppUser u1 = new AppUser("TeppoTestaaja", "salasana");
+			AppUser u2 = new AppUser("Masa", "salasana2");
 			
 			urepository.save(u1);
 			urepository.save(u2);
 			
 			List<Ticket> tickets = Arrays.asList(t4, t5);
-	        Purchase p1 = new Purchase(u1, new Date(), tickets);
+	        Purchase p1 = new Purchase(new Date(), tickets);
 
 	        prepository.save(p1);
 
@@ -67,7 +67,7 @@ public class TicketguruApplication {
 	        
 	        
 	        List<Ticket> tickets2 = Arrays.asList(t6, t7);
-	        Purchase p2 = new Purchase(u2, new Date(), tickets);
+	        Purchase p2 = new Purchase(new Date(), tickets);
 
 	        prepository.save(p2);
 
