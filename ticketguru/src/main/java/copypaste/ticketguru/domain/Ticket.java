@@ -21,7 +21,7 @@ public class Ticket {
     private Event event;
     
     @ManyToOne
-    @JoinColumn(name = "purchase_id", nullable = false)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
 	private boolean isUsed = false;

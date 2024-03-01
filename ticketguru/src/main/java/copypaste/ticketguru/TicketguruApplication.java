@@ -1,5 +1,7 @@
 package copypaste.ticketguru;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -50,7 +52,9 @@ public class TicketguruApplication {
 			
 			urepository.save(u1);
 			
-			Purchase p1 = new Purchase(u1, null, [t4]);
+            List<Ticket> tickets = Arrays.asList(t4, t5);
+			
+			Purchase p1 = new Purchase(u1, new Date(), tickets);
 					
 			prepository.save(p1);
 		};

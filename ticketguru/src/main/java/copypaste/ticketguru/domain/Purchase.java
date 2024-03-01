@@ -24,7 +24,7 @@ public class Purchase {
 
     private Date purchaseDate;
     
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "purchase")
 	private List<Ticket> tickets;
 
 	public Purchase() {
