@@ -25,7 +25,7 @@ public class TicketguruRestController {
 		return (List<Ticket>) trepository.findAll();
 	}
 
-	@PostMapping(value = "/api/purchase")
+	@PostMapping(value = "/api/purchases")
 	public ResponseEntity<Event> createPurchase(@RequestBody Event newEvent) {
 
 		Event savedEvent = erepository.save(newEvent);
