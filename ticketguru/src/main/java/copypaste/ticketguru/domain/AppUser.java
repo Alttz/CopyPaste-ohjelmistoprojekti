@@ -32,10 +32,7 @@ public class AppUser {
 	@Column(name = "username", nullable = false, unique = true)
     private String username;
 	
-	@NotNull(message = "Salasana ei saa olla tyhjä")
-    @NotEmpty(message = "Salasana ei saa olla tyhjä")
-    @Size(min = 4, message = "Salasanassa tulee olla vähintään 4 merkkiä")
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash")
     private String passwordHash;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -54,13 +51,12 @@ public class AppUser {
 
 	public AppUser(
 			@NotNull(message = "Käyttäjätunnus ei saa olla tyhjä") @NotEmpty(message = "Käyttäjätunnus ei saa olla tyhjä") String username,
-			@NotNull(message = "Salasana ei saa olla tyhjä") @NotEmpty(message = "Salasana ei saa olla tyhjä") @Size(min = 4, message = "Salasanassa tulee olla vähintään 4 merkkiä") String passwordHash,
-			List<Purchase> purchases, Set<Role> roles) {
+			String passwordHash, Set<Role> roles, List<Purchase> purchases) {
 		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
-		this.purchases = purchases;
 		this.roles = roles;
+		this.purchases = purchases;
 	}
 
 	public Long getUser_id() {
