@@ -1,5 +1,6 @@
 package copypaste.ticketguru.web;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,10 @@ public class TicketguruRestController {
 	
 	// Create a new meeting
     @PostMapping(value = "/api/purchases")
-    public Purchase createPurchase(@RequestBody Purchase purchase) {
+    public Purchase createPurchase(@RequestBody Purchase purchase,@RequestParam("id") long id) {
+		Ticket temp_ticket = trepository.findById(id).get();
+		//purchase.setTickets();
+		List<Ticket> tickets = Arrays.asList(temp_ticket);
         return prepository.save(purchase);
     }
 
