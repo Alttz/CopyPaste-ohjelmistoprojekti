@@ -3,14 +3,11 @@ package copypaste.ticketguru.web;
 import java.util.List;
 import java.util.Optional;
 
+import copypaste.ticketguru.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import copypaste.ticketguru.domain.Event;
-import copypaste.ticketguru.domain.EventRepository;
-import copypaste.ticketguru.domain.Ticket;
-import copypaste.ticketguru.domain.TicketRepository;
 
 @RestController
 public class TicketguruRestController {
@@ -19,12 +16,26 @@ public class TicketguruRestController {
 	private EventRepository erepository;
 	@Autowired
 	private TicketRepository trepository;
+	@Autowired
+	private PurchaseRepository prepository;
 
 	// hae kaikki liput
-		@GetMapping(value = "/api/tickets")
-		public List<Ticket> getAllTickets() {
-			return (List<Ticket>) trepository.findAll();
-		}
+	@GetMapping(value = "/api/tickets")
+	public List<Ticket> getAllTickets() {
+		return (List<Ticket>) trepository.findAll();
+	}
+
+	@PostMapping(value = "/api/purchase")
+	public ResponseEntity<Event> createPurchase(@RequestBody Event newEvent) {
+
+		Event savedEvent = erepository.save(newEvent);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
+	}
+
+	@GetMapping(value = "/api/purchases")
+	public List<Purchase> getAllPurchases() {
+		return (List<Purchase>) prepository.findAll();
+	}
 	
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
