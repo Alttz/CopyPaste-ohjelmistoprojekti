@@ -51,12 +51,11 @@ public class AppUser {
 
 	public AppUser(
 			@NotNull(message = "Käyttäjätunnus ei saa olla tyhjä") @NotEmpty(message = "Käyttäjätunnus ei saa olla tyhjä") String username,
-			String passwordHash, Set<Role> roles, List<Purchase> purchases) {
+			String passwordHash, Set<Role> roles) {
 		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.roles = roles;
-		this.purchases = purchases;
 	}
 
 	public Long getUser_id() {

@@ -48,7 +48,7 @@ public class TicketguruApplication {
 			trepository.save(t6);
 			trepository.save(t7);
 			
-			AppUser u1 = new AppUser("TeppoTestaaja", null, null, null);
+			AppUser u1 = new AppUser("TeppoTestaaja", null, null);
 			
 			urepository.save(u1);
 			
