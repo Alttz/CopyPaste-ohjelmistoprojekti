@@ -1,6 +1,7 @@
 package copypaste.ticketguru.domain;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
@@ -22,7 +23,20 @@ public class Purchase {
     private AppUser user;
 
     private Date purchaseDate;
+    
+    @OneToMany(mappedBy = "ticket")
+	private List<Ticket> tickets;
 
+	public Purchase() {
+		super();
+	}
+
+	public Purchase(AppUser user, Date purchaseDate, List<Ticket> tickets) {
+		super();
+		this.user = user;
+		this.purchaseDate = purchaseDate;
+		this.tickets = tickets;
+	}
 
 	public long getId() {
 		return id;
@@ -48,11 +62,21 @@ public class Purchase {
 		this.purchaseDate = purchaseDate;
 	}
 
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
 
 	@Override
 	public String toString() {
-		return "Purchase [id=" + id + ", user=" + user + ", purchaseDate=" + purchaseDate + "]";
+		return "Purchase [id=" + id + ", user=" + user + ", purchaseDate=" + purchaseDate + ", tickets=" + tickets
+				+ "]";
 	}
+
+	
 
     
 }

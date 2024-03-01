@@ -20,18 +20,21 @@ public class Ticket {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
     
-
+    @ManyToOne
+    @JoinColumn(name = "purchase_id", nullable = false)
+    private Purchase purchase;
 
 	private boolean isUsed = false;
 
 	public Ticket() {
 	}
 
-	public Ticket(String type, double price, Event event, boolean isUsed) {
+	public Ticket(String type, double price, Event event, Purchase purchase, boolean isUsed) {
 		super();
 		this.type = type;
 		this.price = price;
 		this.event = event;
+		this.purchase = purchase;
 		this.isUsed = isUsed;
 	}
 
@@ -59,14 +62,6 @@ public class Ticket {
 		this.price = price;
 	}
 
-	public boolean getUsed() {
-		return this.isUsed;
-	}
-
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
-	}
-
 	public Event getEvent() {
 		return event;
 	}
@@ -75,12 +70,31 @@ public class Ticket {
 		this.event = event;
 	}
 
+	public Purchase getPurchase() {
+		return purchase;
+	}
 
+	public void setPurchase(Purchase purchase) {
+		this.purchase = purchase;
+	}
+
+	public boolean isUsed() {
+		return isUsed;
+	}
+
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
 
 	@Override
 	public String toString() {
-		return "Ticket [id=" + id + ", type=" + type + ", price=" + price + ", event=" + event + "]";
+		return "Ticket [id=" + id + ", type=" + type + ", price=" + price + ", event=" + event + ", purchase="
+				+ purchase + ", isUsed=" + isUsed + "]";
 	}
+
+	
+
+	
 
 }
 

@@ -1,5 +1,7 @@
 package copypaste.ticketguru;
 
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import copypaste.ticketguru.domain.AppUser;
 import copypaste.ticketguru.domain.Event;
 import copypaste.ticketguru.domain.EventRepository;
+import copypaste.ticketguru.domain.Purchase;
+import copypaste.ticketguru.domain.PurchaseRepository;
 import copypaste.ticketguru.domain.Ticket;
 import copypaste.ticketguru.domain.TicketRepository;
 import copypaste.ticketguru.domain.UserRepository;
@@ -20,7 +24,7 @@ public class TicketguruApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner demo(EventRepository erepository, TicketRepository trepository, UserRepository urepository) {
+	public CommandLineRunner demo(PurchaseRepository prepository, EventRepository erepository, TicketRepository trepository, UserRepository urepository) {
 		return (args) -> {
 
 			Event e4 = new Event("28.9.2023","Hartwallareena","Helsinki","Lordi",1000);
@@ -32,10 +36,10 @@ public class TicketguruApplication {
 			erepository.save(e5);
 			erepository.save(e6);
 
-			Ticket t4 = new Ticket("Eläkeläinen", 10.00, e4, false);
-			Ticket t5 = new Ticket("Opiskelija", 10.00, e4, false);
-			Ticket t6 = new Ticket("Aikuinen", 10.00, e4, false);
-			Ticket t7 = new Ticket("Aikuinen", 10.00, e4, false);
+			Ticket t4 = new Ticket("Eläkeläinen", 10.00, e4, null, false);
+			Ticket t5 = new Ticket("Opiskelija", 10.00, e4, null, false);
+			Ticket t6 = new Ticket("Aikuinen", 10.00, e4, null, false);
+			Ticket t7 = new Ticket("Aikuinen", 10.00, e4, null, false);
 
 			trepository.save(t4);
 			trepository.save(t5);
@@ -45,6 +49,10 @@ public class TicketguruApplication {
 			AppUser u1 = new AppUser("TeppoTestaaja", null, null, null);
 			
 			urepository.save(u1);
+			
+			Purchase p1 = new Purchase(u1, null, [t4]);
+					
+			prepository.save(p1);
 		};
 	}
 

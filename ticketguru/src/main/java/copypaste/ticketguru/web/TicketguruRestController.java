@@ -25,8 +25,8 @@ public class TicketguruRestController {
 		return (List<Ticket>) trepository.findAll();
 	}
 
-	@PostMapping(value = "/api/purchases")
-	public ResponseEntity<Purchase> createPurchase(@RequestBody Purchase newPurchase) {
+	@PostMapping(value = "/api/purchasex")
+	public ResponseEntity<Purchase> createPurchasex(@RequestBody Purchase newPurchase) {
 		Purchase savedPurchase = prepository.save(newPurchase);
 		//Loop all passed tickets through
 		//Set their fk to savePurchase
@@ -38,6 +38,12 @@ public class TicketguruRestController {
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
 	}
+	
+	// Create a new meeting
+    @PostMapping(value = "/api/purchases")
+    public Purchase createPurchase(@RequestBody Purchase purchase) {
+        return prepository.save(purchase);
+    }
 
 	@GetMapping(value = "/api/purchases")
 	public List<Purchase> getAllPurchases() {
