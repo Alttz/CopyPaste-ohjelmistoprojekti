@@ -23,18 +23,7 @@ public class Purchase {
 
     private Date purchaseDate;
 
-    @OneToMany(mappedBy = "purchase")
-    private Set<PurchaseRow> purchaseRows;
-    
-	public Purchase() {
-	}
 
-	public Purchase(AppUser user, Date purchaseDate, Set<PurchaseRow> purchaseRows) {
-		this.user = user;
-		this.purchaseDate = purchaseDate;
-		this.purchaseRows = purchaseRows;
-	}
-	
 	public long getId() {
 		return id;
 	}
@@ -59,18 +48,10 @@ public class Purchase {
 		this.purchaseDate = purchaseDate;
 	}
 
-	public Set<PurchaseRow> getPurchaseRows() {
-		return purchaseRows;
-	}
-
-	public void setPurchaseRows(Set<PurchaseRow> purchaseRows) {
-		this.purchaseRows = purchaseRows;
-	}
 
 	@Override
 	public String toString() {
-		return "Purchase [id=" + id + ", user=" + user + ", purchaseDate=" + purchaseDate + ", purchaseRows="
-				+ purchaseRows + "]";
+		return "Purchase [id=" + id + ", user=" + user + ", purchaseDate=" + purchaseDate + "]";
 	}
 
     

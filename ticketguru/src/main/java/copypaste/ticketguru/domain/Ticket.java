@@ -20,8 +20,7 @@ public class Ticket {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
     
-    @OneToMany(mappedBy = "ticket")
-    private Set<PurchaseRow> purchaseRows;
+
 
 	private boolean isUsed = false;
 
@@ -76,18 +75,12 @@ public class Ticket {
 		this.event = event;
 	}
 
-	public Set<PurchaseRow> getPurchaseRows() {
-		return purchaseRows;
-	}
 
-	public void setPurchaseRows(Set<PurchaseRow> purchaseRows) {
-		this.purchaseRows = purchaseRows;
-	}
 
 	@Override
 	public String toString() {
-		return "Ticket [id=" + id + ", type=" + type + ", price=" + price + ", event=" + event + ", purchaseRows="
-				+ purchaseRows + "]";
+		return "Ticket [id=" + id + ", type=" + type + ", price=" + price + ", event=" + event + "]";
 	}
+
 }
 
