@@ -3,6 +3,8 @@ package copypaste.ticketguru.domain;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,6 +45,7 @@ public class AppUser {
     private Set<Role> roles;
 	
 	@OneToMany(mappedBy = "user")
+	@JsonManagedReference
 	private List<Purchase> purchases;
 
 	public AppUser() {
