@@ -26,10 +26,17 @@ public class TicketguruRestController {
 	}
 
 	@PostMapping(value = "/api/purchases")
-	public ResponseEntity<Event> createPurchase(@RequestBody Event newEvent) {
+	public ResponseEntity<Purchase> createPurchase(@RequestBody Purchase newPurchase) {
+		Purchase savedPurchase = prepository.save(newPurchase);
+		//Loop all passed tickets through
+		//Set their fk to savePurchase
+		//for
+			//luo jokaisen lipun
+			//lipun fk on ostotapahtuman id
 
-		Event savedEvent = erepository.save(newEvent);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
+
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
 	}
 
 	@GetMapping(value = "/api/purchases")
