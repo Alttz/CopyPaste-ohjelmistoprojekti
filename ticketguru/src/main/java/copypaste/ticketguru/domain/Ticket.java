@@ -28,12 +28,12 @@ public class Ticket {
 	public Ticket() {
 	}
 
-	public Ticket(String type, double price, Event event, Set<PurchaseRow> purchaseRows) {
+	public Ticket(String type, double price, Event event, boolean isUsed) {
+		super();
 		this.type = type;
 		this.price = price;
 		this.event = event;
-		this.purchaseRows = purchaseRows;
-		this.isUsed = false; // No reason to create an already used ticket
+		this.isUsed = isUsed;
 	}
 
 	public Long getId() {

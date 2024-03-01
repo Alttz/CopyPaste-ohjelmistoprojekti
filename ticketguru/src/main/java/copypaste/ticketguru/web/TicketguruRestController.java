@@ -9,14 +9,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import copypaste.ticketguru.domain.Event;
 import copypaste.ticketguru.domain.EventRepository;
+import copypaste.ticketguru.domain.Ticket;
+import copypaste.ticketguru.domain.TicketRepository;
 
 @RestController
 public class TicketguruRestController {
 	
 	@Autowired
 	private EventRepository erepository;
+	@Autowired
+	private TicketRepository trepository;
 
-
+	// hae kaikki liput
+		@GetMapping(value = "/api/tickets")
+		public List<Ticket> getAllTickets() {
+			return (List<Ticket>) trepository.findAll();
+		}
 	
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")

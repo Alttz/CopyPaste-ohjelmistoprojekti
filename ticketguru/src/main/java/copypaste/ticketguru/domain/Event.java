@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Event {
 
@@ -72,6 +74,7 @@ public class Event {
 		this.ticketCount = ticketCount;
 	}
 
+	@JsonIgnore
 	public List<Ticket> getTickets() {
 		return tickets;
 	}
