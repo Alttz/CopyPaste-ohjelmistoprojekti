@@ -23,7 +23,7 @@ import jakarta.validation.constraints.Size;
 public class AppUser {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", nullable = false, updatable = false)
     private Long user_id;
 	
@@ -52,7 +52,7 @@ public class AppUser {
 		super();
 	}
 
-	public AppUser(Long user_id,
+	public AppUser(
 			@NotNull(message = "Käyttäjätunnus ei saa olla tyhjä") @NotEmpty(message = "Käyttäjätunnus ei saa olla tyhjä") String username,
 			@NotNull(message = "Salasana ei saa olla tyhjä") @NotEmpty(message = "Salasana ei saa olla tyhjä") @Size(min = 4, message = "Salasanassa tulee olla vähintään 4 merkkiä") String passwordHash,
 			List<Purchase> purchases, Set<Role> roles) {
