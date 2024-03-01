@@ -2,6 +2,8 @@ package copypaste.ticketguru.domain;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +24,7 @@ public class Ticket {
     
     @ManyToOne
     @JoinColumn(name = "purchase_id")
+    @JsonBackReference
     private Purchase purchase;
 
 	private boolean isUsed = false;
@@ -37,6 +40,8 @@ public class Ticket {
 		this.purchase = purchase;
 		this.isUsed = isUsed;
 	}
+
+	
 
 	public Long getId() {
 		return id;

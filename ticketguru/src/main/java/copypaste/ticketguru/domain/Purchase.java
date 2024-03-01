@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class Purchase {
     private Date purchaseDate;
     
     @OneToMany(mappedBy = "purchase")
+    @JsonManagedReference
 	private List<Ticket> tickets;
 
 	public Purchase() {

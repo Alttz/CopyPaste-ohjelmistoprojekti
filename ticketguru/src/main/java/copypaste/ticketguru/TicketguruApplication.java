@@ -37,6 +37,7 @@ public class TicketguruApplication {
 			erepository.save(e4);
 			erepository.save(e5);
 			erepository.save(e6);
+			erepository.save(e7);
 
 			Ticket t4 = new Ticket("Eläkeläinen", 10.00, e4, null, false);
 			Ticket t5 = new Ticket("Opiskelija", 10.00, e4, null, false);
@@ -49,14 +50,31 @@ public class TicketguruApplication {
 			trepository.save(t7);
 			
 			AppUser u1 = new AppUser("TeppoTestaaja", null, null);
+			AppUser u2 = new AppUser("Masa", null, null);
 			
 			urepository.save(u1);
+			urepository.save(u2);
 			
-            List<Ticket> tickets = Arrays.asList(t4, t5);
-			
-			Purchase p1 = new Purchase(u1, new Date(), tickets);
-					
-			prepository.save(p1);
+			List<Ticket> tickets = Arrays.asList(t4, t5);
+	        Purchase p1 = new Purchase(u1, new Date(), tickets);
+
+	        prepository.save(p1);
+
+	        tickets.forEach(ticket -> {
+	            ticket.setPurchase(p1);
+	            trepository.save(ticket);
+	        });
+	        
+	        
+	        List<Ticket> tickets2 = Arrays.asList(t6, t7);
+	        Purchase p2 = new Purchase(u2, new Date(), tickets);
+
+	        prepository.save(p2);
+
+	        tickets2.forEach(ticket -> {
+	            ticket.setPurchase(p2);
+	            trepository.save(ticket);
+	        });
 		};
 	}
 
