@@ -4,8 +4,8 @@ import java.util.List;
 
 public class PurchaseRequest {
 	private Long eventId;
-    private Long userId; // Add this line to include the user ID in the request
-	private List<TicketRequest> tickets;
+    private Long userId; 
+    private List<Long> ticketTypeIds;
 
 	public Long getEventId() {
 		return eventId;
@@ -15,20 +15,22 @@ public class PurchaseRequest {
 		this.eventId = eventId;
 	}
 	
-	public Long getUserId() { // Getter for userId
+	public Long getUserId() { 
         return userId;
     }
 
-    public void setUserId(Long userId) { // Setter for userId
+    public void setUserId(Long userId) { 
         this.userId = userId;
     }
 
-	public List<TicketRequest> getTickets() {
-		return tickets;
+	public List<Long> getTicketTypeIds() {
+		return ticketTypeIds;
 	}
 
-	public void setTickets(List<TicketRequest> tickets) {
-		this.tickets = tickets;
+	public void setTicketTypeIds(List<Long> ticketTypeIds) {
+		this.ticketTypeIds = ticketTypeIds;
 	}
+
+	
 
 }

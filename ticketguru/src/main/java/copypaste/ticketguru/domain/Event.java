@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Event {
 
 	@Id
@@ -22,6 +25,9 @@ public class Event {
 	@OneToMany(mappedBy = "event")
 	private List<Ticket> tickets;
 
+	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+	private List<TicketType> ticketTypes;
+
 	public Event() {
 	}
 
@@ -34,6 +40,18 @@ public class Event {
 		this.ticketCount = ticketCount;
 	}
 
+	public Event(String date, String place, String city, String name, int ticketCount, List<Ticket> tickets,
+			List<TicketType> ticketTypes) {
+		super();
+		this.date = date;
+		this.place = place;
+		this.city = city;
+		this.name = name;
+		this.ticketCount = ticketCount;
+		this.tickets = tickets;
+		this.ticketTypes = ticketTypes;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -42,13 +60,21 @@ public class Event {
 		this.id = id;
 	}
 
-	public String getPlace() {return place; }
+	public String getPlace() {
+		return place;
+	}
 
-	public void setPlace(String place) {this.place = place;}
+	public void setPlace(String place) {
+		this.place = place;
+	}
 
-	public String getCity() { return city; }
+	public String getCity() {
+		return city;
+	}
 
-	public void setCity(String city) { this.city = city;}
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	public String getDate() {
 		return date;
@@ -82,9 +108,22 @@ public class Event {
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
+	
+	
+
+	public List<TicketType> getTicketTypes() {
+		return ticketTypes;
+	}
+
+	public void setTicketTypes(List<TicketType> ticketTypes) {
+		this.ticketTypes = ticketTypes;
+	}
 
 	@Override
 	public String toString() {
-		return "Event [id=" + id + ", date=" + date + ", name=" + name + ", place="+ place +", city="+city+", ticketCount=" + ticketCount + "]";
+		return "Event [id=" + id + ", date=" + date + ", place=" + place + ", city=" + city + ", name=" + name
+				+ ", ticketCount=" + ticketCount + ", tickets=" + tickets + ", ticketTypes=" + ticketTypes + "]";
 	}
+
+	
 }

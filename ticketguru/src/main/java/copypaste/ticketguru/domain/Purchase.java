@@ -2,9 +2,7 @@ package copypaste.ticketguru.domain;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -31,7 +29,7 @@ public class Purchase {
 	private List<Ticket> tickets;
 
 	@ManyToOne
-	@JoinColumn(name = "appuser_id") // This column will store the ID of the AppUser
+	@JoinColumn(name = "appuser_id")
 	private AppUser appUser;
 
 	public Purchase() {

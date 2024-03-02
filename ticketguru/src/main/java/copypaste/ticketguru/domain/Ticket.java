@@ -14,9 +14,9 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
-
-    private double price;
+    @ManyToOne
+    @JoinColumn(name = "ticket_type_id", nullable = false)
+    private TicketType ticketType;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
@@ -32,16 +32,13 @@ public class Ticket {
 	public Ticket() {
 	}
 
-	public Ticket(String type, double price, Event event, Purchase purchase, boolean isUsed) {
+	public Ticket(TicketType ticketType, Event event, Purchase purchase, boolean isUsed) {
 		super();
-		this.type = type;
-		this.price = price;
+		this.ticketType = ticketType;
 		this.event = event;
 		this.purchase = purchase;
 		this.isUsed = isUsed;
 	}
-
-	
 
 	public Long getId() {
 		return id;
@@ -51,20 +48,12 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
+	public TicketType getTicketType() {
+		return ticketType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
+	public void setTicketType(TicketType ticketType) {
+		this.ticketType = ticketType;
 	}
 
 	public Event getEvent() {
@@ -93,13 +82,8 @@ public class Ticket {
 
 	@Override
 	public String toString() {
-		return "Ticket [id=" + id + ", type=" + type + ", price=" + price + ", event=" + event + ", purchase="
-				+ purchase + ", isUsed=" + isUsed + "]";
+		return "Ticket [id=" + id + ", ticketType=" + ticketType + ", event=" + event + ", purchase=" + purchase
+				+ ", isUsed=" + isUsed + "]";
 	}
-
-	
-
-	
-
 }
 
