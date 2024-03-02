@@ -23,6 +23,8 @@ public class TicketguruRestController {
 	private TicketRepository trepository;
 	@Autowired
 	private PurchaseRepository prepository;
+	@Autowired
+	private UserRepository urepository;
 
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
@@ -116,46 +118,53 @@ public class TicketguruRestController {
 	// Luo ostotapahtuma ja liput samassa kutsussa
 	@PostMapping("/api/purchaseswithtickets")
 	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
-	    // Etsitään tapahtuma ID:n perusteella
-	    Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
-	    if (!eventOpt.isPresent()) {
-	        return ResponseEntity.notFound().build();
-	    }
-	    Event event = eventOpt.get();
+		// Etsitään tapahtuma ID:n perusteella
+		Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
+		if (!eventOpt.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		Event event = eventOpt.get();
 
-	    // Tarkastetaan onko riittävästi lippuja myytäväksi
-	    if(event.getTicketCount() < purchaseRequest.getTickets().size()) {
-	        return ResponseEntity.badRequest().body("Not enough tickets left for the event.");
-	    }
+		// Tarkastetaan onko riittävästi lippuja myytäväksi
+		if (event.getTicketCount() < purchaseRequest.getTickets().size()) {
+			return ResponseEntity.badRequest().body("Not enough tickets left for the event.");
+		}
 
-	    // Luodaan uusi ostotapahtuma
-	    Purchase purchase = new Purchase();
-	    purchase.setPurchaseDate(new Date()); // Määritetään ostotapahtuman päivämäärä automaattisesti
+		// Fetch the AppUser (assuming the AppUser ID is part of the PurchaseRequest)
+		Optional<AppUser> userOpt = urepository.findById(purchaseRequest.getUserId());
+		if (!userOpt.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		AppUser appUser = userOpt.get();
 
-	    // Luodaan liput ostoa varten
-	    List<Ticket> tickets = purchaseRequest.getTickets().stream().map(ticketReq -> {
-	        Ticket ticket = new Ticket();
-	        ticket.setType(ticketReq.getType());
-	        ticket.setPrice(ticketReq.getPrice());
-	        ticket.setEvent(event);
-	        ticket.setPurchase(purchase); // Linkataan liput kyseiseen ostotapahtumaan
-	        ticket.setUsed(false);
-	        return ticket;
-	    }).collect(Collectors.toList());
+		// Luodaan uusi ostotapahtuma
+		Purchase purchase = new Purchase();
+		purchase.setPurchaseDate(new Date()); // Määritetään ostotapahtuman päivämäärä automaattisesti
+	    purchase.setAppUser(appUser); // Associate the purchase with the AppUser
+		
+		// Luodaan liput ostoa varten
+		List<Ticket> tickets = purchaseRequest.getTickets().stream().map(ticketReq -> {
+			Ticket ticket = new Ticket();
+			ticket.setType(ticketReq.getType());
+			ticket.setPrice(ticketReq.getPrice());
+			ticket.setEvent(event);
+			ticket.setPurchase(purchase); // Linkataan liput kyseiseen ostotapahtumaan
+			ticket.setUsed(false);
+			return ticket;
+		}).collect(Collectors.toList());
 
-	    purchase.setTickets(tickets);
+		purchase.setTickets(tickets);
 
-	    // Vähennetään tapahtuman lippumäärä
-	    event.setTicketCount(event.getTicketCount() - tickets.size());
-	    
-	    // Tallennetaan tapahtuma ja ostotapahtuma lippuineen
-	    erepository.save(event); // Tallennetaan päivitetty lippumäärä
-	    Purchase savedPurchase = prepository.save(purchase);
-	    trepository.saveAll(tickets);
+		// Vähennetään tapahtuman lippumäärä
+		event.setTicketCount(event.getTicketCount() - tickets.size());
 
-	    return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
+		// Tallennetaan tapahtuma ja ostotapahtuma lippuineen
+		erepository.save(event); // Tallennetaan päivitetty lippumäärä
+		Purchase savedPurchase = prepository.save(purchase);
+		trepository.saveAll(tickets);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
 	}
-
 
 	// Päivitä tapahtumaa
 	@PutMapping(value = "/api/events/{id}")

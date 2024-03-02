@@ -6,6 +6,8 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,16 +18,21 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Purchase {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private Date purchaseDate;
-    
-    @OneToMany(mappedBy = "purchase")
-    @JsonManagedReference
+	private Date purchaseDate;
+
+	@OneToMany(mappedBy = "purchase")
+	@JsonManagedReference
 	private List<Ticket> tickets;
+
+	@ManyToOne
+	@JoinColumn(name = "appuser_id") // This column will store the ID of the AppUser
+	private AppUser appUser;
 
 	public Purchase() {
 		super();
@@ -35,6 +42,13 @@ public class Purchase {
 		super();
 		this.purchaseDate = purchaseDate;
 		this.tickets = tickets;
+	}
+
+	public Purchase(Date purchaseDate, List<Ticket> tickets, AppUser appUser) {
+		super();
+		this.purchaseDate = purchaseDate;
+		this.tickets = tickets;
+		this.appUser = appUser;
 	}
 
 	public long getId() {
@@ -60,14 +74,17 @@ public class Purchase {
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-
-	@Override
-	public String toString() {
-		return "Purchase [id=" + id + ", purchaseDate=" + purchaseDate + ", tickets=" + tickets
-				+ "]";
-	}
-
 	
+	public AppUser getAppUser() {
+        return appUser;
+    }
 
-    
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    @Override
+    public String toString() {
+        return "Purchase [id=" + id + ", appUser=" + appUser + ", purchaseDate=" + purchaseDate + ", tickets=" + tickets + "]";
+    }
 }

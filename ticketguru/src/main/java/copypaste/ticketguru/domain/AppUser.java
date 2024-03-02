@@ -1,27 +1,40 @@
 package copypaste.ticketguru.domain;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name= "app_user")
+@Table(name = "app_user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user_id")
 public class AppUser {
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    private Long user_id;
-	
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private Long user_id;
+
 	@Column(name = "username")
-    private String username;
-	
-    @Column(name = "password")
-    private String password;
+	private String username;
+
+	@Column(name = "password")
+	@JsonIgnore
+	private String password;
+
+	@OneToMany(mappedBy = "appUser")
+	@JsonIgnore
+	private List<Purchase> purchases;
 
 	public AppUser(String username, String password) {
 		super();
@@ -57,9 +70,17 @@ public class AppUser {
 		this.password = password;
 	}
 
+	public List<Purchase> getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(List<Purchase> purchases) {
+		this.purchases = purchases;
+	}
+
 	@Override
 	public String toString() {
-		return "AppUser [user_id=" + user_id + ", username=" + username + ", password=" + password + "]";
+		return "AppUser [id=" + user_id + ", username=" + username + ", purchases=" + purchases + "]";
 	}
-	
+
 }
