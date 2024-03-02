@@ -24,73 +24,6 @@ public class TicketguruRestController {
 	@Autowired
 	private PurchaseRepository prepository;
 
-	// hae kaikki liput
-	@GetMapping(value = "/api/tickets")
-	public List<Ticket> getAllTickets() {
-		return (List<Ticket>) trepository.findAll();
-	}
-	
-	// Metodi, jolla voidaan määrittää tapahtuman ID, johon halutaan myydä tietynlaiset liput.
-	@PostMapping("/api/purchaseswithtickets")
-	public ResponseEntity<Purchase> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
-	    // Etsitään tapahtuma ID:n mukaan
-	    Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
-	    if (!eventOpt.isPresent()) {
-	        return ResponseEntity.notFound().build();
-	    }
-	    Event event = eventOpt.get();
-
-	    // Luodaan uusi ostotapahtuma
-	    Purchase purchase = new Purchase();
-	    purchase.setPurchaseDate(new Date()); // Määritetään ostoajankohta automaattisesti 
-	    
-	    // Lisätään lipuille pyynnössä määritetyt attribuutit
-	    List<Ticket> tickets = new ArrayList<>();
-	    for (TicketRequest ticketReq : purchaseRequest.getTickets()) {
-	        Ticket ticket = new Ticket();
-	        ticket.setType(ticketReq.getType());
-	        ticket.setPrice(ticketReq.getPrice());
-	        ticket.setEvent(event);
-	        ticket.setPurchase(purchase); // Linkataan lippu ostotapahtumaan
-	        ticket.setUsed(false);
-	        tickets.add(ticket);
-	    }
-	    purchase.setTickets(tickets);
-
-	    // Tallennetaan ostotapahtuma ja liput tietokantaan
-	    Purchase savedPurchase = prepository.save(purchase);
-	    trepository.saveAll(tickets); 
-
-	    return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
-	}
-
-
-	// Metodi, jolla pystytään luomaan ostot tietyille lipuille, jotka toimitetaan pyynnön body:ssä
-	@PostMapping(value = "/api/purchases")
-    public ResponseEntity<Purchase> createPurchase(@RequestBody PurchaseRequestDTO purchaseRequest) {
-        List<Ticket> tickets = ((Collection<Ticket>) trepository.findAllById(purchaseRequest.getTickets()))
-                                           .stream()
-                                           .collect(Collectors.toList());
-
-        if (tickets.size() != purchaseRequest.getTickets().size()) {
-            return ResponseEntity.badRequest().build();
-        }
-        
-        Purchase purchase = new Purchase();
-        purchase.setPurchaseDate(new Date()); // Määritetään ostoajankohta automaattisesti
-        purchase.setTickets(tickets);
-        tickets.forEach(ticket -> ticket.setPurchase(purchase)); // Linkataan lippu ostotapahtumaan
-        
-        Purchase savedPurchase = prepository.save(purchase);
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
-    }
-
-	@GetMapping(value = "/api/purchases")
-	public List<Purchase> getAllPurchases() {
-		return (List<Purchase>) prepository.findAll();
-	}
-
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
 	public List<Event> getAllEvents() {
@@ -127,6 +60,104 @@ public class TicketguruRestController {
 		return ResponseEntity.ok(events);
 	}
 
+	// hae kaikki liput
+	@GetMapping(value = "/api/tickets")
+	public List<Ticket> getAllTickets() {
+		return (List<Ticket>) trepository.findAll();
+	}
+
+	// hae kaikki ostot
+	@GetMapping(value = "/api/purchases")
+	public List<Purchase> getAllPurchases() {
+		return (List<Purchase>) prepository.findAll();
+	}
+
+	// Luo uusi tapahtuma
+	@PostMapping(value = "/api/events")
+	public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
+
+		Event savedEvent = erepository.save(newEvent);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
+	}
+
+	// Luo uusi lippu
+	@PostMapping("/api/tickets/{eventId}")
+	public ResponseEntity<Ticket> createTicket(@PathVariable Long eventId, @RequestBody Ticket ticket) {
+		return erepository.findById(eventId).map(event -> {
+			ticket.setEvent(event);
+			ticket.setPurchase(null);
+			ticket.setUsed(false);
+			Ticket savedTicket = trepository.save(ticket);
+			return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	// Luo ostotapahtuma, jossa toimitetaan tieto myytävistä lipusta ID:inä
+	/*
+	 * @PostMapping(value = "/api/purchases") public ResponseEntity<Purchase>
+	 * createPurchase(@RequestBody PurchaseRequestDTO purchaseRequest) {
+	 * List<Ticket> tickets = ((Collection<Ticket>)
+	 * trepository.findAllById(purchaseRequest.getTickets())).stream()
+	 * .collect(Collectors.toList());
+	 * 
+	 * if (tickets.size() != purchaseRequest.getTickets().size()) { return
+	 * ResponseEntity.badRequest().build(); }
+	 * 
+	 * Purchase purchase = new Purchase(); purchase.setPurchaseDate(new Date()); //
+	 * Määritetään ostoajankohta automaattisesti purchase.setTickets(tickets);
+	 * tickets.forEach(ticket -> ticket.setPurchase(purchase)); // Linkataan lippu
+	 * ostotapahtumaan
+	 * 
+	 * Purchase savedPurchase = prepository.save(purchase);
+	 * 
+	 * return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase); }
+	 */
+
+	// Luo ostotapahtuma ja liput samassa kutsussa
+	@PostMapping("/api/purchaseswithtickets")
+	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
+	    // Etsitään tapahtuma ID:n perusteella
+	    Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
+	    if (!eventOpt.isPresent()) {
+	        return ResponseEntity.notFound().build();
+	    }
+	    Event event = eventOpt.get();
+
+	    // Tarkastetaan onko riittävästi lippuja myytäväksi
+	    if(event.getTicketCount() < purchaseRequest.getTickets().size()) {
+	        return ResponseEntity.badRequest().body("Not enough tickets left for the event.");
+	    }
+
+	    // Luodaan uusi ostotapahtuma
+	    Purchase purchase = new Purchase();
+	    purchase.setPurchaseDate(new Date()); // Määritetään ostotapahtuman päivämäärä automaattisesti
+
+	    // Luodaan liput ostoa varten
+	    List<Ticket> tickets = purchaseRequest.getTickets().stream().map(ticketReq -> {
+	        Ticket ticket = new Ticket();
+	        ticket.setType(ticketReq.getType());
+	        ticket.setPrice(ticketReq.getPrice());
+	        ticket.setEvent(event);
+	        ticket.setPurchase(purchase); // Linkataan liput kyseiseen ostotapahtumaan
+	        ticket.setUsed(false);
+	        return ticket;
+	    }).collect(Collectors.toList());
+
+	    purchase.setTickets(tickets);
+
+	    // Vähennetään tapahtuman lippumäärä
+	    event.setTicketCount(event.getTicketCount() - tickets.size());
+	    
+	    // Tallennetaan tapahtuma ja ostotapahtuma lippuineen
+	    erepository.save(event); // Tallennetaan päivitetty lippumäärä
+	    Purchase savedPurchase = prepository.save(purchase);
+	    trepository.saveAll(tickets);
+
+	    return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
+	}
+
+
+	// Päivitä tapahtumaa
 	@PutMapping(value = "/api/events/{id}")
 	public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
 		Optional<Event> event = erepository.findById(id);
@@ -136,14 +167,6 @@ public class TicketguruRestController {
 		}
 		updatedEvent.setId(event.get().getId());
 		return ResponseEntity.ok(erepository.save(updatedEvent));
-	}
-
-	// Luo uusi tapahtuma
-	@PostMapping(value = "/api/events")
-	public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
-
-		Event savedEvent = erepository.save(newEvent);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
 	}
 
 	// Delete
@@ -156,16 +179,5 @@ public class TicketguruRestController {
 		erepository.delete(item);
 		return ResponseEntity.noContent().build();
 	}
-	
-	@PostMapping("/api/tickets/{eventId}")
-    public ResponseEntity<Ticket> createTicket(@PathVariable Long eventId, @RequestBody Ticket ticket) {
-        return erepository.findById(eventId).map(event -> {
-            ticket.setEvent(event);
-            ticket.setPurchase(null); 
-            ticket.setUsed(false);
-            Ticket savedTicket = trepository.save(ticket);
-            return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
-        }).orElse(ResponseEntity.notFound().build());
-    }
 
 }
