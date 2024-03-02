@@ -56,7 +56,7 @@ public class TicketguruApplication {
 			urepository.save(u2);
 			
 			List<Ticket> tickets = Arrays.asList(t4, t5);
-	        Purchase p1 = new Purchase(new Date(), tickets);
+	        Purchase p1 = new Purchase(new Date(), tickets, u1);
 
 	        prepository.save(p1);
 
@@ -67,7 +67,7 @@ public class TicketguruApplication {
 	        
 	        
 	        List<Ticket> tickets2 = Arrays.asList(t6, t7);
-	        Purchase p2 = new Purchase(new Date(), tickets);
+	        Purchase p2 = new Purchase(new Date(), tickets, u2);
 
 	        prepository.save(p2);
 
