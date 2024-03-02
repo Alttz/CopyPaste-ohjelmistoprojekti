@@ -116,7 +116,7 @@ public class TicketguruRestController {
 	 */
 
 	// Luo ostotapahtuma ja liput samassa kutsussa
-	@PostMapping("/api/purchaseswithtickets")
+	@PostMapping("/api/purchases")
 	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
 		// Etsitään tapahtuma ID:n perusteella
 		Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
