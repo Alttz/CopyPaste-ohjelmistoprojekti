@@ -90,13 +90,14 @@ public class TicketguruRestController {
 	// Lisää lipputyypit tapahtumaan
 	@PostMapping("/api/events/{eventId}/tickettypes")
 	public ResponseEntity<?> createTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
-	    Optional<Event> eventOpt = erepository.findById(eventId);
+		// Tarkastetaan löytyykö tapahtuma id:n perusteella
+		Optional<Event> eventOpt = erepository.findById(eventId);
 	    if (!eventOpt.isPresent()) {
 	        return ResponseEntity.notFound().build();
 	    }
 	    Event event = eventOpt.get();
 
-	    // Tarkista lipputyyppien nimet ja luo
+	    // Tarkista lipputyyppien nimet, luodaan ne ja määritetään mihin tapahtumaan ne kuuluu
 	    List<TicketType> ticketTypes = new ArrayList<>();
 	    for (TicketTypeRequest ttRequest : ticketTypeRequests) {
 	        if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
@@ -108,7 +109,7 @@ public class TicketguruRestController {
 
 	    List<TicketType> savedTicketTypes = (List<TicketType>) ttrepository.saveAll(ticketTypes);
 
-	    // Yksinkertaistettu vastaus
+	    // Yksinkertaistetaan JSON-vastausta
 	    List<Map<String, Object>> response = savedTicketTypes.stream().map(tt -> {
 	        Map<String, Object> ticketTypeResponse = new HashMap<>();
 	        ticketTypeResponse.put("id", tt.getId());
@@ -124,16 +125,19 @@ public class TicketguruRestController {
 	// Luodaan ostotapahtuma. Toistaiseksi ei pysty käyttämään useampaan 
 	@PostMapping("/api/purchases")
 	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
+		// Tarkastetaan löytyykö tapahtuma id:n perusteella
 	    Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
 	    if (!eventOpt.isPresent()) {
 	        return ResponseEntity.notFound().build();
 	    }
 	    Event event = eventOpt.get();
 
+	    // tarkatetaan, että lippumäärä on riittävä
 	    if (event.getTicketCount() < purchaseRequest.getTicketTypeNames().size()) {
 	        return ResponseEntity.badRequest().body("Not enough tickets available for the event.");
 	    }
 
+	    // Tarkastetaan löytyykö käyttäjä id:n perusteella
 	    Optional<AppUser> userOpt = urepository.findById(purchaseRequest.getUserId());
 	    if (!userOpt.isPresent()) {
 	        return ResponseEntity.notFound().build();
@@ -143,6 +147,7 @@ public class TicketguruRestController {
 	    // Haetaan lipputyypit tapahtuman ja nimen mukaan, jolloin pystytään toimittamaan vain lipputyyppien-nimet ostotapahtuman yhteydessä
 	    List<TicketType> ticketTypes = ttrepository.findByEventAndNameIn(event, purchaseRequest.getTicketTypeNames());
 	    
+	    // tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit tapahtuman lipputyypeistä
 	    if (ticketTypes.size() != purchaseRequest.getTicketTypeNames().size()) {
 	        return ResponseEntity.badRequest().body("One or more ticket types not found for the event.");
 	    }
@@ -153,9 +158,11 @@ public class TicketguruRestController {
 	    event.setTicketCount(event.getTicketCount() - tickets.size());
 	    erepository.save(event); 
 
+	    // tallenna ostotapahtuma
 	    Purchase purchase = new Purchase(new Date(), tickets, appUser);
 	    Purchase savedPurchase = prepository.save(purchase);
 
+	    // tallenna kullekin lipulle ostotapahtuma, johon ne kuuluu
 	    tickets.forEach(ticket -> {
 	        ticket.setPurchase(savedPurchase);
 	        trepository.save(ticket);
@@ -167,6 +174,7 @@ public class TicketguruRestController {
 	// Päivität tapahtuman lipputyyppejä
 	@PutMapping("/api/events/{eventId}/tickettypes")
 	public ResponseEntity<?> updateTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+		// Tarkastetaan löytyykö tapahtuma id:n perusteella
 	    Optional<Event> eventOpt = erepository.findById(eventId);
 	    if (!eventOpt.isPresent()) {
 	        return ResponseEntity.notFound().build();
@@ -177,7 +185,7 @@ public class TicketguruRestController {
 	    List<TicketType> existingTicketTypes = ttrepository.findByEvent(event);
 	    ttrepository.deleteAll(existingTicketTypes);
 
-	    // Tarkastetaan lipputyyppien nimet ja luodaan uudet
+	    // Tarkastetaan lipputyyppien nimet, luodaan uudet lipputyypit ja määritetään mihin tapahtumaan ne kuuluvat
 	    List<TicketType> ticketTypes = new ArrayList<>();
 	    for (TicketTypeRequest ttRequest : ticketTypeRequests) {
 	        if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
@@ -189,7 +197,7 @@ public class TicketguruRestController {
 
 	    List<TicketType> savedTicketTypes = (List<TicketType>) ttrepository.saveAll(ticketTypes);
 
-	    // Yksinkertaistettu vastasus
+	    // Yksinkertaistetaan JSON-vastausta
 	    List<Map<String, Object>> response = savedTicketTypes.stream().map(tt -> {
 	        Map<String, Object> ticketTypeResponse = new HashMap<>();
 	        ticketTypeResponse.put("id", tt.getId());
