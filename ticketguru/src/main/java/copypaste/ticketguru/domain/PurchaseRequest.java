@@ -5,31 +5,32 @@ import java.util.List;
 public class PurchaseRequest {
 	private Long eventId;
     private Long userId; 
-    private List<Long> ticketTypeIds;
+    private List<String> ticketTypeNames; 
 
-	public Long getEventId() {
-		return eventId;
-	}
+    public Long getEventId() {
+        return eventId;
+    }
 
-	public void setEventId(Long eventId) {
-		this.eventId = eventId;
-	}
-	
-	public Long getUserId() { 
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) { 
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-	public List<Long> getTicketTypeIds() {
-		return ticketTypeIds;
-	}
+    public List<String> getTicketTypeNames() {
+        return ticketTypeNames;
+    }
 
-	public void setTicketTypeIds(List<Long> ticketTypeIds) {
-		this.ticketTypeIds = ticketTypeIds;
-	}
+    public void setTicketTypeNames(List<String> ticketTypeNames) {
+        this.ticketTypeNames = ticketTypeNames;
+    }
+
 
 	
 

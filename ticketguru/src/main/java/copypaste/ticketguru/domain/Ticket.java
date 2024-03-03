@@ -3,6 +3,8 @@ package copypaste.ticketguru.domain;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 
@@ -20,6 +22,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
+    @JsonIgnore // Ignorataan vakio Getter kun JSON vastaus luodaan
     private Event event;
     
     @ManyToOne
@@ -79,6 +82,11 @@ public class Ticket {
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
 	}
+	
+	@JsonGetter("event") // palautetaan vain ID
+    public Long getEventId() {
+        return this.event != null ? this.event.getId() : null;
+    }
 
 	@Override
 	public String toString() {

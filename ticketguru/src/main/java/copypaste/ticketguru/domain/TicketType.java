@@ -1,5 +1,8 @@
 package copypaste.ticketguru.domain;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +22,7 @@ public class TicketType {
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
+    @JsonIgnore // Ignorataan vakio Getter kun JSON vastaus luodaan
     private Event event;
 
 	public TicketType() {
@@ -63,6 +67,11 @@ public class TicketType {
 	public void setEvent(Event event) {
 		this.event = event;
 	}
+	
+	@JsonGetter("event") // palautetaan vain ID
+    public Long getEventId() {
+        return this.event != null ? this.event.getId() : null;
+    }
 
 	@Override
 	public String toString() {

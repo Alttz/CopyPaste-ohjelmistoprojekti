@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ public class TicketguruRestController {
 	private UserRepository urepository;
 	@Autowired
 	private TicketTypeRepository ttrepository;
+	
+    private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija", "Varusmies", "VIP");
 
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
@@ -79,135 +82,143 @@ public class TicketguruRestController {
 
 	// Lisää tapahtuma
 	@PostMapping(value = "/api/events")
-    public ResponseEntity<Event> createEvent(@RequestBody EventRequest eventRequest) {
-        Event event = new Event();
-        event.setName(eventRequest.getName());
-        event.setDate(eventRequest.getDate());
-        event.setPlace(eventRequest.getPlace());
-        event.setCity(eventRequest.getCity());
-        event.setTicketCount(eventRequest.getTicketCount());
+	public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
+		Event savedEvent = erepository.save(newEvent);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
+	}
 
-        Event savedEvent = erepository.save(event);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
-    }
-	
 	// Lisää lipputyypit tapahtumaan
-	@PostMapping("/api/ticketTypes/{eventId}")
-	public ResponseEntity<?> createTicketTypes(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+	@PostMapping("/api/events/{eventId}/tickettypes")
+	public ResponseEntity<?> createTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
 	    Optional<Event> eventOpt = erepository.findById(eventId);
 	    if (!eventOpt.isPresent()) {
 	        return ResponseEntity.notFound().build();
 	    }
 	    Event event = eventOpt.get();
 
-	    List<Map<String, Object>> simplifiedResponse = ticketTypeRequests.stream().map(ttRequest -> {
-	        TicketType ticketType = new TicketType();
-	        ticketType.setName(ttRequest.getName());
-	        ticketType.setPrice(ttRequest.getPrice());
-	        ticketType.setEvent(event);
-	        ttrepository.save(ticketType);
-	        
-	        // Valmistele yksinkertaistettu vastaus metodin vastauksena
+	    // Tarkista lipputyyppien nimet ja luo
+	    List<TicketType> ticketTypes = new ArrayList<>();
+	    for (TicketTypeRequest ttRequest : ticketTypeRequests) {
+	        if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
+	            return ResponseEntity.badRequest().body("Ticket type " + ttRequest.getName() + " is not allowed.");
+	        }
+	        TicketType newTicketType = new TicketType(ttRequest.getName(), ttRequest.getPrice(), event);
+	        ticketTypes.add(newTicketType);
+	    }
+
+	    List<TicketType> savedTicketTypes = (List<TicketType>) ttrepository.saveAll(ticketTypes);
+
+	    // Yksinkertaistettu vastaus
+	    List<Map<String, Object>> response = savedTicketTypes.stream().map(tt -> {
 	        Map<String, Object> ticketTypeResponse = new HashMap<>();
-	        ticketTypeResponse.put("id", ticketType.getId());
-	        ticketTypeResponse.put("name", ticketType.getName());
-	        ticketTypeResponse.put("price", ticketType.getPrice());
-	        ticketTypeResponse.put("event", ticketType.getEvent().getId());
-	        
+	        ticketTypeResponse.put("id", tt.getId());
+	        ticketTypeResponse.put("name", tt.getName());
+	        ticketTypeResponse.put("price", tt.getPrice());
+	        ticketTypeResponse.put("event", tt.getEvent().getId()); // sisällytä vain ID
 	        return ticketTypeResponse;
 	    }).collect(Collectors.toList());
 
-	    return ResponseEntity.status(HttpStatus.CREATED).body(simplifiedResponse);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	// Luodaan ostotapahtuma. Toistaiseksi ei pysty käyttämään useampaan 
+	@PostMapping("/api/purchases")
+	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
+	    Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
+	    if (!eventOpt.isPresent()) {
+	        return ResponseEntity.notFound().build();
+	    }
+	    Event event = eventOpt.get();
+
+	    if (event.getTicketCount() < purchaseRequest.getTicketTypeNames().size()) {
+	        return ResponseEntity.badRequest().body("Not enough tickets available for the event.");
+	    }
+
+	    Optional<AppUser> userOpt = urepository.findById(purchaseRequest.getUserId());
+	    if (!userOpt.isPresent()) {
+	        return ResponseEntity.notFound().build();
+	    }
+	    AppUser appUser = userOpt.get();
+
+	    // Haetaan lipputyypit tapahtuman ja nimen mukaan, jolloin pystytään toimittamaan vain lipputyyppien-nimet ostotapahtuman yhteydessä
+	    List<TicketType> ticketTypes = ttrepository.findByEventAndNameIn(event, purchaseRequest.getTicketTypeNames());
+	    
+	    if (ticketTypes.size() != purchaseRequest.getTicketTypeNames().size()) {
+	        return ResponseEntity.badRequest().body("One or more ticket types not found for the event.");
+	    }
+
+	    List<Ticket> tickets = ticketTypes.stream().map(tt -> new Ticket(tt, event, null, false)).collect(Collectors.toList());
+
+	    // Päivitä tapahtuman lippumäärä
+	    event.setTicketCount(event.getTicketCount() - tickets.size());
+	    erepository.save(event); 
+
+	    Purchase purchase = new Purchase(new Date(), tickets, appUser);
+	    Purchase savedPurchase = prepository.save(purchase);
+
+	    tickets.forEach(ticket -> {
+	        ticket.setPurchase(savedPurchase);
+	        trepository.save(ticket);
+	    });
+
+	    return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
+	}
+	
+	// Päivität tapahtuman lipputyyppejä
+	@PutMapping("/api/events/{eventId}/tickettypes")
+	public ResponseEntity<?> updateTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+	    Optional<Event> eventOpt = erepository.findById(eventId);
+	    if (!eventOpt.isPresent()) {
+	        return ResponseEntity.notFound().build();
+	    }
+	    Event event = eventOpt.get();
+
+	    // Poistetaan aikaisemmat lipputyypit
+	    List<TicketType> existingTicketTypes = ttrepository.findByEvent(event);
+	    ttrepository.deleteAll(existingTicketTypes);
+
+	    // Tarkastetaan lipputyyppien nimet ja luodaan uudet
+	    List<TicketType> ticketTypes = new ArrayList<>();
+	    for (TicketTypeRequest ttRequest : ticketTypeRequests) {
+	        if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
+	            return ResponseEntity.badRequest().body("Ticket type " + ttRequest.getName() + " is not allowed.");
+	        }
+	        TicketType newTicketType = new TicketType(ttRequest.getName(), ttRequest.getPrice(), event);
+	        ticketTypes.add(newTicketType);
+	    }
+
+	    List<TicketType> savedTicketTypes = (List<TicketType>) ttrepository.saveAll(ticketTypes);
+
+	    // Yksinkertaistettu vastasus
+	    List<Map<String, Object>> response = savedTicketTypes.stream().map(tt -> {
+	        Map<String, Object> ticketTypeResponse = new HashMap<>();
+	        ticketTypeResponse.put("id", tt.getId());
+	        ticketTypeResponse.put("name", tt.getName());
+	        ticketTypeResponse.put("price", tt.getPrice());
+	        ticketTypeResponse.put("event", tt.getEvent().getId()); // Sisällytetään vastaukseen vain tapahtuman id
+	        return ticketTypeResponse;
+	    }).collect(Collectors.toList());
+
+	    return ResponseEntity.ok(response);
 	}
 
 
-	// Luo uusi lippu
-	@PostMapping("/api/tickets/{eventId}")
-	public ResponseEntity<Ticket> createTicket(@PathVariable Long eventId, @RequestBody Ticket ticket) {
-		return erepository.findById(eventId).map(event -> {
-			ticket.setEvent(event);
-			ticket.setPurchase(null);
-			ticket.setUsed(false);
-			Ticket savedTicket = trepository.save(ticket);
-			return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
+	// Päivitä tapahtumaa
+	@PutMapping(value = "/api/events/{id}")
+	public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventRequest eventRequest) {
+		return erepository.findById(id).map(event -> {
+			event.setName(eventRequest.getName());
+			event.setDate(eventRequest.getDate());
+			event.setPlace(eventRequest.getPlace());
+			event.setCity(eventRequest.getCity());
+			event.setTicketCount(eventRequest.getTicketCount());
+
+			Event updatedEvent = erepository.save(event);
+			return ResponseEntity.ok(updatedEvent);
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
-	// Luo ostotapahtuma ja liput samassa kutsussa
-	@PostMapping("/api/purchases")
-	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
-		Optional<Event> eventOpt = erepository.findById(purchaseRequest.getEventId());
-		if (!eventOpt.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		Event event = eventOpt.get();
-
-		// Tarkista tapahtuman lippumäärä
-		if (event.getTicketCount() < purchaseRequest.getTicketTypeIds().size()) {
-			return ResponseEntity.badRequest().body("Not enough tickets available for the event.");
-		}
-
-		Optional<AppUser> userOpt = urepository.findById(purchaseRequest.getUserId());
-		if (!userOpt.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		AppUser appUser = userOpt.get();
-
-		List<TicketType> ticketTypes = (List<TicketType>) ttrepository.findAllById(purchaseRequest.getTicketTypeIds());
-
-		if (ticketTypes.size() != purchaseRequest.getTicketTypeIds().size()) {
-			return ResponseEntity.badRequest().body("One or more ticket types not found.");
-		}
-
-		Purchase purchase = new Purchase(new Date(), new ArrayList<>(), appUser);
-
-		for (TicketType ticketType : ticketTypes) {
-			Ticket ticket = new Ticket(ticketType, event, purchase, false);
-			purchase.getTickets().add(ticket);
-		}
-
-		 // Päivitä lippumäärä
-	    event.setTicketCount(event.getTicketCount() - purchaseRequest.getTicketTypeIds().size());
-	    erepository.save(event);
-	    
-		Purchase savedPurchase = prepository.save(purchase);
-		trepository.saveAll(purchase.getTickets());
-
-		// Luo yksinkertaistettu vastaus metodiin
-	    List<Map<String, Object>> simplifiedTicketsResponse = savedPurchase.getTickets().stream().map(ticket -> {
-	        Map<String, Object> ticketResponse = new HashMap<>();
-	        ticketResponse.put("id", ticket.getId());
-	        ticketResponse.put("ticketType", ticket.getTicketType().getId());
-	        ticketResponse.put("event", ticket.getEvent().getId());
-	        ticketResponse.put("used", ticket.isUsed());
-	        return ticketResponse;
-	    }).collect(Collectors.toList());
-
-	    Map<String, Object> simplifiedPurchaseResponse = new HashMap<>();
-	    simplifiedPurchaseResponse.put("id", savedPurchase.getId());
-	    simplifiedPurchaseResponse.put("purchaseDate", savedPurchase.getPurchaseDate());
-	    simplifiedPurchaseResponse.put("tickets", simplifiedTicketsResponse);
-	    simplifiedPurchaseResponse.put("appUser", savedPurchase.getAppUser().getUser_id());
-
-	    return ResponseEntity.status(HttpStatus.CREATED).body(simplifiedPurchaseResponse);
-	}
-	@PutMapping(value = "/api/events/{id}")
-	public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventRequest eventRequest) {
-	    return erepository.findById(id).map(event -> {
-	        event.setName(eventRequest.getName());
-	        event.setDate(eventRequest.getDate());
-	        event.setPlace(eventRequest.getPlace());
-	        event.setCity(eventRequest.getCity());
-	        event.setTicketCount(eventRequest.getTicketCount());
-
-	        Event updatedEvent = erepository.save(event);
-	        return ResponseEntity.ok(updatedEvent);
-	    }).orElse(ResponseEntity.notFound().build());
-	}
-
-
-	// Delete
+	// Poista tapahtuma
 	@DeleteMapping("/api/delete/{id}")
 	public ResponseEntity<Void> deleteEvent(@PathVariable long id) {
 		if (!erepository.existsById(id)) {

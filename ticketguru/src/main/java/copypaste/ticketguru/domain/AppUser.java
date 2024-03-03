@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class AppUser {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long user_id;
 
@@ -30,6 +30,9 @@ public class AppUser {
 	@Column(name = "password")
 	@JsonIgnore
 	private String password;
+
+	@Column(name = "role")
+	private String role;
 
 	@OneToMany(mappedBy = "appUser")
 	@JsonIgnore
@@ -43,6 +46,13 @@ public class AppUser {
 
 	public AppUser() {
 		super();
+	}
+
+	public AppUser(String username, String password, String role) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.role = role;
 	}
 
 	public Long getUser_id() {
@@ -59,6 +69,14 @@ public class AppUser {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getPassword() {
@@ -78,8 +96,7 @@ public class AppUser {
 	}
 
 	@Override
-	public String toString() {
-		return "AppUser [id=" + user_id + ", username=" + username + ", purchases=" + purchases + "]";
-	}
-
+    public String toString() {
+        return "AppUser [id=" + user_id + ", username=" + username + ", role=" + role + ", purchases=" + purchases + "]";
+    }
 }
