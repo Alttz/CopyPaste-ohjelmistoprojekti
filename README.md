@@ -80,23 +80,8 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > ------ | ------ | ------
 > user_id | int PK | Käyttäjätilin id
 > username | varchar(30) |  Käyttäjätilin nimimerkki
-> passwordhash | varchar(128) | Tilin salasana muunnettuna
->
-> ### role
-> _Role-taulu sisältää eri roolit, joita käyttäjillä voi olla._
->
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> role_id | int PK | Roolin id
-> role_name | varchar(50) |  Roolin nimi
->
-> ### permission
-> _Permission-taulu sisältää tiedot eri oikeuksista, joita eri rooleilla voi olla._
->
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> permission_id | int PK | Oikeuden id
-> permission_name | varchar(50) |  Oikeuden nimi
+> password | varchar(128) | Tilin salasana
+> role | varchar(255) | Käyttäjän rooli
 >
 > ### event
 > _Event-taulu sisältää tiedot tämän hetkisistä, tulevista sekä menneistä tapahtumista._
@@ -107,36 +92,42 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > place | varchar(255) | tapahtumapaikka
 > date | varchar(255) | tapahtuman päivämäärä
 > city | varchar(255) | tapahtuman kaupunki
+> name | varchar(255) | tapahtuman nimi
 > ticketCount | int | saatavilla olevien lippujen maksimi määrä
+> tickets | List\<Ticket\> | Tapahtumaan liittyvien lippujen lista (Ei näytetä dokumentaatiossa)
+> ticketTypes | List\<TicketType\> | Tapahtumaan liittyvien lipputyyppien lista (Ei näytetä dokumentaatiossa)
 >
 > ### tickets
-> _Tickets-taulu sisältää tiedot lipuista, mihin tapahtumiin ne on tarkoitettu, mikä niiden lipputyyppi on, hinta ja onko kyseinen lippu jo käytetty._
+> _Tickets-taulu sisältää tiedot lipuista, mihin tapahtumiin ne on tarkoitettu, mihin ostotapahtumaan ne liittyy, mikä niiden lipputyyppi ja hinta on, ja onko kyseinen lippu jo käytetty._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id | int PK | datan id
-> event_id | int FK | referenssi ostotapahtumaan
-> type | varchar(255) | lipputyyppi
-> price | double | lipun hinta
+> id | Long PK | datan id¨
+> ticketType | TicketType | Lipputyyppi, joka määrittää lipun hinnan ja tyypin
+> event | Long | Tapahtuman ID, johon lippu liittyy
+> purchase | Purchase | Ostotapahtuma, johon lippu liittyy
 > isUsed | boolean | Tieto onko lippu käytetty vai ei
+>
+> ### TicketType
+> _Lipputyypit-taulu sisältää tiedon tapahtumiin kuuluvista lipputyypeistä ja niiden hinnoista._
+> 
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> id | Long PK | Lipputyypin yksilöllinen tunniste
+> name | String | Lipputyypin nimi
+> price | double | Lipputyypin hinta
+> event | Event | Tapahtuma, johon lipputyyppi liittyy
 >
 > ### purchase
 > _Purchase-taulu sisältää tiedot ostotapahtumasta, koska se on tehty ja kuka sen on tehnyt._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id | int PK | datan id
-> user_id | int FK | Käyttäjätilin id
-> purchase_date | Date | ostotapahtuman päivämäärä
->
-> ### purchase_row
-> _Tämä taulu sisältää kaikki ostotapahtumaan liitetyt liput. Tämä johtuu siitä, että yhdessä ostotapahtumassa voidaan ostaa monta lippua kerrallaan._
->
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> id | int PK | datan id
-> purchase_id | int FK | referenssi ostotapahtumaan
-> ticket_id | int FK | referenssi lippuun
+> id | Long PK | Ostotapahtuman yksilöllinen tunniste
+> purchaseDate | Date | Ostotapahtuman päivämäärä ja aika
+> tickets | List<Ticket> | Lista lipuista, jotka ostotapahtumaan liittyy
+> appUser | AppUser | Käyttäjä, joka suoritti ostotapahtuman
+> 
 
 ## Tekninen kuvaus
 
