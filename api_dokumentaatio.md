@@ -77,7 +77,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **URL**: `/api/purchases`
 - **Metodi**: `POST`
 - **Kuvaus**: Lisää ostotapahtuman ja luo samalla liput määritettyyn tapahtumaan. Metodi tarkastaa tapahtuman lippumäärän ja päivittää sen ostotapahtuman päätteeksi. Ostotapahtuman yhteydessä määritetään myös, mitä lipputyyppejä ollaan myymässä. Lisäksi ostotapahtumaan määritettään kuka käyttäjä on sen suorittanut.
-- **Vastaus**: 201 Created.
+- **Vastaus**: 201 Created. Mikäli tapahtumaan ei ole riittävästi lippuja jäljellä, antaa palvelu vastaukseksi "Tapahtumaan ei ole riittävästi lippuja vapaana." tai, jos jotain määritettyjä lipputyyppejä ei löydy antaa palvelu vastaukseksi "Yhtä tai useampaa määritettyä lipputyyppiä ei löydy tälle tapahtumalle.".
 
 **esimerkkisyöte**
 ```json

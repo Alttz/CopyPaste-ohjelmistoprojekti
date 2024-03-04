@@ -57,7 +57,7 @@ public class PurchaseRestController {
         return eventRepository.findById(purchaseRequest.getEventId()).map(event -> {
             // tarkatetaan, että lippumäärä on riittävä
             if (event.getTicketCount() < purchaseRequest.getTicketTypeNames().size()) {
-                return ResponseEntity.badRequest().body("Not enough tickets available for the event.");
+                return ResponseEntity.badRequest().body("Tapahtumaan ei ole riittävästi lippuja vapaana.");
             }
 
             // Tarkastetaan löytyykö käyttäjä id:n perusteella
@@ -75,7 +75,7 @@ public class PurchaseRestController {
             // tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit
             // tapahtuman lipputyypeistä
             if (ticketTypes.size() != purchaseRequest.getTicketTypeNames().size()) {
-                return ResponseEntity.badRequest().body("One or more ticket types not found for the event.");
+                return ResponseEntity.badRequest().body("Yhtä tai useampaa määritettyä lipputyyppiä ei löydy tälle tapahtumalle.");
             }
 
             List<Ticket> tickets = ticketTypes.stream().map(tt -> new Ticket(tt, event, null, false))
