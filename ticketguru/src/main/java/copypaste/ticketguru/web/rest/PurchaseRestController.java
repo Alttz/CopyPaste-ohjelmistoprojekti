@@ -25,7 +25,6 @@ import copypaste.ticketguru.domain.TicketRepository;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
 
-
 @RestController
 public class PurchaseRestController {
     // 5 different repos in one controller make me very unhappy
@@ -47,14 +46,14 @@ public class PurchaseRestController {
     UserRepository userRepository;
 
     @GetMapping(value = "/api/purchases")
-	public List<Purchase> getAllPurchases() {
-		return (List<Purchase>) purchaseRepository.findAll();
-	}
+    public List<Purchase> getAllPurchases() {
+        return (List<Purchase>) purchaseRepository.findAll();
+    }
 
-    // Luodaan ostotapahtuma. Toistaiseksi ei pysty käyttämään useampaan 
-	@PostMapping("/api/purchases")
-	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
-		// Tarkastetaan löytyykö tapahtuma id:n perusteella
+    // Luodaan ostotapahtuma. Toistaiseksi ei pysty käyttämään useampaan
+    @PostMapping("/api/purchases")
+    public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
+        // Tarkastetaan löytyykö tapahtuma id:n perusteella
         return eventRepository.findById(purchaseRequest.getEventId()).map(event -> {
             // tarkatetaan, että lippumäärä on riittävä
             if (event.getTicketCount() < purchaseRequest.getTicketTypeNames().size()) {
@@ -68,19 +67,23 @@ public class PurchaseRestController {
             }
             AppUser appUser = userOpt.get();
 
-            // Haetaan lipputyypit tapahtuman ja nimen mukaan, jolloin pystytään toimittamaan vain lipputyyppien-nimet ostotapahtuman yhteydessä
-            List<TicketType> ticketTypes = ticketTypeRepository.findByEventAndNameIn(event, purchaseRequest.getTicketTypeNames());
-            
-            // tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit tapahtuman lipputyypeistä
+            // Haetaan lipputyypit tapahtuman ja nimen mukaan, jolloin pystytään
+            // toimittamaan vain lipputyyppien-nimet ostotapahtuman yhteydessä
+            List<TicketType> ticketTypes = ticketTypeRepository.findByEventAndNameIn(event,
+                    purchaseRequest.getTicketTypeNames());
+
+            // tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit
+            // tapahtuman lipputyypeistä
             if (ticketTypes.size() != purchaseRequest.getTicketTypeNames().size()) {
                 return ResponseEntity.badRequest().body("One or more ticket types not found for the event.");
             }
 
-            List<Ticket> tickets = ticketTypes.stream().map(tt -> new Ticket(tt, event, null, false)).collect(Collectors.toList());
+            List<Ticket> tickets = ticketTypes.stream().map(tt -> new Ticket(tt, event, null, false))
+                    .collect(Collectors.toList());
 
             // Päivitä tapahtuman lippumäärä
             event.setTicketCount(event.getTicketCount() - tickets.size());
-            eventRepository.save(event); 
+            eventRepository.save(event);
 
             // tallenna ostotapahtuma
             Purchase purchase = new Purchase(new Date(), tickets, appUser);
@@ -93,6 +96,6 @@ public class PurchaseRestController {
             });
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
-        }).orElse(ResponseEntity.notFound().build());	    
-	}
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }

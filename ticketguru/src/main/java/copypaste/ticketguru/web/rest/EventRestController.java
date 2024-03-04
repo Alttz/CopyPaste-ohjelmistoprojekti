@@ -31,84 +31,87 @@ import copypaste.ticketguru.domain.TicketTypeRequest;
 public class EventRestController {
     @Autowired
     EventRepository eventRepository;
-    // Looks evil, should probably have its own file, but don't know how to make it nice in that case
+    // Looks evil, should probably have its own file, but don't know how to make it
+    // nice in that case
     @Autowired
     TicketTypeRepository ticketTypeRepository;
 
-    private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija", "Varusmies", "VIP");
+    private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
+            "Varusmies", "VIP");
 
     // hae kaikki tapahtumat
-	@GetMapping(value = "/api/events")
-	public List<Event> getAllEvents() {
-		return (List<Event>) eventRepository.findAll();
-	}
+    @GetMapping(value = "/api/events")
+    public List<Event> getAllEvents() {
+        return (List<Event>) eventRepository.findAll();
+    }
 
-	// hae yksi tapahtuma ID:llä
-	@GetMapping(value = "/api/events/{id}")
-	public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-		Optional<Event> eventOpt = eventRepository.findById(id);
-		if (!eventOpt.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(eventOpt.get());
-	}
+    // hae yksi tapahtuma ID:llä
+    @GetMapping(value = "/api/events/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
+        Optional<Event> eventOpt = eventRepository.findById(id);
+        if (!eventOpt.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(eventOpt.get());
+    }
 
-	// hae tapahtumat kaupungin mukaan
-	@GetMapping(value = "/api/events/byName")
-	public ResponseEntity<List<Event>> findEventsByName(@RequestParam("name") String name) {
-		List<Event> events = eventRepository.findByNameContainingIgnoreCase(name);
-		if (events.isEmpty()) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(events);
-	}
+    // hae tapahtumat kaupungin mukaan
+    @GetMapping(value = "/api/events/byName")
+    public ResponseEntity<List<Event>> findEventsByName(@RequestParam("name") String name) {
+        List<Event> events = eventRepository.findByNameContainingIgnoreCase(name);
+        if (events.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(events);
+    }
 
-	// hae tapahtumat tapahtuman nimen mukaan
-	@GetMapping(value = "/api/events/byCity")
-	public ResponseEntity<List<Event>> findEventsByCity(@RequestParam("city") String city) {
-		List<Event> events = eventRepository.findByCityIgnoreCase(city);
-		if (events.isEmpty()) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(events);
-	}
+    // hae tapahtumat tapahtuman nimen mukaan
+    @GetMapping(value = "/api/events/byCity")
+    public ResponseEntity<List<Event>> findEventsByCity(@RequestParam("city") String city) {
+        List<Event> events = eventRepository.findByCityIgnoreCase(city);
+        if (events.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(events);
+    }
 
     // Lisää tapahtuma
-	@PostMapping(value = "/api/events")
-	public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
-		return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(eventRepository.save(newEvent));
-	}
+    @PostMapping(value = "/api/events")
+    public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(eventRepository.save(newEvent));
+    }
 
     // Tapahtuman päivitys
     @PutMapping(value = "/api/events/{id}")
-	public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventRequest eventRequest) {
-		return eventRepository.findById(id).map(event -> {
-			event.setName(eventRequest.getName());
-			event.setDate(eventRequest.getDate());
-			event.setPlace(eventRequest.getPlace());
-			event.setCity(eventRequest.getCity());
-			event.setTicketCount(eventRequest.getTicketCount());
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventRequest eventRequest) {
+        return eventRepository.findById(id).map(event -> {
+            event.setName(eventRequest.getName());
+            event.setDate(eventRequest.getDate());
+            event.setPlace(eventRequest.getPlace());
+            event.setCity(eventRequest.getCity());
+            event.setTicketCount(eventRequest.getTicketCount());
 
-			Event updatedEvent = eventRepository.save(event);
-			return ResponseEntity.ok(updatedEvent);
-		}).orElse(ResponseEntity.notFound().build());
-	}
+            Event updatedEvent = eventRepository.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
 
     // Tapahtuman poisto
     @DeleteMapping("/api/delete/{id}")
-	public ResponseEntity<?> deleteEvent(@PathVariable long id) {
+    public ResponseEntity<?> deleteEvent(@PathVariable long id) {
         return eventRepository.findById(id).map(event -> {
             eventRepository.delete(event);
             return ResponseEntity.noContent().build();
         }).orElse(ResponseEntity.notFound().build());
-	}
+    }
 
     // Lisää lipputyypit tapahtumaan
-	@PostMapping("/api/events/{eventId}/tickettypes")
-	public ResponseEntity<?> createTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
-		// Tarkastetaan löytyykö tapahtuma id:n perusteella
+    @PostMapping("/api/events/{eventId}/tickettypes")
+    public ResponseEntity<?> createTicketTypesForEvent(@PathVariable Long eventId,
+            @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+        // Tarkastetaan löytyykö tapahtuma id:n perusteella
         return eventRepository.findById(eventId).map(event -> {
             List<TicketType> ticketTypes = new ArrayList<>();
             for (TicketTypeRequest ttRequest : ticketTypeRequests) {
@@ -133,18 +136,20 @@ public class EventRestController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }).orElse(ResponseEntity.notFound().build());
-	}
+    }
 
     // Päivität tapahtuman lipputyyppejä
-	@PutMapping("/api/events/{eventId}/tickettypes")
-	public ResponseEntity<?> updateTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+    @PutMapping("/api/events/{eventId}/tickettypes")
+    public ResponseEntity<?> updateTicketTypesForEvent(@PathVariable Long eventId,
+            @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
         // Tarkastetaan löytyykö tapahtuma id:n perusteella
         return eventRepository.findById(eventId).map(event -> {
             List<TicketType> existingTicketTypes = ticketTypeRepository.findByEvent(event);
             // Poistetaan aikaisemmat lipputyypit
             ticketTypeRepository.deleteAll(existingTicketTypes);
 
-            // Tarkastetaan lipputyyppien nimet, luodaan uudet lipputyypit ja määritetään mihin tapahtumaan ne kuuluvat
+            // Tarkastetaan lipputyyppien nimet, luodaan uudet lipputyypit ja määritetään
+            // mihin tapahtumaan ne kuuluvat
             List<TicketType> ticketTypes = new ArrayList<>();
             for (TicketTypeRequest ttRequest : ticketTypeRequests) {
                 if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
@@ -168,5 +173,5 @@ public class EventRestController {
 
             return ResponseEntity.ok(response);
         }).orElse(ResponseEntity.notFound().build());
-	}
+    }
 }

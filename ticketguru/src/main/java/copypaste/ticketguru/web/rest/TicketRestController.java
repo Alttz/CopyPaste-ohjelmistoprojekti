@@ -10,10 +10,10 @@ import copypaste.ticketguru.domain.TicketRepository;
 
 @RestController
 public class TicketRestController {
-    @Autowired
-    TicketRepository ticketRepository;
+	@Autowired
+	TicketRepository ticketRepository;
 
-    // hae kaikki liput
+	// hae kaikki liput
 	@GetMapping(value = "/api/tickets")
 	public List<Ticket> getAllTickets() {
 		return (List<Ticket>) ticketRepository.findAll();
