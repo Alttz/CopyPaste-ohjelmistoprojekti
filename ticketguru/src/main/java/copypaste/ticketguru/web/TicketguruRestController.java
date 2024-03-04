@@ -44,41 +44,6 @@ public class TicketguruRestController {
 		return (List<Purchase>) prepository.findAll();
 	}
 
-	// Lisää lipputyypit tapahtumaan
-	@PostMapping("/api/events/{eventId}/tickettypes")
-	public ResponseEntity<?> createTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
-		// Tarkastetaan löytyykö tapahtuma id:n perusteella
-		Optional<Event> eventOpt = erepository.findById(eventId);
-	    if (!eventOpt.isPresent()) {
-	        return ResponseEntity.notFound().build();
-	    }
-	    Event event = eventOpt.get();
-
-	    // Tarkista lipputyyppien nimet, luodaan ne ja määritetään mihin tapahtumaan ne kuuluu
-	    List<TicketType> ticketTypes = new ArrayList<>();
-	    for (TicketTypeRequest ttRequest : ticketTypeRequests) {
-	        if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
-	            return ResponseEntity.badRequest().body("Ticket type " + ttRequest.getName() + " is not allowed.");
-	        }
-	        TicketType newTicketType = new TicketType(ttRequest.getName(), ttRequest.getPrice(), event);
-	        ticketTypes.add(newTicketType);
-	    }
-
-	    List<TicketType> savedTicketTypes = (List<TicketType>) ttrepository.saveAll(ticketTypes);
-
-	    // Yksinkertaistetaan JSON-vastausta
-	    List<Map<String, Object>> response = savedTicketTypes.stream().map(tt -> {
-	        Map<String, Object> ticketTypeResponse = new HashMap<>();
-	        ticketTypeResponse.put("id", tt.getId());
-	        ticketTypeResponse.put("name", tt.getName());
-	        ticketTypeResponse.put("price", tt.getPrice());
-	        ticketTypeResponse.put("event", tt.getEvent().getId()); // sisällytä vain ID
-	        return ticketTypeResponse;
-	    }).collect(Collectors.toList());
-
-	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	}
-
 	// Luodaan ostotapahtuma. Toistaiseksi ei pysty käyttämään useampaan 
 	@PostMapping("/api/purchases")
 	public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
@@ -126,44 +91,5 @@ public class TicketguruRestController {
 	    });
 
 	    return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
-	}
-	
-	// Päivität tapahtuman lipputyyppejä
-	@PutMapping("/api/events/{eventId}/tickettypes")
-	public ResponseEntity<?> updateTicketTypesForEvent(@PathVariable Long eventId, @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
-		// Tarkastetaan löytyykö tapahtuma id:n perusteella
-	    Optional<Event> eventOpt = erepository.findById(eventId);
-	    if (!eventOpt.isPresent()) {
-	        return ResponseEntity.notFound().build();
-	    }
-	    Event event = eventOpt.get();
-
-	    // Poistetaan aikaisemmat lipputyypit
-	    List<TicketType> existingTicketTypes = ttrepository.findByEvent(event);
-	    ttrepository.deleteAll(existingTicketTypes);
-
-	    // Tarkastetaan lipputyyppien nimet, luodaan uudet lipputyypit ja määritetään mihin tapahtumaan ne kuuluvat
-	    List<TicketType> ticketTypes = new ArrayList<>();
-	    for (TicketTypeRequest ttRequest : ticketTypeRequests) {
-	        if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
-	            return ResponseEntity.badRequest().body("Ticket type " + ttRequest.getName() + " is not allowed.");
-	        }
-	        TicketType newTicketType = new TicketType(ttRequest.getName(), ttRequest.getPrice(), event);
-	        ticketTypes.add(newTicketType);
-	    }
-
-	    List<TicketType> savedTicketTypes = (List<TicketType>) ttrepository.saveAll(ticketTypes);
-
-	    // Yksinkertaistetaan JSON-vastausta
-	    List<Map<String, Object>> response = savedTicketTypes.stream().map(tt -> {
-	        Map<String, Object> ticketTypeResponse = new HashMap<>();
-	        ticketTypeResponse.put("id", tt.getId());
-	        ticketTypeResponse.put("name", tt.getName());
-	        ticketTypeResponse.put("price", tt.getPrice());
-	        ticketTypeResponse.put("event", tt.getEvent().getId()); // Sisällytetään vastaukseen vain tapahtuman id
-	        return ticketTypeResponse;
-	    }).collect(Collectors.toList());
-
-	    return ResponseEntity.ok(response);
 	}
 }
