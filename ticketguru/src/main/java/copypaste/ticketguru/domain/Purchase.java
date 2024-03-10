@@ -9,18 +9,20 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Purchase {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date purchaseDate;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private AppUser user;
 
 
 	@OneToMany(mappedBy = "purchase")
