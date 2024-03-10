@@ -16,14 +16,12 @@ import jakarta.validation.constraints.PastOrPresent;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Purchase {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private AppUser user;
-
+	@NotNull(message = "Purchase date is required.")
+	@PastOrPresent(message = "Purchase date must be in the past or today.")
+	private Date purchaseDate;
 
 	@OneToMany(mappedBy = "purchase")
 	@JsonManagedReference
@@ -32,7 +30,6 @@ public class Purchase {
 	@ManyToOne
 	@JoinColumn(name = "appuser_id")
 	private AppUser appUser;
-
 
 	public Purchase() {
 		super();
