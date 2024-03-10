@@ -1,8 +1,11 @@
 package copypaste.ticketguru.web.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +30,6 @@ import copypaste.ticketguru.domain.UserRepository;
 
 @RestController
 public class PurchaseRestController {
-    // 5 different repos in one controller make me very unhappy
-    // But what can you do
 
     @Autowired
     PurchaseRepository purchaseRepository;
@@ -55,9 +56,16 @@ public class PurchaseRestController {
     public ResponseEntity<?> createPurchaseWithTickets(@RequestBody PurchaseRequest purchaseRequest) {
         // Tarkastetaan löytyykö tapahtuma id:n perusteella
         return eventRepository.findById(purchaseRequest.getEventId()).map(event -> {
-            // tarkatetaan, että lippumäärä on riittävä
-            if (event.getTicketCount() < purchaseRequest.getTicketTypeNames().size()) {
-                return ResponseEntity.badRequest().body("Tapahtumaan ei ole riittävästi lippuja vapaana.");
+            // Laske, kuinka monta kutakin lipputyyppiä on pyynnössä
+        	Map<String, Long> ticketTypeCounts = purchaseRequest.getTicketTypeNames().stream()
+        		    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            // Laske lippujen totaalimäärä
+            long totalTicketsRequested = ticketTypeCounts.values().stream().mapToLong(Long::longValue).sum();
+            
+            // Tarkasta onko tapahtumaan riittävästi lippuja
+            if (event.getTicketCount() < totalTicketsRequested) {
+                return ResponseEntity.badRequest().body("Lippuja ei ole riittävästi jäljellä tapahtumaan.");
             }
 
             // Tarkastetaan löytyykö käyttäjä id:n perusteella
@@ -67,29 +75,33 @@ public class PurchaseRestController {
             }
             AppUser appUser = userOpt.get();
 
-            // Haetaan lipputyypit tapahtuman ja nimen mukaan, jolloin pystytään
-            // toimittamaan vain lipputyyppien-nimet ostotapahtuman yhteydessä
+            // Hae lipputyypit tapahtuman ja lipputyypin nimen perusteella
             List<TicketType> ticketTypes = ticketTypeRepository.findByEventAndNameIn(event,
-                    purchaseRequest.getTicketTypeNames());
+                    new ArrayList<>(ticketTypeCounts.keySet()));
 
-            // tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit
-            // tapahtuman lipputyypeistä
-            if (ticketTypes.size() != purchaseRequest.getTicketTypeNames().size()) {
-                return ResponseEntity.badRequest().body("Yhtä tai useampaa määritettyä lipputyyppiä ei löydy tälle tapahtumalle.");
+            // Tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit tapahtuman lipputyypeistä            
+            if (ticketTypes.size() != ticketTypeCounts.keySet().size()) {
+                return ResponseEntity.badRequest().body("Yhtä tai useampaa määritettyä lipputyyppiä ei löydy tapahtumaan.");
             }
 
-            List<Ticket> tickets = ticketTypes.stream().map(tt -> new Ticket(tt, event, null, false))
-                    .collect(Collectors.toList());
+            // Luo liput ja määritä niille pyynnössä annetut lipputyypit
+            List<Ticket> tickets = new ArrayList<>();
+            for (TicketType tt : ticketTypes) {
+                long count = ticketTypeCounts.getOrDefault(tt.getName(), 0L);
+                for (int i = 0; i < count; i++) {
+                    tickets.add(new Ticket(tt, event, null, false));
+                }
+            }
 
             // Päivitä tapahtuman lippumäärä
-            event.setTicketCount(event.getTicketCount() - tickets.size());
+            event.setTicketCount((int) (event.getTicketCount() - totalTicketsRequested));
             eventRepository.save(event);
 
-            // tallenna ostotapahtuma
+            // Tallenna ostotaphatuma
             Purchase purchase = new Purchase(new Date(), tickets, appUser);
             Purchase savedPurchase = purchaseRepository.save(purchase);
 
-            // tallenna kullekin lipulle ostotapahtuma, johon ne kuuluu
+            // Tallenna kullekin lipulle ostotapahtuma, johon ne kuuluu
             tickets.forEach(ticket -> {
                 ticket.setPurchase(savedPurchase);
                 ticketRepository.save(ticket);
