@@ -24,6 +24,8 @@ public class PurchaseService {
 	private TicketTypeRepository ticketTypeRepository;
 	@Autowired
 	private PurchaseRepository purchaseRepository;
+	@Autowired
+	private TicketRepository ticketRepository;
 
     // Yksittäisen ostotapahtuman käsittelyn logiikka
 	@Transactional
@@ -53,35 +55,42 @@ public class PurchaseService {
 			List<TicketType> ticketTypes = ticketTypeRepository.findByEventAndNameIn(event,
 					new ArrayList<>(ticketTypeCounts.keySet()));
 
-			// Tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit
-			// tapahtuman lipputyypeistä
+			// Tarkastetaan lipputyypin nimen perusteella löytyykö määritetyt lipputyypit tapahtuman lipputyypeistä
 			if (ticketTypes.size() != ticketTypeCounts.keySet().size()) {
 				return Optional.empty();
 			}
 
 			// Luo liput ja määritä niille pyynnössä annetut lipputyypit
 			List<Ticket> tickets = new ArrayList<>();
-			ticketTypes.forEach(tt -> {
-				long count = ticketTypeCounts.getOrDefault(tt.getName(), 0L);
-				tickets.addAll(createTicketsForType(count, tt, event));
-			});
+		    for (TicketType tt : ticketTypes) {
+		        long count = ticketTypeCounts.getOrDefault(tt.getName(), 0L);
+		        for (int i = 0; i < count; i++) {
+		            tickets.add(new Ticket(tt, event, null, false));
+		        }
+		    }
 
-			// Päivitä tapahtuman lippumäärä
-			event.setTicketCount(event.getTicketCount() - (int) totalTicketsRequested);
-			eventRepository.save(event);
+            // Luodaan ostotapahtuma, jossa lista lipuista on aluksi tyhjä
+		    Purchase purchase = new Purchase(new Date(), new ArrayList<>(), userOpt.get());
+		    
+            // Tallenna ostotapahtuma, jotta siihen generoituu ID
+		    Purchase savedPurchase = purchaseRepository.save(purchase);
+            
+            // Määritetään mihin ostotapahtumaan liput kuuluu ja lisätään ne ostotapahtumalle
+		    tickets.forEach(ticket -> {
+		        ticket.setPurchase(savedPurchase); // Set the purchase
+		        Ticket savedTicket = ticketRepository.save(ticket); // Save the ticket
+		        savedPurchase.getTickets().add(savedTicket); // Optionally re-associate saved tickets with the purchase
+		    });
 
-			// Tallenna ostotapahtuma
-			Purchase purchase = new Purchase(new Date(), tickets, userOpt.get());
-			return Optional.of(purchaseRepository.save(purchase));
-		});
+            // Päivitä tapahtuman lippumäärä ja tallenna
+            event.setTicketCount(event.getTicketCount() - (int) totalTicketsRequested);
+            eventRepository.save(event);
+            
+            purchaseRepository.save(savedPurchase);
+
+            // Palauta tallennettu ostotapahtuma
+            return Optional.of(savedPurchase);
+        });
 	}
 
-    // Metodi, jolla luodan tietty määrä lipputyypin lippuja.
-    private List<Ticket> createTicketsForType(long count, TicketType ticketType, copypaste.ticketguru.domain.Event event) {
-		List<Ticket> tickets = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            tickets.add(new Ticket(ticketType, event, null, false));
-        }
-        return tickets;
-	}
 }

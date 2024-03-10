@@ -76,85 +76,137 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 
 - **URL**: `/api/purchases`
 - **Metodi**: `POST`
-- **Kuvaus**: Lisää ostotapahtuman ja luo samalla liput määritettyyn tapahtumaan. Metodi tarkastaa tapahtuman lippumäärän ja päivittää sen ostotapahtuman päätteeksi. Ostotapahtuman yhteydessä määritetään myös, mitä lipputyyppejä ollaan myymässä. Lisäksi ostotapahtumaan määritettään kuka käyttäjä on sen suorittanut.
-- **Vastaus**: 201 Created. Mikäli tapahtumaan ei ole riittävästi lippuja jäljellä, antaa palvelu vastaukseksi "Tapahtumaan ei ole riittävästi lippuja vapaana." tai, jos jotain määritettyjä lipputyyppejä ei löydy antaa palvelu vastaukseksi "Yhtä tai useampaa määritettyä lipputyyppiä ei löydy tälle tapahtumalle.".
+- **Kuvaus**: Lisää ostotapahtuman ja luo samalla liput määritettyihin tapahtumiin. Metodi tarkastaa tapahtuman lippumäärän ja päivittää sen ostotapahtuman päätteeksi. Ostotapahtuman yhteydessä määritetään myös, mitä lipputyyppejä ollaan myymässä. Lisäksi ostotapahtumaan määritettään kuka käyttäjä on sen suorittanut.
+- **Vastaus**: Metodi palauttaa taulukot "successfulPurchases" onnistuineista ostotapahtumista ja "failedPurchases" epäonnistuneista. Onnistuneet ostotapahtumat listataan ja epäonnistuneista tulee seuraava viesti: "Ostotapahtumaa ei pystytty suorittamaan tapahtumaan ID:llä: 4. Tarkasta tapahtuman ID, lipputyypit ja saatavuus.".
 
 **esimerkkisyöte**
 ```json
+[
 {
   "eventId": 5,
   "userId": 1,
   "ticketTypeNames": ["Aikuinen", "Aikuinen", "VIP", "VIP", "Lapsi"]
+},
+{
+  "eventId": 4,
+  "userId": 1,
+  "ticketTypeNames": ["Aikuinen", "Aikuinen", "Opiskelija"]
 }
+]
 ```
 
 **esimerkki vastaus**
 ```json
 {
-    "id": 3,
-    "purchaseDate": "2024-03-10T12:01:13.563+00:00",
-    "tickets": [
+    "successfulPurchases": [
         {
-            "id": 5,
-            "ticketType": {
-                "id": 13,
-                "name": "Aikuinen",
-                "price": 25.0,
-                "event": 5
-            },
-            "used": false,
-            "event": 5
+            "id": 3,
+            "purchaseDate": "2024-03-10T15:06:15.196+00:00",
+            "tickets": [
+                {
+                    "id": 5,
+                    "ticketType": {
+                        "id": 13,
+                        "name": "Aikuinen",
+                        "price": 25.0,
+                        "event": 5
+                    },
+                    "used": false,
+                    "event": 5
+                },
+                {
+                    "id": 6,
+                    "ticketType": {
+                        "id": 13,
+                        "name": "Aikuinen",
+                        "price": 25.0,
+                        "event": 5
+                    },
+                    "used": false,
+                    "event": 5
+                },
+                {
+                    "id": 7,
+                    "ticketType": {
+                        "id": 14,
+                        "name": "VIP",
+                        "price": 50.0,
+                        "event": 5
+                    },
+                    "used": false,
+                    "event": 5
+                },
+                {
+                    "id": 8,
+                    "ticketType": {
+                        "id": 14,
+                        "name": "VIP",
+                        "price": 50.0,
+                        "event": 5
+                    },
+                    "used": false,
+                    "event": 5
+                },
+                {
+                    "id": 9,
+                    "ticketType": {
+                        "id": 15,
+                        "name": "Lapsi",
+                        "price": 10.0,
+                        "event": 5
+                    },
+                    "used": false,
+                    "event": 5
+                }
+            ],
+            "appUser": {
+                "user_id": 1,
+                "username": "TeppoTestaaja",
+                "role": null
+            }
         },
         {
-            "id": 6,
-            "ticketType": {
-                "id": 13,
-                "name": "Aikuinen",
-                "price": 25.0,
-                "event": 5
-            },
-            "used": false,
-            "event": 5
-        },
-        {
-            "id": 7,
-            "ticketType": {
-                "id": 14,
-                "name": "VIP",
-                "price": 50.0,
-                "event": 5
-            },
-            "used": false,
-            "event": 5
-        },
-        {
-            "id": 8,
-            "ticketType": {
-                "id": 14,
-                "name": "VIP",
-                "price": 50.0,
-                "event": 5
-            },
-            "used": false,
-            "event": 5
-        },
-        {
-            "id": 9,
-            "ticketType": {
-                "id": 15,
-                "name": "Lapsi",
-                "price": 10.0,
-                "event": 5
-            },
-            "used": false,
-            "event": 5
+            "id": 4,
+            "purchaseDate": "2024-03-10T15:06:15.203+00:00",
+            "tickets": [
+                {
+                    "id": 10,
+                    "ticketType": {
+                        "id": 11,
+                        "name": "Opiskelija",
+                        "price": 20.0,
+                        "event": 4
+                    },
+                    "used": false,
+                    "event": 4
+                },
+                {
+                    "id": 11,
+                    "ticketType": {
+                        "id": 12,
+                        "name": "Aikuinen",
+                        "price": 35.0,
+                        "event": 4
+                    },
+                    "used": false,
+                    "event": 4
+                },
+                {
+                    "id": 12,
+                    "ticketType": {
+                        "id": 12,
+                        "name": "Aikuinen",
+                        "price": 35.0,
+                        "event": 4
+                    },
+                    "used": false,
+                    "event": 4
+                }
+            ],
+            "appUser": 1
         }
     ],
-    "appUser": {
-        "user_id": 1,
-        "username": "TeppoTestaaja",
-        "role": null
-    }
+    "failedPurchases": []
 }
 ```
 

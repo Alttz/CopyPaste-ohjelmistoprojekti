@@ -26,7 +26,7 @@ public class PurchaseRestController {
 	@Autowired
     private PurchaseService purchaseService;
 	@Autowired
-	PurchaseRepository purchaseRepository;
+	private PurchaseRepository purchaseRepository;
 
 	@GetMapping(value = "/api/purchases")
 	public List<Purchase> getAllPurchases() {
