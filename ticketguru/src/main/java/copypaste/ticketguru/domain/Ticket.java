@@ -17,7 +17,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@NotBlank(message="TicketType can't be blank")
+	//@NotBlank(message="TicketType can't be blank")
     @ManyToOne
     @JoinColumn(name = "ticket_type_id", nullable = false)
     private TicketType ticketType;
@@ -36,7 +36,7 @@ public class Ticket {
     @JsonBackReference
     private Purchase purchase;
 
-	@AssertTrue(message = "isUsed must be true or false")
+	//@AssertTrue(message = "isUsed must be true or false")
 	private boolean isUsed = false;
 
 	public Ticket() {
