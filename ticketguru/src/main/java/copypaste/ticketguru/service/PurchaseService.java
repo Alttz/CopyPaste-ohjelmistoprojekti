@@ -15,11 +15,8 @@ import copypaste.ticketguru.domain.*;
 
 @Service
 public class PurchaseService {
-
 	@Autowired
 	private EventRepository eventRepository;
-	@Autowired
-	private UserRepository userRepository;
 	@Autowired
 	private TicketTypeRepository ticketTypeRepository;
 	@Autowired
@@ -29,12 +26,12 @@ public class PurchaseService {
 
     // Yksittäisen ostotapahtuman käsittelyn logiikka
 	@Transactional
-    public Optional<Purchase> processPurchaseRequest(PurchaseRequest purchaseRequest) {
+    public Optional<Purchase> processPurchaseRequest(PurchaseRequestRow purchaseRequestRow, AppUser user) {
 		// Tarkastetaan löytyykö tapahtuma id:n perusteella
-		return eventRepository.findById(purchaseRequest.getEventId()).flatMap(event -> {
+		return eventRepository.findById(purchaseRequestRow.getEventId()).flatMap(event -> {
 
 			// Laske, kuinka monta kutakin lipputyyppiä on pyynnössä
-			Map<String, Long> ticketTypeCounts = purchaseRequest.getTicketTypeNames().stream()
+			Map<String, Long> ticketTypeCounts = purchaseRequestRow.getTicketTypeNames().stream()
 					.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
 			// Laske lippujen totaalimäärä
@@ -42,12 +39,6 @@ public class PurchaseService {
 
 			// Tarkasta onko tapahtumaan riittävästi lippuja
 			if (event.getTicketCount() < totalTicketsRequested) {
-				return Optional.empty();
-			}
-
-			// Tarkastetaan löytyykö käyttäjä id:n perusteella
-			Optional<AppUser> userOpt = userRepository.findById(purchaseRequest.getUserId());
-			if (!userOpt.isPresent()) {
 				return Optional.empty();
 			}
 
@@ -70,7 +61,7 @@ public class PurchaseService {
 		    }
 
             // Luodaan ostotapahtuma, jossa lista lipuista on aluksi tyhjä
-		    Purchase purchase = new Purchase(new Date(), new ArrayList<>(), userOpt.get());
+		    Purchase purchase = new Purchase(new Date(), new ArrayList<>(), user);
 		    
             // Tallenna ostotapahtuma, jotta siihen generoituu ID
 		    Purchase savedPurchase = purchaseRepository.save(purchase);

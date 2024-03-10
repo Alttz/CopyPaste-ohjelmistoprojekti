@@ -79,23 +79,24 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **Kuvaus**: Lisää ostotapahtuman ja luo samalla liput määritettyihin tapahtumiin. Metodi tarkastaa tapahtuman lippumäärän ja päivittää sen ostotapahtuman päätteeksi. Ostotapahtuman yhteydessä määritetään myös, mitä lipputyyppejä ollaan myymässä. Lisäksi ostotapahtumaan määritettään kuka käyttäjä on sen suorittanut.
 - **Vastaus**: Metodi palauttaa taulukot "successfulPurchases" onnistuineista ostotapahtumista ja "failedPurchases" epäonnistuneista. Onnistuneet ostotapahtumat listataan ja epäonnistuneista tulee seuraava viesti: "Ostotapahtumaa ei pystytty suorittamaan tapahtumaan ID:llä: 4. Tarkasta tapahtuman ID, lipputyypit ja saatavuus.".
 
-**esimerkkisyöte**
+**Esimerkkisyöte**
 ```json
-[
 {
-  "eventId": 5,
-  "userId": 1,
-  "ticketTypeNames": ["Aikuinen", "Aikuinen", "VIP", "VIP", "Lapsi"]
-},
-{
-  "eventId": 4,
-  "userId": 1,
-  "ticketTypeNames": ["Aikuinen", "Aikuinen", "Opiskelija"]
+    "userId": 1,
+    "purchaseRequestRows": [
+        {
+            "eventId": 5,
+            "ticketTypeNames": ["Aikuinen", "Aikuinen", "VIP", "VIP", "Lapsi"]
+        },
+        {
+            "eventId": 4,
+            "ticketTypeNames": ["Aikuinen", "Aikuinen", "Opiskelija"]
+        }
+    ]
 }
-]
 ```
 
-**esimerkki vastaus**
+**Esimerkkivastaus**
 ```json
 {
     "successfulPurchases": [
