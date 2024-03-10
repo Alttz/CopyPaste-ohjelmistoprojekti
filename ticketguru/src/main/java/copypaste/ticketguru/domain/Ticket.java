@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tickets")
@@ -14,9 +17,14 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+	@NotBlank(message="TicketType can't be blank")
     @ManyToOne
     @JoinColumn(name = "ticket_type_id", nullable = false)
     private TicketType ticketType;
+
+	//Was this deleted/moved elsewhere?
+	//@DecimalMin(value = "0.0", inclusive = false)
+	//private double price;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
@@ -28,6 +36,7 @@ public class Ticket {
     @JsonBackReference
     private Purchase purchase;
 
+	@AssertTrue(message = "isUsed must be true or false")
 	private boolean isUsed = false;
 
 	public Ticket() {

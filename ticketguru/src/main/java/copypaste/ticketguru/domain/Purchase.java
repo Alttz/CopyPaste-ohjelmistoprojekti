@@ -7,13 +7,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -22,7 +18,10 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private Date purchaseDate;
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+    private Date purchaseDate;
+
 
 	@OneToMany(mappedBy = "purchase")
 	@JsonManagedReference
@@ -31,6 +30,7 @@ public class Purchase {
 	@ManyToOne
 	@JoinColumn(name = "appuser_id")
 	private AppUser appUser;
+
 
 	public Purchase() {
 		super();
