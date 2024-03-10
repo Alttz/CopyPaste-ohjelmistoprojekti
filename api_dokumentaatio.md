@@ -84,7 +84,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 {
   "eventId": 5,
   "userId": 1,
-  "ticketTypeNames": ["Aikuinen", "VIP", "Lapsi"]
+  "ticketTypeNames": ["Aikuinen", "Aikuinen", "VIP", "VIP", "Lapsi"]
 }
 ```
 
@@ -92,7 +92,7 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 ```json
 {
     "id": 3,
-    "purchaseDate": "2024-03-03T10:42:16.651+00:00",
+    "purchaseDate": "2024-03-10T12:01:13.563+00:00",
     "tickets": [
         {
             "id": 5,
@@ -108,6 +108,17 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
         {
             "id": 6,
             "ticketType": {
+                "id": 13,
+                "name": "Aikuinen",
+                "price": 25.0,
+                "event": 5
+            },
+            "used": false,
+            "event": 5
+        },
+        {
+            "id": 7,
+            "ticketType": {
                 "id": 14,
                 "name": "VIP",
                 "price": 50.0,
@@ -117,7 +128,18 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
             "event": 5
         },
         {
-            "id": 7,
+            "id": 8,
+            "ticketType": {
+                "id": 14,
+                "name": "VIP",
+                "price": 50.0,
+                "event": 5
+            },
+            "used": false,
+            "event": 5
+        },
+        {
+            "id": 9,
             "ticketType": {
                 "id": 15,
                 "name": "Lapsi",
