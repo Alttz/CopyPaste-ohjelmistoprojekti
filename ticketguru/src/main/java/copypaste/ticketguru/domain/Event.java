@@ -35,7 +35,7 @@ public class Event {
 	@Min(value = 0, message="Ticket count has to be 0 minimum")
 	private int ticketCount;
 
-	@OneToMany(mappedBy = "event")
+	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
 	private List<Ticket> tickets;
 
 	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL)

@@ -19,7 +19,7 @@ public class Ticket {
 
 	//@NotBlank(message="TicketType can't be blank")
     @ManyToOne
-    @JoinColumn(name = "ticket_type_id", nullable = false)
+    @JoinColumn(name = "ticket_type_id", nullable = true)
     private TicketType ticketType;
 
 	//Was this deleted/moved elsewhere?
