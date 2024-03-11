@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tickets")
@@ -36,8 +37,7 @@ public class Ticket {
     @JsonBackReference
     private Purchase purchase;
 
-	//This validation has a problem. I think it's caused by the data we add from CLR?
-	//@AssertTrue(message = "isUsed must be true or false")
+	@NotNull(message="isUsed cannot be null")
 	private boolean isUsed = false;
 
 	public Ticket() {
