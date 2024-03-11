@@ -7,6 +7,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -16,10 +19,20 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	@NotNull
+	//@FutureOrPresent
 	private String date;
+
+	@NotBlank
 	private String place;
+
+	@NotBlank
 	private String city;
+
+	@NotBlank
 	private String name;
+
+	@Min(value = 0, message="Ticket count has to be 0 minimum")
 	private int ticketCount;
 
 	@OneToMany(mappedBy = "event")

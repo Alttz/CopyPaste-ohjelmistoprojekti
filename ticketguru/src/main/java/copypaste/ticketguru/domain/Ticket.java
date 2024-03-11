@@ -36,6 +36,7 @@ public class Ticket {
     @JsonBackReference
     private Purchase purchase;
 
+	//This validation has a problem. I think it's caused by the data we add from CLR?
 	//@AssertTrue(message = "isUsed must be true or false")
 	private boolean isUsed = false;
 
