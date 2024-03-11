@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import copypaste.ticketguru.domain.*;
 import jakarta.validation.*;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
@@ -23,13 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import copypaste.ticketguru.domain.Event;
-import copypaste.ticketguru.domain.EventRepository;
-import copypaste.ticketguru.domain.EventRequest;
-import copypaste.ticketguru.domain.TicketType;
-import copypaste.ticketguru.domain.TicketTypeRepository;
-import copypaste.ticketguru.domain.TicketTypeRequest;
-
 @RestController
 public class EventRestController {
     @Autowired
@@ -38,6 +32,9 @@ public class EventRestController {
     // nice in that case
     @Autowired
     TicketTypeRepository ticketTypeRepository;
+
+    @Autowired
+    TicketRepository ticketRepository;
 
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     Validator validator = factory.getValidator();
@@ -160,10 +157,19 @@ public class EventRestController {
     // Päivität tapahtuman lipputyyppejä
     @PutMapping("/api/events/{eventId}/tickettypes")
     public ResponseEntity<?> updateTicketTypesForEvent(@PathVariable Long eventId,
-            @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+                                                       @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
         // Tarkastetaan löytyykö tapahtuma id:n perusteella
         return eventRepository.findById(eventId).map(event -> {
             List<TicketType> existingTicketTypes = ticketTypeRepository.findByEvent(event);
+
+            // Tarkasta onko lipputyypeille jo luotu lippuja
+            boolean areTicketTypesUsed = existingTicketTypes.stream()
+                    .anyMatch(tt -> !ticketRepository.findByTicketType(tt).isEmpty());
+
+            if (areTicketTypesUsed) {
+                return ResponseEntity.badRequest().body("Cannot update ticket types as tickets have already been created.");
+            }
+
             // Poistetaan aikaisemmat lipputyypit
             ticketTypeRepository.deleteAll(existingTicketTypes);
 
@@ -193,4 +199,5 @@ public class EventRestController {
             return ResponseEntity.ok(response);
         }).orElse(ResponseEntity.notFound().build());
     }
+
 }
