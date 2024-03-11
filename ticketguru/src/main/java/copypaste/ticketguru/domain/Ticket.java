@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tickets")
@@ -19,7 +20,7 @@ public class Ticket {
 
 	//@NotBlank(message="TicketType can't be blank")
     @ManyToOne
-    @JoinColumn(name = "ticket_type_id", nullable = false)
+    @JoinColumn(name = "ticket_type_id", nullable = true)
     private TicketType ticketType;
 
 	//Was this deleted/moved elsewhere?
@@ -36,7 +37,11 @@ public class Ticket {
     @JsonBackReference
     private Purchase purchase;
 
+<<<<<<< HEAD
 	//@AssertTrue(message = "isUsed must be true or false")
+=======
+	@NotNull(message="isUsed cannot be null")
+>>>>>>> 62-luokkien-validoinnit-origin_develop
 	private boolean isUsed = false;
 
 	public Ticket() {

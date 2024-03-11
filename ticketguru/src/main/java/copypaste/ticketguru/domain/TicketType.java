@@ -10,17 +10,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "ticket_types")
 public class TicketType {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String name;
-    private double price;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank(message = "Name must not be blank")
+	private String name;
+
+	@DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero")
+	private double price;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)

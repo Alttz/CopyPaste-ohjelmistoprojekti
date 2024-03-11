@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import jakarta.validation.*;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,9 @@ public class EventRestController {
     // nice in that case
     @Autowired
     TicketTypeRepository ticketTypeRepository;
+
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
 
     private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
             "Varusmies", "VIP");
@@ -77,7 +83,20 @@ public class EventRestController {
 
     // Lisää tapahtuma
     @PostMapping(value = "/api/events")
-    public ResponseEntity<Event> createEvent(@RequestBody Event newEvent) {
+    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event newEvent) {
+
+        /*
+        //This is something we can get errors from bean validations.
+        //Problem is that it's not really needed. It get's overwritten somewhere.
+        //Validation works fine without it and error messages are sent in response correctly.
+        //We just dont have manual access to the errors.
+
+        Set<ConstraintViolation<Event>> violations = validator.validate(newEvent);
+        for (ConstraintViolation<Event> violation : violations) {
+            System.out.println(violation.getMessage());
+        }
+        */
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(eventRepository.save(newEvent));
@@ -85,7 +104,7 @@ public class EventRestController {
 
     // Tapahtuman päivitys
     @PutMapping(value = "/api/events/{id}")
-    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventRequest eventRequest) {
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @Valid @RequestBody EventRequest eventRequest) {
         return eventRepository.findById(id).map(event -> {
             event.setName(eventRequest.getName());
             event.setDate(eventRequest.getDate());
@@ -110,7 +129,7 @@ public class EventRestController {
     // Lisää lipputyypit tapahtumaan
     @PostMapping("/api/events/{eventId}/tickettypes")
     public ResponseEntity<?> createTicketTypesForEvent(@PathVariable Long eventId,
-            @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
+            @Valid @RequestBody List<TicketTypeRequest> ticketTypeRequests) {
         // Tarkastetaan löytyykö tapahtuma id:n perusteella
         return eventRepository.findById(eventId).map(event -> {
             List<TicketType> ticketTypes = new ArrayList<>();
