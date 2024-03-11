@@ -37,11 +37,7 @@ public class Ticket {
     @JsonBackReference
     private Purchase purchase;
 
-<<<<<<< HEAD
-	//@AssertTrue(message = "isUsed must be true or false")
-=======
 	@NotNull(message="isUsed cannot be null")
->>>>>>> 62-luokkien-validoinnit-origin_develop
 	private boolean isUsed = false;
 
 	public Ticket() {
