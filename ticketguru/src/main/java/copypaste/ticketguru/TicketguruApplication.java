@@ -20,6 +20,7 @@ import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
 
+
 @SpringBootApplication
 public class TicketguruApplication {
 
