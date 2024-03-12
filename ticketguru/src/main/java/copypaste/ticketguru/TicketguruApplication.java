@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,10 +21,16 @@ import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
 
+
+
+
+
+
 @SpringBootApplication
 public class TicketguruApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(TicketguruApplication.class, args);
 	}
 
