@@ -23,6 +23,7 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/api/auth")
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
