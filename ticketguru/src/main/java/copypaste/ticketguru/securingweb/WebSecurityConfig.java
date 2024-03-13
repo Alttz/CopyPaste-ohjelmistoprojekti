@@ -22,7 +22,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/api/authorize")
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
