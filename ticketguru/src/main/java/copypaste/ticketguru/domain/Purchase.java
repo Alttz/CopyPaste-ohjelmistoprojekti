@@ -1,54 +1,59 @@
 package copypaste.ticketguru.domain;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Purchase {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private Date purchaseDate;
+	@NotNull(message = "Purchase date is required.")
+	@PastOrPresent(message = "Purchase date must be in the past or today.")
+	private Date purchaseDate;
 
-    @OneToMany(mappedBy = "purchase")
-    private Set<PurchaseRow> purchaseRows;
-    
+	@OneToMany(mappedBy = "purchase")
+	@JsonManagedReference
+	private List<Ticket> tickets;
+
+	@ManyToOne
+	@JoinColumn(name = "appuser_id")
+	private AppUser appUser;
+
 	public Purchase() {
+		super();
 	}
 
-	public Purchase(AppUser user, Date purchaseDate, Set<PurchaseRow> purchaseRows) {
-		this.user = user;
+	public Purchase(Date purchaseDate, List<Ticket> tickets) {
+		super();
 		this.purchaseDate = purchaseDate;
-		this.purchaseRows = purchaseRows;
+		this.tickets = tickets;
 	}
-	
+
+	public Purchase(Date purchaseDate, List<Ticket> tickets, AppUser appUser) {
+		super();
+		this.purchaseDate = purchaseDate;
+		this.tickets = tickets;
+		this.appUser = appUser;
+	}
+
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public AppUser getUser() {
-		return user;
-	}
-
-	public void setUser(AppUser user) {
-		this.user = user;
 	}
 
 	public Date getPurchaseDate() {
@@ -59,19 +64,24 @@ public class Purchase {
 		this.purchaseDate = purchaseDate;
 	}
 
-	public Set<PurchaseRow> getPurchaseRows() {
-		return purchaseRows;
+	public List<Ticket> getTickets() {
+		return tickets;
 	}
 
-	public void setPurchaseRows(Set<PurchaseRow> purchaseRows) {
-		this.purchaseRows = purchaseRows;
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
 	}
+	
+	public AppUser getAppUser() {
+        return appUser;
+    }
 
-	@Override
-	public String toString() {
-		return "Purchase [id=" + id + ", user=" + user + ", purchaseDate=" + purchaseDate + ", purchaseRows="
-				+ purchaseRows + "]";
-	}
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
 
-    
+    @Override
+    public String toString() {
+        return "Purchase [id=" + id + ", appUser=" + appUser + ", purchaseDate=" + purchaseDate + ", tickets=" + tickets + "]";
+    }
 }

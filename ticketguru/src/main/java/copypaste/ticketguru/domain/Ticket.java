@@ -1,8 +1,14 @@
 package copypaste.ticketguru.domain;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tickets")
@@ -12,28 +18,37 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
+	//@NotBlank(message="TicketType can't be blank")
+    @ManyToOne
+    @JoinColumn(name = "ticket_type_id", nullable = true)
+    private TicketType ticketType;
 
-    private double price;
+	//Was this deleted/moved elsewhere?
+	//@DecimalMin(value = "0.0", inclusive = false)
+	//private double price;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
+    @JsonIgnore // Ignorataan vakio Getter kun JSON vastaus luodaan
     private Event event;
     
-    @OneToMany(mappedBy = "ticket")
-    private Set<PurchaseRow> purchaseRows;
+    @ManyToOne
+    @JoinColumn(name = "purchase_id")
+    @JsonBackReference
+    private Purchase purchase;
 
+	@NotNull(message="isUsed cannot be null")
 	private boolean isUsed = false;
 
 	public Ticket() {
 	}
 
-	public Ticket(String type, double price, Event event, Set<PurchaseRow> purchaseRows) {
-		this.type = type;
-		this.price = price;
+	public Ticket(TicketType ticketType, Event event, Purchase purchase, boolean isUsed) {
+		super();
+		this.ticketType = ticketType;
 		this.event = event;
-		this.purchaseRows = purchaseRows;
-		this.isUsed = false; // No reason to create an already used ticket
+		this.purchase = purchase;
+		this.isUsed = isUsed;
 	}
 
 	public Long getId() {
@@ -44,28 +59,12 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
+	public TicketType getTicketType() {
+		return ticketType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public boolean getUsed() {
-		return this.isUsed;
-	}
-
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
+	public void setTicketType(TicketType ticketType) {
+		this.ticketType = ticketType;
 	}
 
 	public Event getEvent() {
@@ -76,18 +75,31 @@ public class Ticket {
 		this.event = event;
 	}
 
-	public Set<PurchaseRow> getPurchaseRows() {
-		return purchaseRows;
+	public Purchase getPurchase() {
+		return purchase;
 	}
 
-	public void setPurchaseRows(Set<PurchaseRow> purchaseRows) {
-		this.purchaseRows = purchaseRows;
+	public void setPurchase(Purchase purchase) {
+		this.purchase = purchase;
 	}
+
+	public boolean isUsed() {
+		return isUsed;
+	}
+
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+	
+	@JsonGetter("event") // palautetaan vain ID
+    public Long getEventId() {
+        return this.event != null ? this.event.getId() : null;
+    }
 
 	@Override
 	public String toString() {
-		return "Ticket [id=" + id + ", type=" + type + ", price=" + price + ", event=" + event + ", purchaseRows="
-				+ purchaseRows + "]";
+		return "Ticket [id=" + id + ", ticketType=" + ticketType + ", event=" + event + ", purchase=" + purchase
+				+ ", isUsed=" + isUsed + "]";
 	}
 }
 

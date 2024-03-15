@@ -1,66 +1,58 @@
 package copypaste.ticketguru.domain;
 
 import java.util.List;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name= "app_user")
+@Table(name = "app_user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user_id")
 public class AppUser {
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false, updatable = false)
-    private Long user_id;
-	
-	@NotNull(message = "Käyttäjätunnus ei saa olla tyhjä")
-    @NotEmpty(message = "Käyttäjätunnus ei saa olla tyhjä")
-	@Column(name = "username", nullable = false, unique = true)
-    private String username;
-	
-	@NotNull(message = "Salasana ei saa olla tyhjä")
-    @NotEmpty(message = "Salasana ei saa olla tyhjä")
-    @Size(min = 4, message = "Salasanassa tulee olla vähintään 4 merkkiä")
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-      name = "user_roles",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-	
-	@OneToMany(mappedBy = "user")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private Long user_id;
+
+	@Column(name = "username")
+	private String username;
+
+	@Column(name = "password")
+	@JsonIgnore
+	private String password;
+
+	@Column(name = "role")
+	private String role;
+
+	@OneToMany(mappedBy = "appUser")
+	@JsonIgnore
 	private List<Purchase> purchases;
+
+	public AppUser(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
 
 	public AppUser() {
 		super();
 	}
 
-	public AppUser(Long user_id,
-			@NotNull(message = "Käyttäjätunnus ei saa olla tyhjä") @NotEmpty(message = "Käyttäjätunnus ei saa olla tyhjä") String username,
-			@NotNull(message = "Salasana ei saa olla tyhjä") @NotEmpty(message = "Salasana ei saa olla tyhjä") @Size(min = 4, message = "Salasanassa tulee olla vähintään 4 merkkiä") String passwordHash,
-			List<Purchase> purchases, Set<Role> roles) {
+	public AppUser(String username, String password, String role) {
 		super();
 		this.username = username;
-		this.passwordHash = passwordHash;
-		this.purchases = purchases;
-		this.roles = roles;
+		this.password = password;
+		this.role = role;
 	}
 
 	public Long getUser_id() {
@@ -79,12 +71,20 @@ public class AppUser {
 		this.username = username;
 	}
 
-	public String getPasswordHash() {
-		return passwordHash;
+	public String getRole() {
+		return role;
 	}
 
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public List<Purchase> getPurchases() {
@@ -95,19 +95,8 @@ public class AppUser {
 		this.purchases = purchases;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
 	@Override
-	public String toString() {
-		return "AppUser [user_id=" + user_id + ", username=" + username + ", passwordHash=" + passwordHash
-				+ ", purchases=" + purchases + ", roles=" + roles + "]";
-	}
-
-	
+    public String toString() {
+        return "AppUser [id=" + user_id + ", username=" + username + ", role=" + role + ", purchases=" + purchases + "]";
+    }
 }
