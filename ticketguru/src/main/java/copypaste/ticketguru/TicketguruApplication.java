@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import copypaste.ticketguru.domain.AppUser;
 import copypaste.ticketguru.domain.Event;
@@ -21,11 +21,6 @@ import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
 
-
-
-
-
-
 @SpringBootApplication
 public class TicketguruApplication {
 
@@ -36,7 +31,7 @@ public class TicketguruApplication {
 
 	@Bean
 	public CommandLineRunner demo(PurchaseRepository prepository, EventRepository erepository,
-			TicketRepository trepository, UserRepository urepository, TicketTypeRepository ticketTypeRepository) {
+			TicketRepository trepository, UserRepository urepository, TicketTypeRepository ticketTypeRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 
 			Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
@@ -71,9 +66,19 @@ public class TicketguruApplication {
 	        Ticket t7 = new Ticket(aikuinenE4, e4, null, false);
 	        trepository.saveAll(Arrays.asList(t4, t5, t6, t7));
 
-			AppUser u1 = new AppUser("TeppoTestaaja", "salasana");
-			AppUser u2 = new AppUser("Masa", "salasana2");
+			AppUser u1 = new AppUser("TeppoTestaaja", passwordEncoder.encode("salasana"), "ROLE_ADMIN");
+			AppUser u2 = new AppUser("Masa", passwordEncoder.encode("salasana2"), "ROLE_ADMIN");
 	        urepository.saveAll(Arrays.asList(u1, u2));
+	        
+	        if (urepository.findByUsername("admin").isEmpty()) {
+	            AppUser admin = new AppUser("admin", passwordEncoder.encode("adminpass"), "ROLE_ADMIN");
+	            urepository.save(admin);
+	        }
+	        
+	        if (urepository.findByUsername("user").isEmpty()) {
+	            AppUser user = new AppUser("user", passwordEncoder.encode("password"), "ROLE_USER");
+	            urepository.save(user);
+	        }
 
 			List<Ticket> tickets = Arrays.asList(t4, t5);
 			Purchase p1 = new Purchase(new Date(), tickets, u1);
