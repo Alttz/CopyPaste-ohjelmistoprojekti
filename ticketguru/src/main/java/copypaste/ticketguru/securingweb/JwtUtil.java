@@ -5,6 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +20,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "secret"; // Use a more secure key in production
+    private static String SECRET_KEY = "secret"; // Use a more secure key in production
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -51,5 +58,19 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    
+    public static boolean isTokenValid(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("your_issuer") // If you set an issuer when creating the token
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(token);
+            return true; // Token is valid
+        } catch (JWTVerificationException exception){
+            //Invalid signature/claims
+            return false;
+        }
     }
 }

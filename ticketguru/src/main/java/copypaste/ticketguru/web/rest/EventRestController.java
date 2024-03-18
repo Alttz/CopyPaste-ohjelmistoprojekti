@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import copypaste.ticketguru.domain.*;
+import copypaste.ticketguru.securingweb.JwtUtil;
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,8 +44,16 @@ public class EventRestController {
 
     // hae kaikki tapahtumat
     @GetMapping(value = "/api/events")
-    public List<Event> getAllEvents() {
-        return (List<Event>) eventRepository.findAll();
+    public ResponseEntity<?> getAllEvents(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Authorization: Bearer ")) { 
+            String token = authHeader.substring(7); // Remove "Bearer " prefix
+            if (JwtUtil.isTokenValid(token)) {
+                List<Event> events = (List<Event>) eventRepository.findAll();
+                return ResponseEntity.ok(events); // Token is valid, return the events
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
     }
 
     // hae yksi tapahtuma ID:llä
