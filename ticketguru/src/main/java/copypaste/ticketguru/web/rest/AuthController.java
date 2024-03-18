@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,8 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -46,8 +49,7 @@ public class AuthController {
 
 
     private boolean passwordMatches(String rawPassword, String encodedPassword) {
-        // Implement password matching, e.g., using BCrypt
-        return true;
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     private String generateJwtToken(AppUser user) {
