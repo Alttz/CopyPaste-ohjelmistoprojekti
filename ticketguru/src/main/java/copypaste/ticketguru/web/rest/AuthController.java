@@ -22,7 +22,6 @@ import copypaste.ticketguru.domain.JwtResponse;
 import copypaste.ticketguru.domain.UserRepository;
 
 @RestController
-@RequestMapping("/api")
 public class AuthController {
 
     @Autowired
@@ -30,7 +29,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<AppUser> userOptional = userRepository.findByUsername(loginRequest.getUsername());
         
