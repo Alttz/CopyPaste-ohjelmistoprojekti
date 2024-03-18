@@ -56,11 +56,12 @@ public class AuthController {
         Date now = new Date(nowMillis);
 
      // Use java-jwt library methods directly to specify the signing key
-        Algorithm algorithm = Algorithm.HMAC256("your_secret");
+        Algorithm algorithm = Algorithm.HMAC256("secret");
 
         return JWT.create()
                 .withSubject(user.getUsername())
                 .withIssuedAt(now)
+                .withIssuer("your_name")
                 // Add more claims as needed
                 .sign(algorithm);
     }

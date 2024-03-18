@@ -45,8 +45,9 @@ public class EventRestController {
     // hae kaikki tapahtumat
     @GetMapping(value = "/api/events")
     public ResponseEntity<?> getAllEvents(@RequestHeader(value = "Authorization", required = false) String authHeader) {
-        if (authHeader != null && authHeader.startsWith("Authorization: Bearer ")) { 
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7); // Remove "Bearer " prefix
+            Boolean temp = JwtUtil.isTokenValid(token);
             if (JwtUtil.isTokenValid(token)) {
                 List<Event> events = (List<Event>) eventRepository.findAll();
                 return ResponseEntity.ok(events); // Token is valid, return the events
