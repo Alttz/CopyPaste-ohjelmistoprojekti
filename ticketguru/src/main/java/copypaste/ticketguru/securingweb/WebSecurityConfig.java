@@ -24,13 +24,10 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/home").permitAll()
+                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(formLogin -> formLogin
-                .loginPage("/login")
-                .permitAll()
-            )
+
             .logout(logout -> logout.permitAll());
         return http.build();
     }
