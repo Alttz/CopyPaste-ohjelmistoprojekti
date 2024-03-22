@@ -44,19 +44,21 @@ public class EventRestController {
 	private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
 			"Varusmies", "VIP");
 
+	private Boolean RestValidateJWT(String authHeader) {
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			String token = authHeader.substring(7); // Extract the token from the header
+			// Validate the token
+            return jwtUtil.validateToken(token);
+		}
+		return false;
+	}
+
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
 	public ResponseEntity<?> getAllEvents(@RequestHeader(value = "Authorization", required = false) String authHeader) {
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7); // Extract the token from the header
-
-			// Validate the token
-			if (jwtUtil.validateToken(token)) {
-				// Proceed to get the events, username can be used if needed for user-specific
-				// logic
-				List<Event> events = (List<Event>) eventRepository.findAll();
-				return ResponseEntity.ok(events); // Return the events if token is valid
-			}
+		if(RestValidateJWT(authHeader)) {
+			List<Event> events = (List<Event>) eventRepository.findAll();
+			return ResponseEntity.ok(events); // Return the events if token is valid
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
 	}
