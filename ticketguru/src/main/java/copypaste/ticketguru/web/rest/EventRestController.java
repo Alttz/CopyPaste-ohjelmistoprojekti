@@ -38,6 +38,7 @@ public class EventRestController {
 
 	ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	Validator validator = factory.getValidator();
+	
 	@Autowired
 	private JwtUtil jwtUtil;
 
