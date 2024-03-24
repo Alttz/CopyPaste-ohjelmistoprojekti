@@ -1,28 +1,60 @@
 
+
 # TicketGuru Tapahtuma-API Dokumentaatio
 
 TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation hakemiseen ja selaamiseen. Tässä dokumentaatiossa kerrotaan, miten kutakin päätepistettä käytetään tapahtumien hakuun TicketGuru-järjestelmästä.
 
+## Autentikointi
+
+Päätepisteiden käyttämiseksi sinun on hankittava JWT-tokeni tunnistautumalla `/api/login` routeen. Tämän jälkeen kun haluat käyttää muita routeja se pitää antaa `Authorization` headerissa.
+
+###  Kirjaudu & Hanki JWT-tokeni
+
+- **URL**: `/api/login`
+- **Metodi**: `POST`
+- **Kuvaus**: Tunnistaudu käyttäjänimen ja salasanan avulla. Onnistuneet tunnistautumisen yhteydessä saat tässä sessiossa käytettävän JWT-tokenin
+- **Esimerkkipyyntö**:
+  ```json
+  {
+    "username": "admin",
+    "password": "adminpass"
+  }
+  ```
+- **Vastaus**: 
+  - **200 OK**: Kyseinen responssi sisältää tarvitun JWT-tokenin.
+    ```json
+    {
+      "token": "[TOKEN]"
+    }
+    ```
+Muista varmistaa, että antaessasi tokenin pyynnön ohessa se on varmasti asetettu Bearer tokeniksi.
+
+
 ## Päätepisteet
 
 ### Lisää tapahtuma
-
-- **URL**: `/api/events`
+- **URL**: `/api/events/{id}/tickettypes`
 - **Metodi**: `POST`
-- **Kuvaus**: Lisää tapahtuman.
+- **Kuvaus**: Lisää tapahtumalle lipputyypit. Lipputyyppien nimet on standardisoitu ja rajattu seuraaviin: "Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija", "Varusmies", "VIP". Kunkin lipputyypin hinnan voi tapahtumakohtaisesti määrittää, kun ne luodaan.
 - **Vastaus**: 201 Created.
 
 **esimerkkisyöte**
 ```json
+[
   {
-    "name": "Pyhimys",
-    "date": "6.6.2024",
-    "place": "Korjaamo",
-    "city": "Helsinki",
-    "ticketCount": 500,
+    "name": "Aikuinen",
+    "price": 25.00
+  },
+  {
+    "name": "VIP",
+    "price": 50.00
+  },
+  {
+    "name": "Lapsi",
+    "price": 10.00
   }
+]
 ```
-
 ### Lisää lipputyypit tapahtumaan
 
 - **URL**: `/api/events/{id}/tickettypes`
