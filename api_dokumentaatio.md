@@ -23,9 +23,10 @@ Päätepisteiden käyttämiseksi sinun on hankittava JWT-tokeni tunnistautumalla
 - **Vastaus**: 
   - **200 OK**: Kyseinen responssi sisältää tarvitun JWT-tokenin.
     ```json
-    {
-      "token": "[TOKEN]"
-    }
+      {
+          "token": "[TOKEN]",
+          "type": "Bearer"
+      }
     ```
 Muista varmistaa, että antaessasi tokenin pyynnön ohessa se on varmasti asetettu Bearer tokeniksi.
 
