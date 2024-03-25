@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import copypaste.ticketguru.domain.AppUser;
 import copypaste.ticketguru.domain.JwtResponse;
+import copypaste.ticketguru.domain.RESTError;
 import copypaste.ticketguru.domain.UserRepository;
 import copypaste.ticketguru.securingweb.JwtUtil;
 
@@ -36,10 +37,10 @@ public class AuthController {
                 String token = jwtUtil.generateToken(user.getUsername()); // Use username to generate token
                 return ResponseEntity.ok(new JwtResponse(token));
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid credentials"));
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("User not found"));
         }
     }
 

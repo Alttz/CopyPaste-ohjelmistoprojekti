@@ -21,8 +21,9 @@ import copypaste.ticketguru.domain.Purchase;
 
 import copypaste.ticketguru.domain.PurchaseRepository;
 import copypaste.ticketguru.domain.PurchaseRequest;
+import copypaste.ticketguru.domain.RESTError;
 import copypaste.ticketguru.domain.UserRepository;
-import copypaste.ticketguru.securingweb.JwtUtil;
+import copypaste.ticketguru.service.JwtValidatorService;
 import copypaste.ticketguru.service.PurchaseService;
 import jakarta.validation.Valid;
 
@@ -34,27 +35,17 @@ public class PurchaseRestController {
 	private PurchaseRepository purchaseRepository;
 	@Autowired
 	private UserRepository userRepository;
-
 	@Autowired
-	private JwtUtil jwtUtil;
-
-	private Boolean RestValidateJWT(String authHeader) {
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7); // Extract the token from the header
-			// Validate the token
-			return jwtUtil.validateToken(token);
-		}
-		return false;
-	}
+	private JwtValidatorService jwtValidatorService;
 
 	@GetMapping(value = "/api/purchases")
 	public ResponseEntity<?> getAllPurchases(
 			@RequestHeader(value = "Authorization", required = false) String authHeader) {
-		if (RestValidateJWT(authHeader)) {
+		if (jwtValidatorService.validateToken(authHeader)) {
 			List<Purchase> purchases = (List<Purchase>) purchaseRepository.findAll();
 			return ResponseEntity.ok(purchases);
 		}
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
 	}
 
 	// Luodaan ostotapahtuma, jossa voidaan ostaa lippuja useampaan tapahtumaan
@@ -62,7 +53,7 @@ public class PurchaseRestController {
 	@Transactional
 	public ResponseEntity<?> createMultiplePurchasesWithTickets(@Valid @RequestBody PurchaseRequest purchaseRequest,
 			@RequestHeader(value = "Authorization", required = false) String authHeader) {
-		if (RestValidateJWT(authHeader)) {
+		if (jwtValidatorService.validateToken(authHeader)) {
 			List<Purchase> successfulPurchases = new ArrayList<>();
 			List<String> failedPurchases = new ArrayList<>();
 
@@ -84,7 +75,7 @@ public class PurchaseRestController {
 			// Luo vastaus, jossa käydään läpi onnistuneet ja epäonnistuneet ostotapahtumat.
 			return constructResponse(successfulPurchases, failedPurchases);
 		}
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing token");
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
 	}
 
 	// Luodaan vastaus, sisöältäen onnistuneet ja epäonnistuneet ostotapahtumat

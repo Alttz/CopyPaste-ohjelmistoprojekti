@@ -32,28 +32,23 @@ Muista varmistaa, että antaessasi tokenin pyynnön ohessa se on varmasti asetet
 
 ## Päätepisteet
 
+
 ### Lisää tapahtuma
-- **URL**: `/api/events/{id}/tickettypes`
+
+- **URL**: `/api/events`
 - **Metodi**: `POST`
-- **Kuvaus**: Lisää tapahtumalle lipputyypit. Lipputyyppien nimet on standardisoitu ja rajattu seuraaviin: "Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija", "Varusmies", "VIP". Kunkin lipputyypin hinnan voi tapahtumakohtaisesti määrittää, kun ne luodaan.
+- **Kuvaus**: Lisää tapahtuman.
 - **Vastaus**: 201 Created.
 
 **esimerkkisyöte**
 ```json
-[
   {
-    "name": "Aikuinen",
-    "price": 25.00
-  },
-  {
-    "name": "VIP",
-    "price": 50.00
-  },
-  {
-    "name": "Lapsi",
-    "price": 10.00
+    "name": "Pyhimys",
+    "date": "6.6.2024",
+    "place": "Korjaamo",
+    "city": "Helsinki",
+    "ticketCount": 500,
   }
-]
 ```
 ### Lisää lipputyypit tapahtumaan
 
@@ -723,6 +718,14 @@ Muista varmistaa, että antaessasi tokenin pyynnön ohessa se on varmasti asetet
 - **Metodi**: `DELETE`
 - **Kuvaus**: Poista annettu resurssi palvelimelta.
 - **Vastaus**: Jos id:n mukaista tapahtumaa ei ole olemassa, palauttaa 404 Not Found. Jos tapahtuman poistaminen onnistuu, palauttaa 204 No Content.
+
+### Virheet
+JWT-tokenin puuttuminen tai vääryys sekä tietyt virheet requesteissä johtavat palautteeseen skeemalla
+```json
+{
+    "errorDescription": "The error's description"
+}
+```
 
 ## Käyttö
 
