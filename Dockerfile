@@ -5,7 +5,8 @@ FROM eclipse-temurin:17-jdk-focal as builder
 WORKDIR /opt/app
 
 # Copy Maven wrapper files and pom.xml
-COPY ticketguru/mvnw ticketguru/.mvn/ ./
+COPY ticketguru/mvnw ./
+COPY ticketguru/.mvn ./
 COPY ticketguru/pom.xml ./
 
 RUN ls -a
