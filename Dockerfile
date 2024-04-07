@@ -8,6 +8,8 @@ WORKDIR /opt/app
 COPY ticketguru/mvnw ticketguru/.mvn/ ./
 COPY ticketguru/pom.xml ./
 
+RUN ls -a
+
 # Make Maven wrapper executable and download dependencies
 RUN chmod +x mvnw
 #RUN ./mvnw dependency:go-offline
