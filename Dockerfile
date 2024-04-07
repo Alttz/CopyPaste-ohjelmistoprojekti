@@ -2,7 +2,7 @@
 FROM eclipse-temurin:17-jdk-focal as builder
 
 # Set the working directory
-WORKDIR ticketguru/
+WORKDIR /opt/app
 
 # Copy Maven wrapper files and pom.xml
 COPY ticketguru/mvnw ticketguru/.mvn/ ./
@@ -10,7 +10,7 @@ COPY ticketguru/pom.xml ./
 
 # Make Maven wrapper executable and download dependencies
 RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
+#RUN ./mvnw dependency:go-offline
 
 # Copy application source
 COPY ticketguru/src ./src
