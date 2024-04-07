@@ -21,8 +21,19 @@ import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
+
 @SpringBootApplication
 public class TicketguruApplication {
+	
+	static {
+        Dotenv dotenv = Dotenv.load();
+        System.setProperty("spring.datasource.url", dotenv.get("DATABASE_URL"));
+        System.setProperty("spring.datasource.username", dotenv.get("DATABASE_USER"));
+        System.setProperty("spring.datasource.password", dotenv.get("DATABASE_PASSWORD"));
+
+    }
 
 	public static void main(String[] args) {
 
@@ -34,7 +45,7 @@ public class TicketguruApplication {
 			TicketRepository trepository, UserRepository urepository, TicketTypeRepository ticketTypeRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 
-			Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
+			/* Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
 			Event e5 = new Event("1.4.2024", "PubiTarmo", "Turku", "Apulanta", 1000);
 			Event e6 = new Event("18.7.2024", "Kansallisteatteri", "Helsinki", "Käärijä", 1000);
 			Event e7 = new Event("5.5.2024", "Koulun musaluokka", "Luhanka", "Antti Tuisku", 1000);
@@ -98,7 +109,7 @@ public class TicketguruApplication {
 			tickets2.forEach(ticket -> {
 				ticket.setPurchase(p2);
 				trepository.save(ticket);
-			});
+			}); */
 		};
 	}
 
