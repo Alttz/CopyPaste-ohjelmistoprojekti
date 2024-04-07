@@ -1,14 +1,34 @@
+# Stage 1: Build the application
 FROM eclipse-temurin:17-jdk-focal as builder
-WORKDIR /opt/app/ticketguru
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN chmod +x ./mvnw
-RUN ./mvnw dependency:go-offline
-COPY ./src ./src
-RUN ./mvnw clean install -DskipTests 
-RUN find ./target -type f -name '*.jar' -exec cp {} /opt/app/app.jar \; -quit
 
+# Set the working directory
+WORKDIR /opt/app
+
+# Copy Maven wrapper files and pom.xml
+COPY ticketguru/mvnw ticketguru/.mvn/ ./
+COPY ticketguru/pom.xml ./
+
+# Make Maven wrapper executable and download dependencies
+RUN chmod +x mvnw
+RUN ./mvnw dependency:go-offline
+
+# Copy application source
+COPY ticketguru/src ./src
+
+# Build the application
+RUN ./mvnw clean install -DskipTests
+
+# Stage 2: Create runtime image
 FROM eclipse-temurin:17-jre-alpine
-COPY --from=builder /opt/app/*.jar /opt/app/
+
+# Set the working directory
+WORKDIR /opt/app
+
+# Copy JAR file from the builder stage
+COPY --from=builder /opt/app/ticketguru/target/*.jar ./app.jar
+
+# Expose port 8080
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/opt/app/app.jar" ]
+
+# Define entrypoint
+ENTRYPOINT ["java", "-jar", "app.jar"]
