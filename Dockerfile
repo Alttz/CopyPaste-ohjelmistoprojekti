@@ -6,10 +6,11 @@ WORKDIR /opt/app
 
 # Copy Maven wrapper files and pom.xml
 COPY ticketguru/mvnw ./
-COPY ticketguru/.mvn ./
 COPY ticketguru/pom.xml ./
+COPY ticketguru/.mvn/ ./
 
 RUN ls -a
+RUN ls -a .mvn/
 
 # Make Maven wrapper executable and download dependencies
 RUN chmod +x mvnw
