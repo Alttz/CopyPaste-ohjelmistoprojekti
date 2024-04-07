@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jdk-focal as builder
-WORKDIR /opt/app
+WORKDIR /opt/app/ticketguru
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 RUN chmod +x ./mvnw
