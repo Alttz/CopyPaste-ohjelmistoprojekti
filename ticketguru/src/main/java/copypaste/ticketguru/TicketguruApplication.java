@@ -40,12 +40,12 @@ public class TicketguruApplication {
 		SpringApplication.run(TicketguruApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner demo(PurchaseRepository prepository, EventRepository erepository,
 			TicketRepository trepository, UserRepository urepository, TicketTypeRepository ticketTypeRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 
-			/* Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
+			 Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
 			Event e5 = new Event("1.4.2024", "PubiTarmo", "Turku", "Apulanta", 1000);
 			Event e6 = new Event("18.7.2024", "Kansallisteatteri", "Helsinki", "Käärijä", 1000);
 			Event e7 = new Event("5.5.2024", "Koulun musaluokka", "Luhanka", "Antti Tuisku", 1000);
@@ -110,7 +110,7 @@ public class TicketguruApplication {
 				ticket.setPurchase(p2);
 				trepository.save(ticket);
 			}); */
-		};
-	}
+		
+	
 
-}
+};
