@@ -21,7 +21,7 @@ import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
 
-import io.github.cdimascio.dotenv.Dotenv;
+// import io.github.cdimascio.dotenv.Dotenv;
 
 
 @SpringBootApplication
