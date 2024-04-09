@@ -5,7 +5,7 @@ COPY ticketguru/pom.xml ./
 COPY ticketguru/mvnw ./
 RUN chmod +x ./mvnw
 RUN ./mvnw dependency:go-offline
-COPY ticketguru/src ./src
+COPY ./ticketguru/src ./src
 RUN ./mvnw clean install -DskipTests 
 RUN find ./target -type f -name '*.jar' -exec cp {} /opt/app/app.jar \; -quit
 
