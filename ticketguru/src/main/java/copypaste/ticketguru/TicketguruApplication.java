@@ -30,7 +30,6 @@ import copypaste.ticketguru.domain.UserRepository;
 public class TicketguruApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(TicketguruApplication.class, args);
 	}
 
