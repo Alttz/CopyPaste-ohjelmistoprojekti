@@ -16,7 +16,8 @@ import jakarta.validation.constraints.NotNull;
 public class Event {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq_generator")
+    @SequenceGenerator(name = "event_seq_generator", sequenceName = "event_seq", allocationSize = 1)
 	private long id;
 
 	@NotNull

@@ -1,9 +1,38 @@
 
+
 # TicketGuru Tapahtuma-API Dokumentaatio
 
 TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation hakemiseen ja selaamiseen. Tässä dokumentaatiossa kerrotaan, miten kutakin päätepistettä käytetään tapahtumien hakuun TicketGuru-järjestelmästä.
 
+## Autentikointi
+
+Päätepisteiden käyttämiseksi sinun on hankittava JWT-tokeni tunnistautumalla `/api/login` routeen. Tämän jälkeen kun haluat käyttää muita routeja se pitää antaa `Authorization` headerissa.
+
+###  Kirjaudu & Hanki JWT-tokeni
+
+- **URL**: `/api/login`
+- **Metodi**: `POST`
+- **Kuvaus**: Tunnistaudu käyttäjänimen ja salasanan avulla. Onnistuneet tunnistautumisen yhteydessä saat tässä sessiossa käytettävän JWT-tokenin
+- **Esimerkkipyyntö**:
+  ```json
+  {
+    "username": "admin",
+    "password": "adminpass"
+  }
+  ```
+- **Vastaus**: 
+  - **200 OK**: Kyseinen responssi sisältää tarvitun JWT-tokenin.
+    ```json
+      {
+          "token": "[TOKEN]",
+          "type": "Bearer"
+      }
+    ```
+Muista varmistaa, että antaessasi tokenin pyynnön ohessa se on varmasti asetettu Bearer tokeniksi.
+
+
 ## Päätepisteet
+
 
 ### Lisää tapahtuma
 
@@ -22,7 +51,6 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
     "ticketCount": 500,
   }
 ```
-
 ### Lisää lipputyypit tapahtumaan
 
 - **URL**: `/api/events/{id}/tickettypes`
@@ -691,6 +719,14 @@ TicketGuru Tapahtuma-API tarjoaa joukon päätepisteitä tapahtumainformaation h
 - **Metodi**: `DELETE`
 - **Kuvaus**: Poista annettu resurssi palvelimelta.
 - **Vastaus**: Jos id:n mukaista tapahtumaa ei ole olemassa, palauttaa 404 Not Found. Jos tapahtuman poistaminen onnistuu, palauttaa 204 No Content.
+
+### Virheet
+JWT-tokenin puuttuminen tai vääryys sekä tietyt virheet requesteissä johtavat palautteeseen skeemalla
+```json
+{
+    "errorDescription": "The error's description"
+}
+```
 
 ## Käyttö
 
