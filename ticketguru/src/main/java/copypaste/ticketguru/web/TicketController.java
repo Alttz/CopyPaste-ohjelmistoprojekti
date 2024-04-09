@@ -23,6 +23,4 @@ public class TicketController {
 	public String showMainPage() {
 		return "hello";
 	}
-
-
 }
