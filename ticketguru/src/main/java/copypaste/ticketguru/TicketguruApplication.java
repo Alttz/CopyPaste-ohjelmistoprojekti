@@ -24,15 +24,13 @@ import copypaste.ticketguru.domain.UserRepository;
 @SpringBootApplication
 public class TicketguruApplication {
 	
-	static {
-        System.setProperty("spring.datasource.username", System.getenv("DB_USER"));
-        System.setProperty("spring.datasource.password", System.getenv("DATABASE_PASSWORD")); 
-        System.setProperty("spring.datasource.service_host", System.getenv("DB_SERVICE_SERVICE_HOST"));
-        System.setProperty("spring.datasource.service_port", System.getenv("DB_SERVICE_SERVICE_PORT")); 
-        System.setProperty("spring.datasource.name", System.getenv("DB_PASSWORD")); 
+	/* static {
+		Dotenv dotenv = Dotenv.load();
+        System.setProperty("spring.datasource.url", dotenv.get("DATABASE_URL"));
+        System.setProperty("spring.datasource.username", dotenv.get("DATABASE_USER"));
+        System.setProperty("spring.datasource.password", dotenv.get("DATABASE_PASSWORD"));
 
-
-    } 
+    } */
 
 	public static void main(String[] args) {
 
