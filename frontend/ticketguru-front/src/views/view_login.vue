@@ -33,6 +33,7 @@ async function Login() {
       <div>
         <CompBox>
           <h4>Login</h4>
+          <hr>
           <input type="text" v-model="username" placeholder="username"><br>
           <input type="password" v-model="password" placeholder="password"><br>
           <button v-on:click="Login">Login</button>
