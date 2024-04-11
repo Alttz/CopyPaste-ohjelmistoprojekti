@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "tickets")
 public class Ticket {
@@ -37,6 +39,8 @@ public class Ticket {
 	@NotNull(message="isUsed cannot be null")
 	private boolean isUsed = false;
 
+	private String uuid;
+
 	public Ticket() {
 	}
 
@@ -46,6 +50,7 @@ public class Ticket {
 		this.event = event;
 		this.purchase = purchase;
 		this.isUsed = isUsed;
+		this.uuid = UUID.randomUUID().toString();
 	}
 
 	public Long getId() {
@@ -92,6 +97,14 @@ public class Ticket {
     public Long getEventId() {
         return this.event != null ? this.event.getId() : null;
     }
+
+	public String getUuid() {
+		return this.uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
 	@Override
 	public String toString() {

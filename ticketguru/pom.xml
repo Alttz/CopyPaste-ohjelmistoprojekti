@@ -119,15 +119,13 @@
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
 		</dependency> 
-
-		<!-- 
-		"For local database"
 		
+		<!-- "For local database" --> 
 		<dependency>
 			<groupId>io.github.cdimascio</groupId>
 			<artifactId>java-dotenv</artifactId>
 			<version>5.2.2</version>
-		</dependency> -->
+		</dependency> 
 		
 	</dependencies>
 

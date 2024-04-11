@@ -3,7 +3,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-!ticketguru/target/ticketguru-0.0.1-SNAPSHOT.jar
 
 ### STS ###
 .apt_generated
@@ -30,6 +29,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# local env files
+.env*.local
+.env
+
 ### VS Code ###
 .vscode/
 /.metadata/
+

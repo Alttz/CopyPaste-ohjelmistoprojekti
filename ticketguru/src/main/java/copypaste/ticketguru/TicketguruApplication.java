@@ -1,14 +1,19 @@
 package copypaste.ticketguru;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import copypaste.ticketguru.domain.AppUser;
 import copypaste.ticketguru.domain.Event;
@@ -20,28 +25,36 @@ import copypaste.ticketguru.domain.TicketRepository;
 import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
+import io.github.cdimascio.dotenv.Dotenv; // Comment this out before pushing to main
 
 @SpringBootApplication
-public class TicketguruApplication {
-	
-	/* static {
+public class TicketguruApplication {	
+	// Ought to have a better way
+	// Maybe check if system environment has so-and-so defined? Like TICKETGURU_TEST or the like
+
+	// Used in development. Comment this out before pushing to main 
+	/*
+	static {
 		Dotenv dotenv = Dotenv.load();
         System.setProperty("spring.datasource.url", dotenv.get("DATABASE_URL"));
         System.setProperty("spring.datasource.username", dotenv.get("DATABASE_USER"));
         System.setProperty("spring.datasource.password", dotenv.get("DATABASE_PASSWORD"));
 
-    } */
-
+    }
+	// */
+	
 	public static void main(String[] args) {
 		SpringApplication.run(TicketguruApplication.class, args);
 	}
 
-	/* @Bean
+	// TODO: find a better way to do this than just commenting and uncommenting, there's probably something
+	/*
+	 @Bean
 	public CommandLineRunner demo(PurchaseRepository prepository, EventRepository erepository,
 			TicketRepository trepository, UserRepository urepository, TicketTypeRepository ticketTypeRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 
-			 Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
+			Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
 			Event e5 = new Event("1.4.2024", "PubiTarmo", "Turku", "Apulanta", 1000);
 			Event e6 = new Event("18.7.2024", "Kansallisteatteri", "Helsinki", "Käärijä", 1000);
 			Event e7 = new Event("5.5.2024", "Koulun musaluokka", "Luhanka", "Antti Tuisku", 1000);
@@ -105,8 +118,26 @@ public class TicketguruApplication {
 			tickets2.forEach(ticket -> {
 				ticket.setPurchase(p2);
 				trepository.save(ticket);
-			}); */
+			});
 		};
+	}
+	*/
+
+	// HACK
+	// There's probably an annotation somewhere
+	@Bean
+	public CommandLineRunner fixTicketsWithoutUUID(TicketRepository ticketRepository) {
+		return (args) -> {
+			for(Ticket ticket : ticketRepository.findAll()) {
+				if(ticket.getUuid() == null) {
+					ticket.setUuid(UUID.randomUUID().toString());
+					ticketRepository.save(ticket);
+				}
+			}
+		};
+	}
+	
+};
 	
 
 
