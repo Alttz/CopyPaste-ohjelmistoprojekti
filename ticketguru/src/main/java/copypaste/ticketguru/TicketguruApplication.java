@@ -20,18 +20,21 @@ import copypaste.ticketguru.domain.TicketRepository;
 import copypaste.ticketguru.domain.TicketType;
 import copypaste.ticketguru.domain.TicketTypeRepository;
 import copypaste.ticketguru.domain.UserRepository;
+import io.github.cdimascio.dotenv.Dotenv; // Comment this out before pushing to main
 
 @SpringBootApplication
 public class TicketguruApplication {
 	
-	/* static {
+	// Used in development. Comment this out before pushing to main /*
+	static {
 		Dotenv dotenv = Dotenv.load();
         System.setProperty("spring.datasource.url", dotenv.get("DATABASE_URL"));
         System.setProperty("spring.datasource.username", dotenv.get("DATABASE_USER"));
         System.setProperty("spring.datasource.password", dotenv.get("DATABASE_PASSWORD"));
 
-    } */
-
+    }
+	// */
+	
 	public static void main(String[] args) {
 		SpringApplication.run(TicketguruApplication.class, args);
 	}
