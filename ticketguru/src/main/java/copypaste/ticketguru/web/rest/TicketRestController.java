@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import copypaste.ticketguru.domain.RESTError;
@@ -47,4 +49,36 @@ public class TicketRestController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
     }
+
+	@GetMapping(value = "/api/tickets/byUuid")
+	public ResponseEntity<?> getTicketByUuid(
+			@RequestParam("uuid") String uuid,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (jwtValidatorService.validateToken(authHeader)) {
+            Optional<Ticket> ticket = ticketRepository.findByUuid(uuid);
+			if (ticket.isPresent()) {
+                return ResponseEntity.ok(ticket.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
+    }
+
+	@PatchMapping(value = "/api/tickets/markAsUsed")
+	public ResponseEntity<?> markTicketAsUsed(
+		@RequestParam("uuid") String uuid,
+        @RequestHeader(value = "Authorization", required = false) String authHeader
+	) {
+		if (jwtValidatorService.validateToken(authHeader)) {
+			return ticketRepository.findByUuid(uuid).map(ticket -> {
+				ticket.setUsed(true);
+				ticketRepository.save(ticket);
+
+				return ResponseEntity.noContent().build();
+			}).orElse(ResponseEntity.notFound().build());
+        }
+
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
+	}
 }
