@@ -28,9 +28,12 @@ import copypaste.ticketguru.domain.UserRepository;
 import io.github.cdimascio.dotenv.Dotenv; // Comment this out before pushing to main
 
 @SpringBootApplication
-public class TicketguruApplication {
-	
-	// Used in development. Comment this out before pushing to main /*
+public class TicketguruApplication {	
+	// Ought to have a better way
+	// Maybe check if system environment has so-and-so defined? Like TICKETGURU_TEST or the like
+
+	// Used in development. Comment this out before pushing to main 
+	/*
 	static {
 		Dotenv dotenv = Dotenv.load();
         System.setProperty("spring.datasource.url", dotenv.get("DATABASE_URL"));
