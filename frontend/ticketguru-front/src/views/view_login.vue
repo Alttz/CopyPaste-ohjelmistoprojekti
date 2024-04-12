@@ -21,7 +21,7 @@ async function Login() {
     message.value = "Invalid username or password"
     return resp
   } else {
-    router.push('/customers')
+    router.push('/events')
   }
 }
 

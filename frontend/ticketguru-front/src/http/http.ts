@@ -1,3 +1,5 @@
+
+import { HttpRoutes } from "./http_routes"
 import axios from "axios"
 
 /*
@@ -16,7 +18,7 @@ export class Http {
 	static token: string|undefined = undefined
 	static auth_header: any|undefined = undefined
 
-	
+	HttpRoutes.get()
 	static async get(request_address:string) {
 
 		const resp = axios.get(this.apiurl+request_address,this.auth_header)
@@ -60,6 +62,26 @@ export class Http {
 
 	}
 	
+	static async login(username:string,password:string) {
+
+		var temp = this.apiurl+"login/"
+		var resp = (await axios.post<any>(temp,{
+			username: username,
+			password: password
+		})).data;
+
+		if (resp["success"] == true) {
+			localStorage.removeItem("token")
+			localStorage.clear()
+
+			this.token = resp["data"]["token"]
+			this.auth_header = {"headers":{"Authorization": `Bearer ${this.token}`}}
+			localStorage.setItem("token",resp["data"]["token"])
+			console.log(localStorage.getItem("token"))
+			return resp
+		}
+	}
+
 	/*Näillä methodeilal voi toteuttaa JWT kirjautumisen ja tokenin käynnissäolon validoinnin. (checkAuth() on hieman buginen)*/
 	/*
 	static async login(username:string,password:string) {
