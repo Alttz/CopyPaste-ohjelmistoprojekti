@@ -118,7 +118,7 @@ public class TicketguruApplication {
 			});
 		};
 	}
-	*/
+	
 
 	// HACK
 	// There's probably an annotation somewhere
@@ -132,7 +132,7 @@ public class TicketguruApplication {
 				}
 			}
 		};
-	}
+	}*/
 	
 };
 	
