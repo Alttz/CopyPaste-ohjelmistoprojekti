@@ -550,6 +550,61 @@ Muista varmistaa, että antaessasi tokenin pyynnön ohessa se on varmasti asetet
 ]
 ```
 
+### Hae lippu ID:n perusteella
+
+- **URL**: `/api/tickets/{id}`
+- **Metodi**: `GET`
+- **Kuvaus**: Hakee lipun ID:n perusteella.
+- **Vastaus**: Palauttaa 200 OK ja yksittäisen lipun tiedot JSON-muodossa.  jos annetulla ID:llä ei löydy tapahtumaa palautetaan 404 not found.
+
+**Esimerkki vastaus**
+
+```json
+{
+    "id": 3,
+    "ticketType": {
+        "id": 3,
+        "name": "Aikuinen",
+        "price": 25.0,
+        "event": 1
+    },
+    "uuid": "a93af710-cb1f-4945-a108-2d3f5e7a4352",
+    "used": true,
+    "event": 1
+}
+```
+
+### Hae lippu UUID:n perusteella
+
+- **URL**: `/api/tickets/byUuid?uuid={uuid}`
+- **Metodi**: `GET`
+- **Kuvaus**: Hakee lipun ID:n perusteella.
+- **Vastaus**: Palauttaa 200 OK ja yksittäisen lipun tiedot JSON-muodossa.  jos annetulla UUID:llä ei löydy tapahtumaa palautetaan 404 not found.
+
+**Esimerkki vastaus**
+
+```json
+{
+    "id": 4,
+    "ticketType": {
+        "id": 3,
+        "name": "Aikuinen",
+        "price": 25.0,
+        "event": 1
+    },
+    "uuid": "263c5f67-8d0e-4b3c-b0f3-2b21dd0526d4",
+    "used": true,
+    "event": 1
+}
+```
+
+### Merkitse lippu käytetyksi
+
+- **URL**: `/api/tickets/markAsUsed?uuid={uuid}`
+- **Metodi**: `PATCH`
+- **Kuvaus**: Merkitsee lipun tilaksi käytetty.
+- **Vastaus**: Palauttaa 204 No content ja muuttaa lipun "used"-attribuutin TRUE:ksi.
+
 ### Hae kaikki ostotapahtumat
 
 - **URL**: `/api/purchases`
@@ -739,6 +794,9 @@ Näiden päätepisteiden käyttämiseksi lähetä dokumentaation mukaisia kysytt
 - **Hae tapahtumia nimen perusteella**: `GET /api/events/byName?name=Lordi`
 - **Hae tapahtumia kaupungin perusteella**: `GET /api/events/byCity?city=Helsinki`
 - **Hae kaikki liput**: `GET /api/tickets`
+- **Hae lippu ID:n perusteella**: `GET /api/tickets/1`
+- **Hae lippu UUID:n perusteella**: `GET /api/tickets/byUuid?uuid=a93af710-cb1f-4945-a108-2d3f5e7a4352`
+- **Merkitse lippu käytetyksi**: `PATCH /api/tickets/markAsUsed?uuid=a93af710-cb1f-4945-a108-2d3f5e7a4352`
 - **Hae kaikki ostotapahtumat**: `GET /api/purchases`
 - **Lisää tapahtuma**: `POST /api/events`
 - **Lisää lipputyypit tapahtumaan**: `POST /api/events/5/tickettypes`
