@@ -15,8 +15,8 @@ tässä classissa vaan haetaan ne kun tarvitaan
 
 export class Http {
 	static apiurl = "http://projekti-ticketguru-tiimi4.rahtiapp.fi/";
-	static username:string = ""
-	static password:string = ""
+	static username:string|undefined = undefined
+	static password:string|undefined = undefined
 	static async get(url: string) {
 		const authHeader = this.getAuthHeader();
 		try {
@@ -70,27 +70,7 @@ export class Http {
 		return { Authorization: `Basic ${encodedCredentials}` };
 	}
 	static async login(username:string,password:string) {
-
-		var temp = this.apiurl+"login/"
-		var resp = (await axios.post<any>(temp,{
-			username: username,
-			password: password
-		})).data;
-
-
-		if (resp["success"] == true) {
-
-			//Localstorage is bit annoying sometimes and don't like to delete things.
-			localStorage.removeItem("username")
-			localStorage.removeItem("password")
-			localStorage.clear()
-
-			//this.auth_header = {"headers":{"Authorization": `Basic ${this.encoded_credentials}`}}
-
-
-			localStorage.setItem("token",resp["data"]["token"])
-			console.log(localStorage.getItem("token"))
-			return resp
-		}
+		this.username = username
+		this.password = password
 	}
 }
