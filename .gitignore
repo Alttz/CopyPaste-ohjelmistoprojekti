@@ -37,3 +37,5 @@ build/
 .vscode/
 /.metadata/
 
+node_modules/
+
