@@ -23,16 +23,17 @@ export class Http {
     }
 
 	static async get(url: string) {
-		try {
-            const response = await axios.get(this.apiurl + url, { 
-                headers: { Authorization: `Basic ${this.token}` }
+        try {
+            const response = await axios.get(this.apiurl + url, {
+                headers: this.getAuthHeader(),
             });
             return response.data;
         } catch (error) {
-            console.error("GET request failed:", error);
-            throw error;
+            // Handle error
+			console.error("Get request failed:", error);
+			throw error;
         }
-	}
+    }
 
 	static async post(url: string, data: any) {
 		const authHeader = this.getAuthHeader();
@@ -71,9 +72,8 @@ export class Http {
 	}
 
 	private static getAuthHeader() {
-		const encodedCredentials = Buffer.from(this.username + ":" + this.password).toString('base64');
-		return { Authorization: `Basic ${encodedCredentials}` };
-	}
+        return { Authorization: `Basic ${this.token}` };
+    }
 
 	static async login(username: string, password: string) {
         this.setCredentials(username, password);

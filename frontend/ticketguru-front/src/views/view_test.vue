@@ -23,7 +23,11 @@ const fetchTicketValidity = async () => {
         const response = await Http.get(`tarkastukset/${ticketCode.value}`);
         ticketValidity.value = response.response;  // Directly using the 'response' key from the API
     } catch (err) {
-        error.value = "Failed to fetch ticket data.";
+        if (err.message.includes("Authentication failed")) {
+            error.value = "Login information is insufficient or wrong. Please check your credentials.";
+        } else {
+            error.value = "Failed to fetch ticket data.";
+        }
         console.error(err);
     } finally {
         isLoading.value = false;
