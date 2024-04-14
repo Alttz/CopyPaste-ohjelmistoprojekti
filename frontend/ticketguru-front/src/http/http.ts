@@ -14,19 +14,24 @@ tässä classissa vaan haetaan ne kun tarvitaan
 */
 
 export class Http {
-	static apiurl = "http://projekti-ticketguru-tiimi4.rahtiapp.fi/";
-	static username:string|undefined = undefined
-	static password:string|undefined = undefined
+	static apiurl = "https://projekti-ticketguru-tiimi4.rahtiapp.fi/";
+
+    private static token: string | null = null;
+
+    static setCredentials(username: string, password: string) {
+        this.token = btoa(username + ':' + password);  // Encode credentials only once
+    }
+
 	static async get(url: string) {
-		const authHeader = this.getAuthHeader();
 		try {
-			const response = await axios.get(this.apiurl + url, { headers: authHeader });
-			return response.data;
-		} catch (error) {
-			// Handle error
-			console.error("GET request failed:", error);
-			throw error;
-		}
+            const response = await axios.get(this.apiurl + url, { 
+                headers: { Authorization: `Basic ${this.token}` }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("GET request failed:", error);
+            throw error;
+        }
 	}
 
 	static async post(url: string, data: any) {
@@ -69,8 +74,9 @@ export class Http {
 		const encodedCredentials = Buffer.from(this.username + ":" + this.password).toString('base64');
 		return { Authorization: `Basic ${encodedCredentials}` };
 	}
-	static async login(username:string,password:string) {
-		this.username = username
-		this.password = password
-	}
+
+	static async login(username: string, password: string) {
+        this.setCredentials(username, password);
+        return true;
+    }
 }
