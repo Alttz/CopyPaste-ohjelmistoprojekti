@@ -1,56 +1,89 @@
 <script setup lang="ts">
-import CompEditableTable from '@/components/CompEditableTable.vue';
-//import CompBox from '@/components/CompBox.vue';
-
-import axios from "axios"
-import { Http, } from '@/http/http';
-import router from '@/router';
-import { type Ref, ref } from 'vue';
+import { Http } from '@/http/http';
+import { ref } from 'vue';
 
 const ticketCode = ref('');
-const ticketValidity = ref(null);
+const ticketData = ref(null);
+const ticketValidity = ref(null);  // Ensure this is reset appropriately
 const isLoading = ref(false);
 const error = ref('');
 
-const fetchTicketValidity = async () => {
-    error.value = '';  // Clear previous errors on new request
+const fetchTicket = async () => {
+    error.value = '';
+    ticketValidity.value = null;  // Reset validity when searching for new ticket
     if (!ticketCode.value) {
         error.value = "Please enter a ticket code.";
         return;
     }
     isLoading.value = true;
     try {
-        const response = await Http.get(`tarkastukset/${ticketCode.value}`);
-        ticketValidity.value = response.response;  // Directly using the 'response' key from the API
-    } catch (err) {
-        if (err.message.includes("Authentication failed")) {
-            error.value = "Login information is insufficient or wrong. Please check your credentials.";
+        const response = await Http.get('myyntitapahtumat');
+        const tickets = response.flatMap(event => event.liputDto);
+        const foundTicket = tickets.find(ticket => ticket.tarkistuskoodi === ticketCode.value);
+        if (foundTicket) {
+            ticketData.value = foundTicket;
         } else {
-            error.value = "Failed to fetch ticket data.";
+            ticketData.value = null;
+            error.value = "No ticket found with the provided code.";
         }
+    } catch (err) {
+        error.value = "Failed to fetch ticket data.";
         console.error(err);
     } finally {
         isLoading.value = false;
     }
 };
 
+const fetchTicketValidity = async () => {
+    if (!ticketCode.value) {
+        error.value = "Please enter a ticket code for validation.";
+        return;
+    }
+    isLoading.value = true;
+    try {
+        const response = await Http.get(`tarkastukset/${ticketCode.value}`);
+        ticketValidity.value = response.response;  // Use the response directly
+    } catch (err) {
+        error.value = "Failed to validate ticket.";
+        console.error(err);
+    } finally {
+        isLoading.value = false;
+    }
+};
 </script>
+
 
 <template>
     <div>
-        <input v-model="ticketCode" type="text" placeholder="Enter Ticket Code" />
-        <button @click="fetchTicketValidity" :disabled="isLoading">
-            {{ isLoading ? 'Checking...' : 'Check Ticket' }}
+        <input v-model="ticketCode" type="text" placeholder="Lisää tarkastuskoodi" />
+        <button @click="fetchTicket" :disabled="isLoading">
+            {{ isLoading ? 'Tarkastetaan...' : 'Hae lipun tiedot' }}
         </button>
 
         <div v-if="error" class="error">{{ error }}</div>
+
+        <div v-if="ticketData">
+            <h3>Lipun tiedot:</h3>
+            <p>Tapahtuman nimi: {{ ticketData.tapahtumanNimi }}</p>
+            <p>Ajankohta: {{ ticketData.tapahtumaAika }}</p>
+            <p>Paikka: {{ ticketData.tapahtumaPaikka }}</p>
+            <p>Lipputyyppi: {{ ticketData.lipputyyppi }}</p>
+            <p>Hinta: {{ ticketData.hinta }} €</p>
+            
+            <!-- Button for checking ticket validity -->
+            <button @click="fetchTicketValidity" :disabled="isLoading">
+                {{ isLoading ? 'Checking...' : 'Check Ticket' }}
+            </button>
+        </div>
+
         <div v-if="ticketValidity !== null">
-            <h3>Ticket Status:</h3>
-            <p v-if="ticketValidity">{{ ticketCode }} is valid and now marked as used.</p>
-            <p v-else>{{ ticketCode }} is either already used or does not exist.</p>
+            <h3>Tarkasta lippu:</h3>
+            <p v-if="ticketValidity">{{ ticketCode.value }} Lippu on validi ja merkattu nyt käytetyksi.</p>
+            <p v-else>{{ ticketCode.value }} Lippu on jo käytetty tai sitä ei ole olemassa.</p>
         </div>
     </div>
 </template>
+
 
 
 
