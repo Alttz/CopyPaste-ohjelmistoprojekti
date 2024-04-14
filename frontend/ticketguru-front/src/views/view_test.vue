@@ -72,12 +72,12 @@ const fetchTicketValidity = async () => {
             
             <!-- Button for checking ticket validity -->
             <button @click="fetchTicketValidity" :disabled="isLoading">
-                {{ isLoading ? 'Checking...' : 'Check Ticket' }}
+                {{ isLoading ? 'Tarkastetaan...' : 'Tarkasta lippu' }}
             </button>
         </div>
 
         <div v-if="ticketValidity !== null">
-            <h3>Tarkasta lippu:</h3>
+            <h3>Lipun tila:</h3>
             <p v-if="ticketValidity">{{ ticketCode.value }} Lippu on validi ja merkattu nyt käytetyksi.</p>
             <p v-else>{{ ticketCode.value }} Lippu on jo käytetty tai sitä ei ole olemassa.</p>
         </div>

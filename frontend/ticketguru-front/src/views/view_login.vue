@@ -43,7 +43,7 @@ async function Login() {
 <style scoped>
     input, button {
         margin-top: 20px;
-        width: 100%;
+        width: 20%;
         min-height: 30px;
     }
 </style>
