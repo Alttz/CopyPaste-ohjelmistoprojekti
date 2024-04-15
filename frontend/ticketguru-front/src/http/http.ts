@@ -16,24 +16,24 @@ tässä classissa vaan haetaan ne kun tarvitaan
 export class Http {
 	static apiurl = "https://projekti-ticketguru-tiimi4.rahtiapp.fi/";
 
-    private static token: string | null = null;
+	private static token: string | null = null;
 
-    static setCredentials(username: string, password: string) {
-        this.token = btoa(username + ':' + password);  // Encode credentials only once
-    }
+	static setCredentials(username: string, password: string) {
+		this.token = btoa(username + ':' + password);  // Encode credentials only once
+	}
 
 	static async get(url: string) {
-        try {
-            const response = await axios.get(this.apiurl + url, {
-                headers: this.getAuthHeader(),
-            });
-            return response.data;
-        } catch (error) {
-            // Handle error
+		try {
+			const response = await axios.get(this.apiurl + url, {
+				headers: this.getAuthHeader(),
+			});
+			return response.data;
+		} catch (error) {
+			// Handle error
 			console.error("Get request failed:", error);
 			throw error;
-        }
-    }
+		}
+	}
 
 	static async post(url: string, data: any) {
 		const authHeader = this.getAuthHeader();
@@ -72,11 +72,27 @@ export class Http {
 	}
 
 	private static getAuthHeader() {
-        return { Authorization: `Basic ${this.token}` };
-    }
+		return { Authorization: `Basic ${this.token}` };
+	}
 
 	static async login(username: string, password: string) {
-        this.setCredentials(username, password);
-        return true;
-    }
+		const token = btoa(username + ':' + password);  // Encode credentials
+		try {
+			const response = await axios.get(`${this.apiurl}myyntitapahtumat`, {
+				headers: { Authorization: `Basic ${token}` },
+			});
+
+			// Check if the response body contains an indication of being a login page
+            if (response.data.includes("Login") || response.data.includes("<title>Please sign in</title>")) {
+                console.error("Redirected to login page despite 200 status.");
+                return false;
+            }
+			this.setCredentials(username, password);
+            return true;
+		} catch (error) {
+			console.error("Authentication failed:", error);
+			return false;
+		}
+	}
+
 }

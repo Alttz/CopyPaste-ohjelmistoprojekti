@@ -6,34 +6,28 @@ import { ref } from 'vue';
 let username = ref("");
 let password = ref("");
 let message = ref("");
-const error = ref('');
 
 async function Login() {
-  error.value = '';  // Clear previous errors on new request
-  try {
+    message.value = '';  // Clear previous messages
     let loginSuccessful = await Http.login(username.value, password.value);
     if (!loginSuccessful) {
-      message.value = "Invalid username or password";
-      return false;
+        message.value = "Käyttäjätunnus tai salasana on väärä";
     } else {
-      // Assuming login credentials are validated and correct
-      router.push('/test');
+        router.push('/ticketcheck');  // Navigate on successful login
     }
-  } catch (error) {
-    message.value = "Login failed: " + error.message;
-  }
 }
+
 </script>
 
 <template>
     <div class="container-fluid">
       <div>
         <CompBox>
-          <h4>Login</h4>
+          <h4>Kirjautuminen</h4>
           <hr>
-          <input type="text" v-model="username" placeholder="username"><br>
-          <input type="password" v-model="password" placeholder="password"><br>
-          <button v-on:click="Login">Login</button>
+          <input type="text" v-model="username" placeholder="Käyttäjätunnus"><br>
+          <input type="password" v-model="password" placeholder="Salasana"><br>
+          <button v-on:click="Login">Kirjaudu sisään</button>
           <p>{{ message }}</p>
         </CompBox>
       </div>
