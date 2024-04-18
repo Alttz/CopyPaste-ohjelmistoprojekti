@@ -13,7 +13,7 @@ async function Login() {
     if (!loginSuccessful) {
         message.value = "Käyttäjätunnus tai salasana on väärä";
     } else {
-        router.push('/ticketcheck');  // Navigate on successful login
+        router.push('/events');  // Navigate on successful login
     }
 }
 
@@ -22,14 +22,12 @@ async function Login() {
 <template>
     <div class="container-fluid">
       <div>
-        <CompBox>
           <h4>Kirjautuminen</h4>
           <hr>
           <input type="text" v-model="username" placeholder="Käyttäjätunnus"><br>
           <input type="password" v-model="password" placeholder="Salasana"><br>
           <button v-on:click="Login">Kirjaudu sisään</button>
           <p>{{ message }}</p>
-        </CompBox>
       </div>
     </div>
 </template>

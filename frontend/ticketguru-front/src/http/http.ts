@@ -14,7 +14,7 @@ tässä classissa vaan haetaan ne kun tarvitaan
 */
 
 export class Http {
-	static apiurl = "http://localhost:8080/";
+	static apiurl = "https://copypaste-ohjelmistoprojekti-copypaste-ticketguru.rahtiapp.fi/api";
 
 	private static token: string | null = null;
 
