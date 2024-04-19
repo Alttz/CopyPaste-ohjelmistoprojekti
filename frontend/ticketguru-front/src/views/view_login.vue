@@ -6,6 +6,19 @@ import { ref } from 'vue';
 let username = ref("");
 let password = ref("");
 let message = ref("");
+let storage = ref(Http.parseJWT(localStorage.getItem("token")))
+let isTokenStillValid = ref(false)
+
+if (localStorage.getItem("token") !== null) {
+    const temp_token = localStorage.getItem("token")
+    isTokenStillValid.value = Http.checkTokenValidity(temp_token)
+    if(isTokenStillValid) {
+        Http.setToken(temp_token)
+        router.push('/events')
+    }
+
+}
+
 
 async function Login() {
     message.value = '';  // Clear previous messages
@@ -28,6 +41,9 @@ async function Login() {
           <input type="password" v-model="password" placeholder="Salasana"><br>
           <button v-on:click="Login">Kirjaudu sisään</button>
           <p>{{ message }}</p>
+
+          <p style="margin-top:150px; color:purple;">Token: {{storage}}</p>
+          <p style="color:purple">isTokenStillValid: {{isTokenStillValid}}</p>
       </div>
     </div>
 </template>

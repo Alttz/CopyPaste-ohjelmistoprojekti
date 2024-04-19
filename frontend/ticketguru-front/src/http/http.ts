@@ -16,7 +16,37 @@ tässä classissa vaan haetaan ne kun tarvitaan
 export class Http {
 	static apiurl = "https://copypaste-ohjelmistoprojekti-copypaste-ticketguru.rahtiapp.fi/api";
 
-	private static token: string | null = null;
+	private static token: string | null = localStorage.getItem("token");
+
+
+	static checkTokenValidity(passed_token:string) {
+		try {
+			const tokenData = JSON.parse(atob(passed_token.split('.')[1])); // Decode JWT token
+			const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+			const currentTime = Date.now(); // Current time in milliseconds
+
+			return currentTime <= expirationTime;
+
+		} catch (error) {
+			console.log("Error decoding token: " + error.message)
+		}
+
+	}
+
+	static parseJWT(passed_token) {
+		try {
+			return JSON.parse(atob(passed_token.split('.')[1]));
+
+		} catch (error) {
+			console.log("Error decoding token: " + error.message)
+		}
+
+	}
+
+	static setToken(passed_token) {
+		this.token = passed_token
+	}
+
 
 	/*
 	static setCredentials(username: string, password: string) {
@@ -87,6 +117,9 @@ export class Http {
 				const token = response.data.token;
 				if (token) {
 					this.token = token;
+					localStorage.setItem("token", token);
+
+
 					return true;
 				} else {
 					console.error("No token received.");
