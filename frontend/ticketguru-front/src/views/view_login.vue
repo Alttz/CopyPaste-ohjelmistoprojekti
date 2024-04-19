@@ -9,6 +9,8 @@ let message = ref("");
 let storage = ref(Http.parseJWT(localStorage.getItem("token")))
 let isTokenStillValid = ref(false)
 
+//this is used to check if user has still valid token stored.
+//If so he is logged in automaticaly with that token
 if (localStorage.getItem("token") !== null) {
     const temp_token = localStorage.getItem("token")
     isTokenStillValid.value = Http.checkTokenValidity(temp_token)
