@@ -4,25 +4,34 @@
 	import { Http } from '@/http/http';
 	import router from '@/router';
 
+	import CompBox from '@/components/CompBox.vue'
+    import CompSelect from '@/components/CompSelect.vue'
+
 
 
 	const props = defineProps<{
 		toFetch:string
 		allowClick?: boolean
+		clickRedirectTarget?: string
 		allowEdit?: boolean
 		showDeleted?: boolean
 		shownColumns?: any
 		allowSearch?: boolean
+		passedComponents?: any
 	}>()
 
 	var editMode : Ref<boolean> = ref(false)
 	var temp = (await Http.get(props.toFetch))
 	var items : Ref<any> = ref(temp)
 	var keys : Ref<any> = ref(Object.keys(temp[0]))
-	
+
+
+	var passedComponents : Ref<any> = ref(props.passedComponents)
+
 	//Tell user if we are in edit mode
 	var editText : Ref<any> = ref("Edit")
 
+	console.log(props)
 
 
 	function toggleEdit(event:any) {
@@ -42,6 +51,14 @@
 
 	function saveData() {}
 
+	function clickAction(id:number,event:any) {
+		if (props.allowClick) {
+			console.log(router)
+			//router.push(props.what+"/"+id)
+			//router.push(props.what+"/"+id,{state:{id:id}})
+			router.push({name:"events/"+id,params:{id:id}})
+		}
+	}
 
 	//: before passed prop means it's literal type not a string for example. (list can be passed this way)
 </script>
@@ -55,7 +72,7 @@
 			</tr>
 		</thead>
 		<tbody v-if="editMode">
-			<tr v-for="data in items">
+			<tr v-for="data in items" >
 				<td v-for="d in data">
 					<input className="form-control" :value="d">
 				</td>
@@ -63,8 +80,17 @@
 		</tbody>
 
 		<tbody v-else>
-			<tr v-for="data in items">
-				<td v-for="d in data">{{d}}</td>
+			<tr v-for="data in items" @click="clickAction(1,$event)">
+				<td v-for="d in data">
+					<template v-if="Array.isArray(d)">
+						<!-- Render something different for array -->
+						<CompSelect :todisplay=d></CompSelect>
+					</template>
+					<template v-else>
+						<!-- Render span for non-array values -->
+						<span>{{ d }}</span>
+					</template>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -72,12 +98,21 @@
 	<div class="col-md-4" v-if="props.allowEdit === true">
 		<button class="btn" :class="{'btn-success': editMode, 'btn-warning':!editMode}" @click="toggleEdit($event)">{{editText}}</button>
 	</div>
+
+	<div>
+
+
+	</div>
 </template>
 
 
 <style scoped>
 	.search-button {
 		margin-botton: 25px;
+	}
+
+	* {
+		margin: 1px solid black;
 	}
 
 </style>

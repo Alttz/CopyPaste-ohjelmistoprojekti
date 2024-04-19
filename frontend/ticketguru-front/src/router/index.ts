@@ -4,6 +4,7 @@ import view_events from '../views/view_events.vue'
 import view_login from "../views/view_login.vue"
 import view_logout from "../views/view_logout.vue"
 import view_ticketcheck from "../views/view_ticketcheck.vue"
+import view_event from '@/views/view_event.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,13 @@ const router = createRouter({
       name: 'events',
       component: view_events
     },
+
+    {
+      path: '/events/:id',
+      name: 'event',
+      component: view_event
+    },
+
     {
       path: '/ticketcheck',
       name: 'ticketcheck',

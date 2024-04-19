@@ -2,7 +2,7 @@
 
 <template>
 	<div class="custombox">
-        <slot />
+        adddddddddddddddddddddddddddddddddd
     </div>
 </template>
 

@@ -7,8 +7,10 @@ import { Http,} from '@/http/http';
 import router from '@/router';
 import { type Ref, ref } from 'vue';
 
+import { useRouter, useRoute } from 'vue-router';
 
-
+const route = useRoute()
+const id = route.params.id
 
 
 
@@ -16,9 +18,7 @@ import { type Ref, ref } from 'vue';
 
 <template>
     <div>
-        <Suspense>
-            <CompEditableTable to-fetch="/events" :passed-components="{'ticketTypes': Select}" :allow-click="true"/>
-        </Suspense>
+        <p>Vieweing single event: {{id}}</p>
     </div>
 
 </template>
@@ -29,4 +29,3 @@ import { type Ref, ref } from 'vue';
 
 
 </style>
-	
