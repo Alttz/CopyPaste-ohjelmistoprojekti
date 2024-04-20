@@ -56,7 +56,7 @@
 			console.log(router)
 			//router.push(props.what+"/"+id)
 			//router.push(props.what+"/"+id,{state:{id:id}})
-			router.push({name:"events/"+id,params:{id:id}})
+			router.push({name:"events",query:{id:id}})
 		}
 	}
 
