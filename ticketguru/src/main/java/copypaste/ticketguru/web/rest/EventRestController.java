@@ -42,7 +42,7 @@ public class EventRestController {
 	@Autowired
 	private JwtValidatorService jwtValidatorService;
 
-	private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
+	private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Adult", "Child", "Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
 			"Varusmies", "VIP");
 
 	// hae kaikki tapahtumat
