@@ -9,15 +9,18 @@ import { type Ref, ref } from 'vue';
 import CompBuyTickets from '@/components/CompBuyTickets.vue'
 
 
-var cartItems : Ref<any> = ref({})
+var cartItems : Ref<any> = ref([])
+var cartItemsKeys : Ref<any> = ref([])
 
 function handleAddToCart(ticketData) {
-    cartItems.value = ticketData
-    console.log(cartItems.value)
+    cartItems.value.push(ticketData)
+    cartItemsKeys.value = Object.keys(cartItems.value[0])
+    console.log(ticketData)
 }
 
 function buyTickets() {
     //Do http.ts call here to send post buy request
+    alert("Buying tickets....")
     
 }
 
@@ -31,27 +34,18 @@ function buyTickets() {
         </Suspense>
 
         <h3>Shopping Cart</h3>
-
+        adadad{{cartItems.value}}
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
-                    <th>id</th>
-                    <th>date</th>
-                    <th>place</th>
-                    <th>name</th>
-                    <th>ticketType</th>
-                    <th>Price</th>
+                    <th v-for="header in cartItemsKeys">{{header}}</th>
                 </tr>
             </thead>
 
             <tbody>
-                <tr>
-                    <td>0</td>
-                    <td>wlalalal</td>
-                    <td>wlalalal</td>
-                    <td>wlalalal</td>
-                    <td>wlalalal</td>
-                    <td>24.00 €</td>
+                <tr v-for="ticket in cartItems">
+                    <td v-for="data in ticket">{{data}}</td>
+                    <td><button>Delete</button></td>
                 </tr>
             </tbody>
         </table>

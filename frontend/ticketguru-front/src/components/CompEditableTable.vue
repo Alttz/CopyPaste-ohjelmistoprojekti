@@ -8,7 +8,7 @@
     import CompSelect from '@/components/CompSelect.vue'
 
 
-	defineEmits(['addToCart'])
+	const emit = defineEmits(['addToCart'])
 
 	const props = defineProps<{
 		toFetch:string
@@ -62,6 +62,29 @@
 		}
 	}
 
+	//Let's preprocess what we are gonna add to the cart
+	//Not everything is needed overthere
+	function addToCart(ticket) {
+		//$emit('addToCart',data)
+
+
+
+		let processed_data = {
+			"id":ticket['id'],
+			"date":ticket['date'],
+			"place":ticket['place'],
+			"city":ticket['city'],
+			"name":ticket['name'],
+			"ticketType":"Seniori",
+			"Price":"0 €"
+		}
+
+
+		emit("addToCart",processed_data)
+		//alert(ticket["city"])
+
+	}
+
 	//: before passed prop means it's literal type not a string for example. (list can be passed this way)
 </script>
 
@@ -99,7 +122,7 @@
 
 				</td>
 				<td>
-					<button @click="$emit('addToCart',data)">Add to Cart</button>
+					<button @click="addToCart(data)">Add to Cart</button>
 				</td>
 			</tr>
 		</tbody>
