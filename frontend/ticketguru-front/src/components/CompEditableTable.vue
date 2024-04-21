@@ -30,6 +30,8 @@
 
 	var passedComponents : Ref<any> = ref(props.passedComponents)
 
+	var selectedOptions = {}
+
 	//Tell user if we are in edit mode
 	var editText : Ref<any> = ref("Edit")
 
@@ -62,12 +64,23 @@
 		}
 	}
 
+
+	//This feels so anti vue for real
+	//Please refactor this if you know how...
+	//This all could have been a v-model i think -_-
+	function optionChanged(event,id) {
+		const selected_element = event.target[event.target.selectedIndex]
+		selectedOptions[id] = {
+			"ticketType":selected_element.value,
+			"price":selected_element.text.replace(/\D/g, "")
+		}
+		console.log(selectedOptions)
+	}
+
 	//Let's preprocess what we are gonna add to the cart
 	//Not everything is needed overthere
 	function addToCart(ticket) {
 		//$emit('addToCart',data)
-
-
 
 		let processed_data = {
 			"id":ticket['id'],
@@ -75,8 +88,8 @@
 			"place":ticket['place'],
 			"city":ticket['city'],
 			"name":ticket['name'],
-			"ticketType":"Seniori",
-			"Price":"0 €"
+			"ticketType": selectedOptions[ticket['id']]['ticketType'],
+			"Price": selectedOptions[ticket['id']]['price'],
 		}
 
 
@@ -108,18 +121,22 @@
 			<tr v-for="data in items" @click="clickAction(data['id'],$event)">
 				<td v-for="d in data">
 					<template v-if="Array.isArray(d)">
-						<!-- Render something different for array -->
-						<CompSelect :todisplay=d></CompSelect>
+
+
+						<select v-model="selectedOptions[data.id]" @change="optionChanged($event, data.id)">
+							<option v-for="opt in d" :key="opt.name" :value="opt.name">{{ opt.name }} | {{ opt.price }} €</option>
+						</select>
+
+
+
 					</template>
 					<template v-else>
-						<!-- Render span for non-array values -->
 						<span>{{ d }}</span>
 					</template>
 				</td>
 
 				<td>
 					<input type="number" value="1" min="1" :max="data['ticketCount']">
-
 				</td>
 				<td>
 					<button @click="addToCart(data)">Add to Cart</button>
