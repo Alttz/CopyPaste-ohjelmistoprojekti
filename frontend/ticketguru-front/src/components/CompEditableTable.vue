@@ -26,6 +26,7 @@
 	var keys : Ref<any> = ref(Object.keys(temp[0]))
 
 
+
 	var passedComponents : Ref<any> = ref(props.passedComponents)
 
 	//Tell user if we are in edit mode
@@ -56,7 +57,7 @@
 			console.log(router)
 			//router.push(props.what+"/"+id)
 			//router.push(props.what+"/"+id,{state:{id:id}})
-			router.push({name:"events",query:{id:id}})
+			router.push({name:"event",query:{id:id}})
 		}
 	}
 
@@ -80,7 +81,7 @@
 		</tbody>
 
 		<tbody v-else>
-			<tr v-for="data in items" @click="clickAction(1,$event)">
+			<tr v-for="data in items" @click="clickAction(data['id'],$event)">
 				<td v-for="d in data">
 					<template v-if="Array.isArray(d)">
 						<!-- Render something different for array -->
@@ -95,6 +96,8 @@
 		</tbody>
 	</table>
 
+
+	<p>{{data}}</p>
 	<div class="col-md-4" v-if="props.allowEdit === true">
 		<button class="btn" :class="{'btn-success': editMode, 'btn-warning':!editMode}" @click="toggleEdit($event)">{{editText}}</button>
 	</div>
