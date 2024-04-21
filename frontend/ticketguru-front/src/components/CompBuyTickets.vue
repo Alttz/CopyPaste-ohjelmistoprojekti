@@ -8,14 +8,7 @@
 
 
 	const props = defineProps<{
-        toFetch:string
-        allowClick?: boolean
-        clickRedirectTarget?: string
-        allowEdit?: boolean
-        showDeleted?: boolean
-        shownColumns?: any
-        allowSearch?: boolean
-        passedComponents?: any
+
     }>()
 
     /*

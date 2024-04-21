@@ -8,6 +8,7 @@
     import CompSelect from '@/components/CompSelect.vue'
 
 
+	defineEmits(['addToCart'])
 
 	const props = defineProps<{
 		toFetch:string
@@ -91,6 +92,14 @@
 						<!-- Render span for non-array values -->
 						<span>{{ d }}</span>
 					</template>
+				</td>
+
+				<td>
+					<input type="number" value="1" min="1" :max="data['ticketCount']">
+
+				</td>
+				<td>
+					<button @click="$emit('addToCart',data)">Add to Cart</button>
 				</td>
 			</tr>
 		</tbody>
