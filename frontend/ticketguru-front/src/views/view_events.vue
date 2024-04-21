@@ -20,7 +20,38 @@ function handleAddToCart(ticketData) {
 
 function buyTickets() {
     //Do http.ts call here to send post buy request
-    alert("Buying tickets....")
+
+
+
+    let temp_purchaseRequestRows = []
+
+    let ticketTypesForEvents = {}
+    for (let i = 0; i < cartItems.value.length; i++) {
+        let ticket = cartItems.value[i]
+
+        //Let's find all different ticketTypes that are sold to each event and add them into a dictionary in a list with key that is the event's id
+        if(!(ticket["id"] in ticketTypesForEvents)) {
+            ticketTypesForEvents[ticket["id"]] = []
+        }
+        ticketTypesForEvents[ticket["id"]].push(ticket["ticketType"])
+    }
+
+
+    for (const [key, value] of Object.entries(ticketTypesForEvents)) {
+        temp_purchaseRequestRows.push({
+            "eventId": 4,
+            "ticketTypeNames":value
+        })
+    }
+
+
+    let template_request = {
+        "userId": 1,
+        "purchaseRequestRows": temp_purchaseRequestRows
+    }
+
+    const response = Http.post("/purchases",template_request)
+    console.log(response)
     
 }
 
@@ -34,7 +65,7 @@ function buyTickets() {
         </Suspense>
 
         <h3>Shopping Cart</h3>
-        adadad{{cartItems.value}}
+
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
