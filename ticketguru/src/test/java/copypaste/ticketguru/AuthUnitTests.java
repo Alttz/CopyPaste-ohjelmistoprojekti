@@ -19,7 +19,7 @@ import copypaste.ticketguru.service.JwtValidatorService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthTests {
+public class AuthUnitTests {
     @Autowired
     private MockMvc mockMvc;
 
