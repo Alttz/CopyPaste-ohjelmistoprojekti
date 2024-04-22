@@ -12,6 +12,10 @@ import CompBuyTickets from '@/components/CompBuyTickets.vue'
 var cartItems : Ref<any> = ref([])
 var cartItemsKeys : Ref<any> = ref([])
 
+
+var boughtTickets : Ref<any> = ref([])
+var boughtTicketKeys : Ref<any> = ref([])
+
 function handleAddToCart(ticketData) {
     cartItems.value.push(ticketData)
     cartItemsKeys.value = Object.keys(cartItems.value[0])
@@ -39,7 +43,7 @@ function buyTickets() {
 
     for (const [key, value] of Object.entries(ticketTypesForEvents)) {
         temp_purchaseRequestRows.push({
-            "eventId": 4,
+            "eventId": key,
             "ticketTypeNames":value
         })
     }
@@ -51,6 +55,13 @@ function buyTickets() {
     }
 
     const response = Http.post("/purchases",template_request)
+
+
+    cartItems.value = []
+    cartItemsKeys.value = []
+
+
+    
     console.log(response)
     
 }
@@ -84,6 +95,24 @@ function buyTickets() {
         <hr>
         <h4>Total: 0.00€</h4>
         <button @click=buyTickets>Buy</button>
+
+
+
+
+        <table class="table table-bordered border-primary">
+            <thead class="thead-dark">
+                <tr>
+                    <th v-for="header in boughtTicketKeys">{{header}}</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="ticket in boughtTickets">
+                    <td v-for="data in ticket">{{data}}</td>
+                    <td><button>Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </template>
