@@ -22,7 +22,7 @@ function handleAddToCart(ticketData) {
     console.log(ticketData)
 }
 
-function buyTickets() {
+async function buyTickets() {
     //Do http.ts call here to send post buy request
 
 
@@ -54,9 +54,11 @@ function buyTickets() {
         "purchaseRequestRows": temp_purchaseRequestRows
     }
 
-    const response = Http.post("/purchases",template_request)
+    const response = await Http.post("/purchases",template_request)
 
 
+    boughtTickets.value = response["successfulPurchases"]
+    boughtTicketKeys.value = Object.keys(response["successfulPurchases"][0]['tickets'][0])
     cartItems.value = []
     cartItemsKeys.value = []
 
@@ -91,14 +93,11 @@ function buyTickets() {
                 </tr>
             </tbody>
         </table>
-
-        <hr>
-        <h4>Total: 0.00€</h4>
         <button @click=buyTickets>Buy</button>
 
 
-
-
+        <hr>
+        <h4>Ostetut liput</h4>
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
@@ -107,10 +106,17 @@ function buyTickets() {
             </thead>
 
             <tbody>
-                <tr v-for="ticket in boughtTickets">
-                    <td v-for="data in ticket">{{data}}</td>
-                    <td><button>Delete</button></td>
-                </tr>
+                <template v-for="ticket in boughtTickets">
+                    <template v-for="data in ticket['tickets']">
+                        <tr>
+                            <td>{{data.id}}</td>
+                            <td>{{data.ticketType['name']}} | {{data.ticketType['price']}} €</td>
+                            <td>{{data.uuid}}</td>
+                            <td>{{data.used}}</td>
+                            <td>{{data.event}}</td>
+                        </tr>
+                    </template>
+                </template>
             </tbody>
         </table>
     </div>
