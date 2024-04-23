@@ -6,6 +6,21 @@ import { ref } from 'vue';
 let username = ref("");
 let password = ref("");
 let message = ref("");
+let storage = ref(Http.parseJWT(localStorage.getItem("token")))
+let isTokenStillValid = ref(false)
+
+//this is used to check if user has still valid token stored.
+//If so he is logged in automaticaly with that token
+if (localStorage.getItem("token") !== null) {
+    const temp_token = localStorage.getItem("token")
+    isTokenStillValid.value = Http.checkTokenValidity(temp_token)
+    if(isTokenStillValid) {
+        Http.setToken(temp_token)
+        router.push('/events')
+    }
+
+}
+
 
 async function Login() {
     message.value = '';  // Clear previous messages
@@ -13,7 +28,7 @@ async function Login() {
     if (!loginSuccessful) {
         message.value = "Käyttäjätunnus tai salasana on väärä";
     } else {
-        router.push('/ticketcheck');  // Navigate on successful login
+        router.push('/events');  // Navigate on successful login
     }
 }
 
@@ -22,14 +37,15 @@ async function Login() {
 <template>
     <div class="container-fluid">
       <div>
-        <CompBox>
           <h4>Kirjautuminen</h4>
           <hr>
           <input type="text" v-model="username" placeholder="Käyttäjätunnus"><br>
           <input type="password" v-model="password" placeholder="Salasana"><br>
           <button v-on:click="Login">Kirjaudu sisään</button>
           <p>{{ message }}</p>
-        </CompBox>
+
+          <p style="margin-top:150px; color:purple;">Token: {{storage}}</p>
+          <p style="color:purple">isTokenStillValid: {{isTokenStillValid}}</p>
       </div>
     </div>
 </template>

@@ -14,13 +14,45 @@ tässä classissa vaan haetaan ne kun tarvitaan
 */
 
 export class Http {
-	static apiurl = "https://projekti-ticketguru-tiimi4.rahtiapp.fi/";
+	static apiurl = "https://copypaste-ohjelmistoprojekti-copypaste-ticketguru.rahtiapp.fi/api";
 
-	private static token: string | null = null;
+	private static token: string | null = localStorage.getItem("token");
 
+
+	static checkTokenValidity(passed_token:string) {
+		try {
+			const tokenData = JSON.parse(atob(passed_token.split('.')[1])); // Decode JWT token
+			const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+			const currentTime = Date.now(); // Current time in milliseconds
+
+			return currentTime <= expirationTime;
+
+		} catch (error) {
+			console.log("Error decoding token: " + error.message)
+		}
+
+	}
+
+	static parseJWT(passed_token) {
+		try {
+			return JSON.parse(atob(passed_token.split('.')[1]));
+
+		} catch (error) {
+			console.log("Error decoding token: " + error.message)
+		}
+
+	}
+
+	static setToken(passed_token) {
+		this.token = passed_token
+	}
+
+
+	/*
 	static setCredentials(username: string, password: string) {
 		this.token = btoa(username + ':' + password);  // Encode credentials only once
 	}
+	*/
 
 	static async get(url: string) {
 		try {
@@ -72,27 +104,31 @@ export class Http {
 	}
 
 	private static getAuthHeader() {
-		return { Authorization: `Basic ${this.token}` };
+		return { Authorization: `Bearer ${this.token}` };
 	}
 
 	static async login(username: string, password: string) {
-		const token = btoa(username + ':' + password);  // Encode credentials
-		try {
-			const response = await axios.get(`${this.apiurl}myyntitapahtumat`, {
-				headers: { Authorization: `Basic ${token}` },
-			});
+			try {
+				const response = await axios.post(`${this.apiurl}/login`, {
+					username: username,
+					password: password
+				});
 
-			// Check if the response body contains an indication of being a login page
-            if (response.data.includes("Login") || response.data.includes("<title>Please sign in</title>")) {
-                console.error("Redirected to login page despite 200 status.");
-                return false;
-            }
-			this.setCredentials(username, password);
-            return true;
-		} catch (error) {
-			console.error("Authentication failed:", error);
-			return false;
+				const token = response.data.token;
+				if (token) {
+					this.token = token;
+					localStorage.setItem("token", token);
+
+
+					return true;
+				} else {
+					console.error("No token received.");
+					return false;
+				}
+			} catch (error) {
+				console.error("Authentication failed:", error);
+				return false;
+			}
 		}
-	}
 
 }
