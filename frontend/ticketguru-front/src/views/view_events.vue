@@ -8,11 +8,8 @@ import router from '@/router';
 import { type Ref, ref } from 'vue';
 import CompBuyTickets from '@/components/CompBuyTickets.vue'
 
-
 var cartItems : Ref<any> = ref([])
 var cartItemsKeys : Ref<any> = ref([])
-
-
 var boughtTickets : Ref<any> = ref([])
 var boughtTicketKeys : Ref<any> = ref([])
 
@@ -25,10 +22,7 @@ function handleAddToCart(ticketData) {
 async function buyTickets() {
     //Do http.ts call here to send post buy request
 
-
-
     let temp_purchaseRequestRows = []
-
     let ticketTypesForEvents = {}
     for (let i = 0; i < cartItems.value.length; i++) {
         let ticket = cartItems.value[i]
@@ -48,7 +42,6 @@ async function buyTickets() {
         })
     }
 
-
     let template_request = {
         "userId": 1,
         "purchaseRequestRows": temp_purchaseRequestRows
@@ -56,22 +49,19 @@ async function buyTickets() {
 
     const response = await Http.post("/purchases",template_request)
 
-
     boughtTickets.value = response["successfulPurchases"]
     boughtTicketKeys.value = Object.keys(response["successfulPurchases"][0]['tickets'][0])
     cartItems.value = []
     cartItemsKeys.value = []
-
-
     
     console.log(response)
-    
 }
 
 </script>
 
 <template>
     <div>
+        <a href="http://localhost:3000/logout">Kirjaudu ulos</a>
         <h3>Events</h3>
         <Suspense>
             <CompEditableTable to-fetch="/events" :passed-components="{'ticketTypes': Select}" @addToCart="handleAddToCart" />
@@ -89,7 +79,7 @@ async function buyTickets() {
             <tbody>
                 <tr v-for="ticket in cartItems">
                     <td v-for="data in ticket">{{data}}</td>
-                    <td><button>Delete</button></td>
+                    <td>€</td>
                 </tr>
             </tbody>
         </table>

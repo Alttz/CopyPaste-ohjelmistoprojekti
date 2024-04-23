@@ -3,14 +3,8 @@
 import axios from "axios"
 
 /*
-Kirjoitin tän classin alunperin toimimaan JWT authin kanssa.
-Nyt me joudutaan handlaamaan tää erilailla sillä kaikki muut ryhmät käyttää basic authia
-Ei sillälailla hirveän erilainen mutta pitää tutkia miten basic authi toimii, että miten passataan
-tunnukset joka requestin mukana järkevästi
-
-
-login sivun scripti tekee niin, että se tallentaa selaimen localstorageen tarivtut auth tiedot ja sitten
-tässä classissa vaan haetaan ne kun tarvitaan
+Yksinkertaisuudessaan Wrapper luokka axioxelle joka trackaa oikeat post locationit
+ja authentificationit
 */
 
 export class Http {

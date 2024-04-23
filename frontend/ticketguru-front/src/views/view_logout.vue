@@ -16,6 +16,7 @@ localStorage.clear()
 
     <div>
         <p>You have been logged out</p>
+        <a href="http://localhost:3000/login">Kirjaudu sisään</a>
     </div>
 
 </template>
