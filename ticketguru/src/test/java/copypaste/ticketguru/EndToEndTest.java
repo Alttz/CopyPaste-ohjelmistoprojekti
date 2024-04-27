@@ -101,7 +101,7 @@ public class EndToEndTest {
                 .param("uuid", uuid)
                 .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.used").value(true));
+                .andExpect(jsonPath("$[0].used").value(true));                
     }
 
 

@@ -1,6 +1,9 @@
 package copypaste.ticketguru;
 
 import static org.mockito.Mockito.*;
+
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -20,7 +23,7 @@ public class EventUnitTest {
     @Test
     public void testFindEventById() {
         // Arrange
-        Event mockEvent = new Event("2023-09-28", "Hartwallareena", "Helsinki", "Lordi", 1000);
+        Event mockEvent = new Event(LocalDate.of(2023, 9, 28), "Hartwallareena", "Helsinki", "Lordi", 1000);
         when(eventRepository.findById(1L)).thenReturn(Optional.of(mockEvent));
 
         // Act

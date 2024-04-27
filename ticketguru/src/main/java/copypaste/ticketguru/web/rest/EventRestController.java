@@ -74,7 +74,8 @@ public class EventRestController {
 			if (!eventOpt.isPresent()) {
 				return ResponseEntity.notFound().build();
 			}
-			return ResponseEntity.ok(eventOpt.get());
+			
+			return ResponseEntity.ok(List.of(eventOpt.get()));
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
 	}
