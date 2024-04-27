@@ -139,7 +139,7 @@
 					<input type="number" value="1" min="1" :max="data['ticketCount']">
 				</td>
 				<td>
-					<button @click="addToCart(data)">Add to Cart</button>
+					<button @click="addToCart(data)">Lisää ostoskoriin</button>
 				</td>
 			</tr>
 		</tbody>

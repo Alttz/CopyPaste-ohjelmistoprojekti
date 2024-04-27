@@ -57,17 +57,23 @@ async function buyTickets() {
     console.log(response)
 }
 
+function goToEventManagement() {
+    router.push({ name: 'event_management' });
+}
+
+
 </script>
 
 <template>
     <div>
         <a href="http://localhost:3000/logout">Kirjaudu ulos</a>
-        <h3>Events</h3>
+        <br><br><button @click="goToEventManagement">Hallitse tapahtumia</button>
+        <h3>Myy lippuja</h3>
         <Suspense>
             <CompEditableTable to-fetch="/events" :passed-components="{'ticketTypes': Select}" @addToCart="handleAddToCart" />
         </Suspense>
 
-        <h3>Shopping Cart</h3>
+        <h3>Ostoskori</h3>
 
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
@@ -83,7 +89,7 @@ async function buyTickets() {
                 </tr>
             </tbody>
         </table>
-        <button @click=buyTickets>Buy</button>
+        <button @click=buyTickets>Osta</button>
 
 
         <hr>

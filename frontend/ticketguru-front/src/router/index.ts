@@ -5,6 +5,9 @@ import view_login from "../views/view_login.vue"
 import view_logout from "../views/view_logout.vue"
 import view_ticketcheck from "../views/view_ticketcheck.vue"
 import view_event from '@/views/view_event.vue'
+import view_eventManagement from '@/views/view_eventManagement.vue'
+import view_createEvent from '@/views/view_createEvent.vue'
+import view_editEvent from '@/views/view_editEvent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +38,25 @@ const router = createRouter({
       name: 'event',
       component: view_event
     },
+
+    {
+      path: '/event_management',
+      name: 'event_management',
+      component: view_eventManagement
+    },
+    {
+      path: '/createevent',
+      name: 'createevent',
+      component: view_createEvent
+    },
+
+    {
+      path: '/editevent/:id',
+      name: 'editevent',
+      component: view_editEvent,
+      props: true
+    },
+
 
     {
       path: '/ticketcheck',
