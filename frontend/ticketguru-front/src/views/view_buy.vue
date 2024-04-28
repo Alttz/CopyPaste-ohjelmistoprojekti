@@ -66,12 +66,12 @@ function goToEventManagement() {
 
 <template>
     <div>
-        <h3>Myy lippuja</h3>
+        <h3>Buy Tickets</h3>
         <Suspense>
             <CompEditableTable to-fetch="/events" :passed-components="{'ticketTypes': Select}" @addToCart="handleAddToCart" />
         </Suspense>
 
-        <h3>Ostoskori</h3>
+        <h3>Shoppingcart</h3>
 
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
@@ -91,7 +91,7 @@ function goToEventManagement() {
 
 
         <hr>
-        <h4>Ostetut liput</h4>
+        <h4>Order</h4>
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>

@@ -11,8 +11,7 @@ function goToEventManagement() {
 
 <template>
     <div>
-        <h3>Ticketguru</h3>
-        <p>Temporary landing page</p>
+        <h2>404 Page not found</h2>
     </div>
 
 </template>
@@ -20,6 +19,10 @@ function goToEventManagement() {
 
 <style scoped>
 
-
+    h2 {
+        text-align:center;
+        margin-top:40vh;
+    }
+    
 
 </style>
