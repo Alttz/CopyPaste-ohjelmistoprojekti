@@ -42,9 +42,6 @@ public class EventRestController {
 	@Autowired
 	private JwtValidatorService jwtValidatorService;
 
-	private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
-			"Varusmies", "VIP");
-
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
 	public ResponseEntity<?> getAllEvents(@RequestHeader(value = "Authorization", required = false) String authHeader) {
@@ -200,10 +197,6 @@ public class EventRestController {
 			return eventRepository.findById(eventId).map(event -> {
 				List<TicketType> ticketTypes = new ArrayList<>();
 				for (TicketTypeRequest ttRequest : ticketTypeRequests) {
-					if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
-						return ResponseEntity.badRequest()
-								.body(new RESTError("Ticket type " + ttRequest.getName() + " is not allowed."));
-					}
 					TicketType newTicketType = new TicketType(ttRequest.getName(), ttRequest.getPrice(), event);
 					ticketTypes.add(newTicketType);
 				}
@@ -252,10 +245,6 @@ public class EventRestController {
 				// mihin tapahtumaan ne kuuluvat
 				List<TicketType> ticketTypes = new ArrayList<>();
 				for (TicketTypeRequest ttRequest : ticketTypeRequests) {
-					if (!ALLOWED_TICKET_TYPES.contains(ttRequest.getName())) {
-						return ResponseEntity.badRequest()
-								.body(new RESTError("Ticket type " + ttRequest.getName() + " is not allowed."));
-					}
 					TicketType newTicketType = new TicketType(ttRequest.getName(), ttRequest.getPrice(), event);
 					ticketTypes.add(newTicketType);
 				}
