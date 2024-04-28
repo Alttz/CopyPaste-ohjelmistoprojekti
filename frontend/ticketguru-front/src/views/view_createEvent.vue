@@ -8,7 +8,7 @@ const defaultEventData  = ({
     date: '',
     city: '',
     place: '',
-    ticketcount: 0
+    ticketCount: 0
 });
 
 const eventData = ref({...defaultEventData});
@@ -53,7 +53,7 @@ function goBack() {
             </div>
             <div class="form-group">
                 <label for="ticketCount">Ticket Count</label>
-                <input type="number" id="ticketCount" v-model.number="eventData.ticketcount" required min="1">
+                <input type="number" id="ticketCount" v-model.number="eventData.ticketCount" required min="1">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
