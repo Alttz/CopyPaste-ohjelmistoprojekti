@@ -9,6 +9,7 @@ import view_eventManagement from '@/views/view_eventManagement.vue'
 import view_createEvent from '@/views/view_createEvent.vue'
 import view_editEvent from '@/views/view_editEvent.vue'
 import view_ticketTypes from '@/views/view_ticketTypes.vue'
+import view_landing from '@/views/view_landing.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/',
       name: 'login2',
       component: view_login
+    },
+    {
+      path: '/landing',
+      name: 'landing',
+      component: view_landing
     },
     {
       path: '/login',

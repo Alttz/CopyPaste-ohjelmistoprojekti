@@ -66,8 +66,6 @@ function goToEventManagement() {
 
 <template>
     <div>
-        <a href="http://localhost:3000/logout">Kirjaudu ulos</a>
-        <br><br><button @click="goToEventManagement">Hallitse tapahtumia</button>
         <h3>Myy lippuja</h3>
         <Suspense>
             <CompEditableTable to-fetch="/events" :passed-components="{'ticketTypes': Select}" @addToCart="handleAddToCart" />
