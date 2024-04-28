@@ -8,6 +8,7 @@ import view_event from '@/views/view_event.vue'
 import view_eventManagement from '@/views/view_eventManagement.vue'
 import view_createEvent from '@/views/view_createEvent.vue'
 import view_editEvent from '@/views/view_editEvent.vue'
+import view_ticketTypes from '@/views/view_ticketTypes.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +63,13 @@ const router = createRouter({
       path: '/ticketcheck',
       name: 'ticketcheck',
       component: view_ticketcheck
+    },
+
+    {
+      path: '/ticket-types/:id',
+      name: 'ticketTypes',
+      component: view_ticketTypes,
+      props: true
     },
 
     {

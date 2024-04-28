@@ -41,6 +41,10 @@ function editEvent(id: number) {
   router.push({ name: 'editevent', params: { id } });
 }
 
+function viewTicketTypes(id: number) {
+    router.push({ name: 'ticketTypes', params: { id } });
+}
+
 //: before passed prop means it's literal type not a string for example. (list can be passed this way)
 </script>
 
@@ -50,7 +54,7 @@ function editEvent(id: number) {
 	<table class="table table-bordered border-primary">
 		<thead class="thead-dark">
 			<tr>
-				<th>Ajankohta</th>
+				<th>Aika</th>
 				<th>Kaupunki</th>
 				<th>Kuvaus</th>
 				<th>Toiminnot</th>
@@ -70,9 +74,9 @@ function editEvent(id: number) {
 				<td>{{ data['city'] }}</td>
 				<td>{{ data['name'] }}</td>
 				<td>
-					<button class="btn btn-primary btn-sm" @click="editEvent(data.id)">Edit</button>
-					<button class="btn btn-info btn-sm" @click="viewTicketTypes(data)">Ticket Types</button>
-					<button class="btn btn-warning btn-sm" @click="generateReport(data)">Report</button>
+					<button class="btn btn-primary btn-sm" @click="editEvent(data.id)">Muokkaa</button>
+					<button class="btn btn-info btn-sm" @click="viewTicketTypes(data.id)">Lipputyypit</button>
+					<button class="btn btn-warning btn-sm" @click="generateReport(data)">Raportti</button>
 				</td>
 			</tr>
 		</tbody>
