@@ -87,7 +87,6 @@ function viewReport(id: number) {
 	</table>
 </template>
 
-
 <style scoped>
 .search-button {
 	margin-bottom: 25px;
