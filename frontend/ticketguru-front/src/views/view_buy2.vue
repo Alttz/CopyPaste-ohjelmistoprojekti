@@ -5,9 +5,7 @@ import router from '@/router';
 import { type Ref, ref } from 'vue';
 
 var cartItems : Ref<any> = ref([])
-var cartItemsKeys : Ref<any> = ref([])
 var boughtTickets : Ref<any> = ref([])
-var boughtTicketKeys : Ref<any> = ref([])
 
 
 
@@ -35,14 +33,26 @@ function addToCart() {
     for (let i = 0; i < model_amount.value; i++) {
         cartItems.value.push({
             "ticket": model_select.value,
-            "type": temp_ticketdata[model_tickettype.value]
+            "type": temp_ticketdata[model_tickettype.value],
+            "index": cartItems.value.length
         })
+
+        model_totalPrice.value += parseInt(temp_ticketdata[model_tickettype.value].price)
     }
 
 }
 
 function deleteFromCart(ticket) {
-    alert("Deleting")
+    console.log("Juodaan ja painitaan")
+    console.log(ticket.type.price)
+
+    model_totalPrice.value -= parseInt(ticket.type.price)
+    cartItems.value.splice(ticket.index, 1)
+}
+
+function clearCartItems() {
+    cartItems.value = []
+    model_totalPrice.value = 0
 }
 
 </script>
@@ -73,6 +83,7 @@ function deleteFromCart(ticket) {
         </div>
         
         <h3>Shopping Cart</h3>
+        <button @click="clearCartItems()">Clear Items</button>
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
