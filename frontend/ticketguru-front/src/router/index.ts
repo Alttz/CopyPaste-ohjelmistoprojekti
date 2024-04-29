@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 //import HomeView from '../views/HomeView.vue'
-import view_buy from '../views/view_buy.vue'
+import view_buy2 from '../views/view_buy2.vue'
 import view_login from "../views/view_login.vue"
 import view_logout from "../views/view_logout.vue"
 import view_ticketcheck from "../views/view_ticketcheck.vue"
@@ -36,16 +36,11 @@ const router = createRouter({
       name: 'logout',
       component: view_logout
     },
-    {
-      path: '/events',
-      name: 'events',
-      component: view_buy
-    },
 
     {
       path: '/buy',
       name: 'buy',
-      component: view_buy
+      component: view_buy2
     },
 
     {
@@ -87,12 +82,19 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      component: view_pagenotfound
     }
+
   ]
 })
 
 export default router
+
+
+/*
+    {
+      path: '/:pathMatch(.*)*',
+      component: view_pagenotfound
+    }
+* */
+
+

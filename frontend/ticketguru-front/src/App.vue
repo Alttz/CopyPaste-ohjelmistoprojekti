@@ -11,7 +11,9 @@ import { RouterLink, RouterView } from 'vue-router'
     <RouterLink to="/logout">Logout</RouterLink>
   </nav>
 
-  <RouterView />
+  <Suspense>
+    <RouterView />
+  </Suspense>
 </template>
 
 <style scoped>
