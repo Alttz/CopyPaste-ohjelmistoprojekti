@@ -48,31 +48,33 @@ function goBack() {
 
 <template>
     <div>
-        <button class="btn btn-secondary" @click="goBack">Back</button>
-        <h1>Edit Event</h1>
+        <br>
+        <button class="btn btn-secondary" @click="goBack">Takaisin</button>
+        <h1>Muokkaa tapahtumaa</h1>
         <div v-if="eventData.id">
             <form @submit.prevent="updateEvent">
                 <div class="form-group">
-                    <label for="eventDate">Date</label>
+                    <label for="eventDate">Aika: </label>
                     <input type="text" id="eventDate" v-model="eventData.date" required>
                 </div>
                 <div class="form-group">
-                    <label for="eventPlace">Place</label>
+                    <label for="eventPlace">Paikka: </label>
                     <input type="text" id="eventPlace" v-model="eventData.place" required>
                 </div>
                 <div class="form-group">
-                    <label for="eventName">Description</label>
+                    <label for="eventName">Kuvaus: </label>
                     <input type="text" id="eventName" v-model="eventData.name" required>
                 </div>
                 <div class="form-group">
-                    <label for="eventCity">City</label>
+                    <label for="eventCity">Kaupunki: </label>
                     <input type="text" id="eventCity" v-model="eventData.city" required>
                 </div>
                 <div class="form-group">
-                    <label for="ticketCount">Ticket count</label>
+                    <label for="ticketCount">Lippuja kpl: </label>
                     <input type="number" id="ticketCount" v-model.number="eventData.ticketCount" required min="1">
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <br>
+                <button type="submit" class="btn btn-primary">Päivitä</button>
             </form>
         </div>
         <div v-else>

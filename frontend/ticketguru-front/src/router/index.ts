@@ -11,7 +11,7 @@ import view_editEvent from '@/views/view_editEvent.vue'
 import view_ticketTypes from '@/views/view_ticketTypes.vue'
 import view_landing from '@/views/view_landing.vue'
 import view_pagenotfound from '@/views/view_pagenotfound.vue'
-
+import view_salesReport from '@/views/view_salesReport.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,6 +79,13 @@ const router = createRouter({
       component: view_ticketTypes,
       props: true
     },
+
+    {
+      path: '/sales_report/:id',
+      name: 'sales_report',
+      component: view_salesReport,
+      props: true
+  },
 
     {
       path: '/about',

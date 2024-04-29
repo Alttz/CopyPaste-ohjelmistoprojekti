@@ -45,6 +45,10 @@ function viewTicketTypes(id: number) {
     router.push({ name: 'ticketTypes', params: { id } });
 }
 
+function viewReport(id: number) {
+    router.push({ name: 'sales_report', params: { id } });
+}
+
 //: before passed prop means it's literal type not a string for example. (list can be passed this way)
 </script>
 
@@ -76,7 +80,7 @@ function viewTicketTypes(id: number) {
 				<td>
 					<button class="btn btn-primary btn-sm" @click="editEvent(data.id)">Muokkaa</button>
 					<button class="btn btn-info btn-sm" @click="viewTicketTypes(data.id)">Lipputyypit</button>
-					<button class="btn btn-warning btn-sm" @click="generateReport(data)">Raportti</button>
+					<button class="btn btn-warning btn-sm" @click="viewReport(data.id)">Raportti</button>
 				</td>
 			</tr>
 		</tbody>
