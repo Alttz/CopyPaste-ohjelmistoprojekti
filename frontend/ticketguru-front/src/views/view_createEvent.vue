@@ -32,30 +32,32 @@ function goBack() {
 
 <template>
     <div>
+        <br>
         <button class="btn btn-secondary" @click="goBack">Takaisin</button>
         <h1>Uusi tapahtuma</h1>
         <form @submit.prevent="submitEvent">
             <div class="form-group">
-                <label for="eventDate">Aika</label>
+                <label for="eventDate">Aika: </label>
                 <input type="text" id="eventDate" v-model="eventData.date" required>
             </div>
             <div class="form-group">
-                <label for="eventName">Paikka</label>
+                <label for="eventName">Paikka: </label>
                 <input type="text" id="eventName" v-model="eventData.place" required>
             </div>
             <div class="form-group">
-                <label for="eventCity">Kuvaus</label>
+                <label for="eventCity">Kuvaus: </label>
                 <input type="text" id="eventCity" v-model="eventData.name" required>
             </div>
             <div class="form-group">
-                <label for="eventCity">Kaupunki</label>
+                <label for="eventCity">Kaupunki: </label>
                 <input type="text" id="eventCity" v-model="eventData.city" required>
             </div>
             <div class="form-group">
-                <label for="ticketCount">Ticket Count</label>
+                <label for="ticketCount">Lippu kpl: </label>
                 <input type="number" id="ticketCount" v-model.number="eventData.ticketCount" required min="1">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <br>
+            <button type="submit" class="btn btn-primary">Tallenna</button>
         </form>
     </div>
 </template>

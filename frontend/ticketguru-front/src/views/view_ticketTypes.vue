@@ -105,6 +105,7 @@ function backToEventList() {
 
 <template>
     <div>
+        <br>
         <button @click="backToEventList">Takaisin</button>
         <h1>Lipputyypit | {{ event?.name }}</h1>
         <table class="table" v-if="event && event.ticketTypes && event.ticketTypes.length > 0">
