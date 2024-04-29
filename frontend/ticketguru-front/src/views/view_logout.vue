@@ -9,6 +9,10 @@ import { type Ref, ref } from 'vue';
 Http.setToken("user has logged out")
 localStorage.clear()
 
+function goToLogin() {
+    router.push({ name: 'login' });
+}
+
 
 </script>
 
@@ -16,7 +20,7 @@ localStorage.clear()
 
     <div>
         <p>You have been logged out</p>
-        <a href="http://localhost:3000/login">Kirjaudu sisään</a>
+        <button @click="goToLogin">Kirjaudu sisään</button>
     </div>
 
 </template>
