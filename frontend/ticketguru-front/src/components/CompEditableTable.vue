@@ -160,7 +160,7 @@
 
 <style scoped>
 	.search-button {
-		margin-botton: 25px;
+		margin-bottom: 25px;
 	}
 
 	* {
