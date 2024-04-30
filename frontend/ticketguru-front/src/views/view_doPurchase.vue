@@ -41,10 +41,6 @@
         ticketTypesForEvents[ticket["event"]].push(ticket)
     }
 
-    console.log("ProcessedTicketTypes")
-    console.log(ticketTypesForEvents)
-
-
 
     //Constructing the proper request to be passed to API
     let temp_purchaseRequestRows = []
@@ -70,16 +66,41 @@
     displayOnPage.value = JSON.stringify(template_request)
     console.log(template_request)
 
-    //const response = await Http.post("/purchases",template_request)
-    
+
+    const response = await Http.post("/purchases",template_request)
+    var response_items : Ref<any> = ref(response)
+    console.log(response)
 
 
 </script>
 
 <template>
     <div>
-        <h3>doPurchase</h3>
-        <p>{{displayOnPage}}</p>
+        <h3>Thankyou for your Purchase!</h3>
+
+        <tbody>
+            <th>Date</th>
+            <th>Event</th>
+            <th>Username</th>
+            <th>TicketType</th>
+            <th>Price</th>
+            <th>Verification code</th>
+
+        </tbody>
+        <tbody>
+            <template v-for="item in response_items.successfulPurchases">
+                <tr v-for="ticket in item.tickets">
+                    <td>{{item.purchaseDate}}</td>
+                    <td>{{ticket.ticketType.event}}</td>
+                    <td>{{item.appUser.username}}</td>
+                    <td>{{ticket.ticketType.name}}</td>
+                    <td>{{ticket.ticketType.price}} €</td>
+                    <td>{{ticket.uuid}}</td>
+                </tr>
+            </template>
+        </tbody>
+
+
     </div>
 
 </template>
