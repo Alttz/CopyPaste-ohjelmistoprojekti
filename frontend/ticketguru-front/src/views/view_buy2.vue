@@ -43,9 +43,6 @@ function addToCart() {
 }
 
 function deleteFromCart(ticket) {
-    console.log("Juodaan ja painitaan")
-    console.log(ticket.type.price)
-
     model_totalPrice.value -= parseInt(ticket.type.price)
     cartItems.value.splice(ticket.index, 1)
 }
@@ -53,6 +50,12 @@ function deleteFromCart(ticket) {
 function clearCartItems() {
     cartItems.value = []
     model_totalPrice.value = 0
+}
+
+function doPurchase() {
+    localStorage.removeItem("purchaseData")
+    localStorage.setItem("purchaseData",JSON.stringify(cartItems.value))
+    router.push({name: 'doPurchase'});
 }
 
 </script>
@@ -118,7 +121,7 @@ function clearCartItems() {
                     <td></td>
                     <td></td>
                     <td>{{model_totalPrice}} €</td>
-                    <td></td>
+                    <td><button @click="doPurchase()">Buy</button></td>
                 </tr>
             </tbody>
         </table>
