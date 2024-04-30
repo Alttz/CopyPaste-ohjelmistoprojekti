@@ -26,13 +26,39 @@
 
     let purchaseData : Ref<any> = ref(JSON.parse(localStorage.getItem("purchaseData")))
     let displayOnPage : Ref<string> = ref("")
-    console.log(localStorage.getItem("purchaseData"))
+    //console.log(localStorage.getItem("purchaseData"))
 
+
+    //Group all ticket's properly to a dict with event's id as their key
+    let ticketTypesForEvents = {}
+    for (let i = 0; i < purchaseData.value.length; i++) {
+        let ticket = purchaseData.value[i].type
+
+        //Let's find all different ticketTypes that are sold to each event and add them into a dictionary in a list with key that is the event's id
+        if(!(ticket["event"] in ticketTypesForEvents)) {
+            ticketTypesForEvents[ticket["event"]] = []
+        }
+        ticketTypesForEvents[ticket["event"]].push(ticket)
+    }
+
+    console.log("ProcessedTicketTypes")
+    console.log(ticketTypesForEvents)
+
+
+
+    //Constructing the proper request to be passed to API
     let temp_purchaseRequestRows = []
-    for (const [key, value] of Object.entries(purchaseData.value)) {
+    for (const [key, value] of Object.entries(ticketTypesForEvents)) {
+
+        //This processing could be done in the grouping section maybe better.
+        var temp_processed_types = []
+        for (let i = 0; i < value.length; i++) {
+            temp_processed_types.push(value[i].name)
+        }
+
         temp_purchaseRequestRows.push({
             "eventId": key,
-            "ticketTypeNames": [value.type.name]
+            "ticketTypeNames": temp_processed_types
         })
     }
 
