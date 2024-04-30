@@ -96,6 +96,7 @@
                     <td>{{ticket.ticketType.name}}</td>
                     <td>{{ticket.ticketType.price}} €</td>
                     <td>{{ticket.uuid}}</td>
+                    <td><button >Print</button></td>
                 </tr>
             </template>
         </tbody>
