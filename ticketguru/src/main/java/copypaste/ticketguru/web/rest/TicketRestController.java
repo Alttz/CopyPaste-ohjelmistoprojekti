@@ -42,7 +42,7 @@ public class TicketRestController {
         if (jwtValidatorService.validateToken(authHeader)) {
             Optional<Ticket> ticket = ticketRepository.findById(id);
             if (ticket.isPresent()) {
-                return ResponseEntity.ok(ticket.get());
+                return ResponseEntity.ok(List.of(ticket.get()));
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -57,7 +57,7 @@ public class TicketRestController {
         if (jwtValidatorService.validateToken(authHeader)) {
             Optional<Ticket> ticket = ticketRepository.findByUuid(uuid);
 			if (ticket.isPresent()) {
-                return ResponseEntity.ok(ticket.get());
+                return ResponseEntity.ok(List.of(ticket.get()));
             } else {
                 return ResponseEntity.notFound().build();
             }

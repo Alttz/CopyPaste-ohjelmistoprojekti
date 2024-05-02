@@ -1,7 +1,7 @@
 package copypaste.ticketguru.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,7 +61,7 @@ public class PurchaseService {
 		    }
 
             // Luodaan ostotapahtuma, jossa lista lipuista on aluksi tyhjä
-		    Purchase purchase = new Purchase(new Date(), new ArrayList<>(), user);
+		    Purchase purchase = new Purchase(LocalDate.now(), new ArrayList<>(), user);
 		    
             // Tallenna ostotapahtuma, jotta siihen generoituu ID
 		    Purchase savedPurchase = purchaseRepository.save(purchase);

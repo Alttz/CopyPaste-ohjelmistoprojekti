@@ -42,6 +42,9 @@ public class EventRestController {
 	@Autowired
 	private JwtValidatorService jwtValidatorService;
 
+	private static final Set<String> ALLOWED_TICKET_TYPES = Set.of("Adult", "Child", "Aikuinen", "Lapsi", "Eläkeläinen", "Opiskelija",
+			"Varusmies", "VIP");
+
 	// hae kaikki tapahtumat
 	@GetMapping(value = "/api/events")
 	public ResponseEntity<?> getAllEvents(@RequestHeader(value = "Authorization", required = false) String authHeader) {
@@ -71,7 +74,8 @@ public class EventRestController {
 			if (!eventOpt.isPresent()) {
 				return ResponseEntity.notFound().build();
 			}
-			return ResponseEntity.ok(eventOpt.get());
+			
+			return ResponseEntity.ok(List.of(eventOpt.get()));
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
 	}

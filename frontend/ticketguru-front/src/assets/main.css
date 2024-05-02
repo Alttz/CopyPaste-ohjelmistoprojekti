@@ -1,0 +1,12 @@
+@import './base.css';
+
+html {
+  min-height: 100vh;
+  background-color: #e6e6e6;
+}
+
+.box {
+  background-color: #ffffff;
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+}

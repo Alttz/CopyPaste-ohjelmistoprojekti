@@ -2,11 +2,14 @@ package copypaste.ticketguru.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,9 +22,10 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotNull
-	//@FutureOrPresent
-	private String date;
+	// Removed for now
+	// @NotNull
+	// @FutureOrPresent
+	private LocalDate date;
 
 	@NotBlank
 	private String place;
@@ -44,7 +48,7 @@ public class Event {
 	public Event() {
 	}
 
-	public Event(String date, String place, String city, String name, int ticketCount) {
+	public Event(LocalDate date, String place, String city, String name, int ticketCount) {
 		super();
 		this.date = date;
 		this.place = place;
@@ -53,7 +57,7 @@ public class Event {
 		this.ticketCount = ticketCount;
 	}
 
-	public Event(String date, String place, String city, String name, int ticketCount, List<Ticket> tickets,
+	public Event(LocalDate date, String place, String city, String name, int ticketCount, List<Ticket> tickets,
 			List<TicketType> ticketTypes) {
 		super();
 		this.date = date;
@@ -89,12 +93,12 @@ public class Event {
 		this.city = city;
 	}
 
-	public String getDate() {
-		return date;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public LocalDate getDate() {
+		return this.date;
 	}
 
 	public String getName() {
@@ -121,8 +125,6 @@ public class Event {
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	
-	
 
 	public List<TicketType> getTicketTypes() {
 		return ticketTypes;

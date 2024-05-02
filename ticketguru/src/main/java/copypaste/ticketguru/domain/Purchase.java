@@ -1,5 +1,6 @@
 package copypaste.ticketguru.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Purchase {
 
 	@NotNull(message = "Purchase date is required.")
 	@PastOrPresent(message = "Purchase date must be in the past or today.")
-	private Date purchaseDate;
+	private LocalDate purchaseDate;
 
 	@OneToMany(mappedBy = "purchase")
 	@JsonManagedReference
@@ -35,13 +36,13 @@ public class Purchase {
 		super();
 	}
 
-	public Purchase(Date purchaseDate, List<Ticket> tickets) {
+	public Purchase(LocalDate purchaseDate, List<Ticket> tickets) {
 		super();
 		this.purchaseDate = purchaseDate;
 		this.tickets = tickets;
 	}
 
-	public Purchase(Date purchaseDate, List<Ticket> tickets, AppUser appUser) {
+	public Purchase(LocalDate purchaseDate, List<Ticket> tickets, AppUser appUser) {
 		super();
 		this.purchaseDate = purchaseDate;
 		this.tickets = tickets;
@@ -56,11 +57,11 @@ public class Purchase {
 		this.id = id;
 	}
 
-	public Date getPurchaseDate() {
+	public LocalDate getPurchaseDate() {
 		return purchaseDate;
 	}
 
-	public void setPurchaseDate(Date purchaseDate) {
+	public void setPurchaseDate(LocalDate purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
 

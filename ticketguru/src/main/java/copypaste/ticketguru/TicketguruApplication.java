@@ -1,5 +1,6 @@
 package copypaste.ticketguru;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,10 +55,10 @@ public class TicketguruApplication {
 			TicketRepository trepository, UserRepository urepository, TicketTypeRepository ticketTypeRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
 
-			Event e4 = new Event("28.9.2023", "Hartwallareena", "Helsinki", "Lordi", 1000);
-			Event e5 = new Event("1.4.2024", "PubiTarmo", "Turku", "Apulanta", 1000);
-			Event e6 = new Event("18.7.2024", "Kansallisteatteri", "Helsinki", "Käärijä", 1000);
-			Event e7 = new Event("5.5.2024", "Koulun musaluokka", "Luhanka", "Antti Tuisku", 1000);
+			Event e4 = new Event(LocalDate.of(2024, 9, 28), "Hartwallareena", "Helsinki", "Lordi", 1000);
+			Event e5 = new Event(LocalDate.of(2024, 5, 1), "PubiTarmo", "Turku", "Apulanta", 1000);
+			Event e6 = new Event(LocalDate.of(2024, 7, 18), "Kansallisteatteri", "Helsinki", "Käärijä", 1000);
+			Event e7 = new Event(LocalDate.of(2024, 5, 5), "Koulun musaluokka", "Luhanka", "Antti Tuisku", 1000);
 	        erepository.saveAll(Arrays.asList(e4, e5, e6, e7)); // Assuming you're saving events here
 
 			TicketType elakelainenE4 = new TicketType("Eläkeläinen", 15.00, e4);
@@ -101,7 +102,7 @@ public class TicketguruApplication {
 	        }
 
 			List<Ticket> tickets = Arrays.asList(t4, t5);
-			Purchase p1 = new Purchase(new Date(), tickets, u1);
+			Purchase p1 = new Purchase(LocalDate.now(), tickets, u1);
 
 			prepository.save(p1);
 
@@ -111,7 +112,7 @@ public class TicketguruApplication {
 			});
 
 			List<Ticket> tickets2 = Arrays.asList(t6, t7);
-			Purchase p2 = new Purchase(new Date(), tickets, u2);
+			Purchase p2 = new Purchase(LocalDate.now(), tickets, u2);
 
 			prepository.save(p2);
 
@@ -121,8 +122,8 @@ public class TicketguruApplication {
 			});
 		};
 	}
-	*/
 
+	/*
 	// HACK
 	// There's probably an annotation somewhere
 	@Bean
@@ -135,8 +136,7 @@ public class TicketguruApplication {
 				}
 			}
 		};
-	}
-	
+	}*/
 };
 	
 
