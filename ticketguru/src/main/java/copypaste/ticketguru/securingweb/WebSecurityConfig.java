@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                 "http://127.0.0.1:5000",
                 "http://127.0.0.1:8000",
                 "http://127.0.0.1:8080",
+                "https://alttz.github.io/",
         		"https://projekti-ticketguru-tiimi4.rahtiapp.fi")); // change origin accordingly
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); 
