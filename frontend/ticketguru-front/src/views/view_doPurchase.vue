@@ -71,6 +71,43 @@
     var response_items : Ref<any> = ref(response)
     console.log(response)
 
+    /*
+    function doPrint(ticketData) {
+        localStorage.removeItem("printTicketData")
+        localStorage.setItem("printTicketData",JSON.stringify(ticketData))
+        router.push({name: 'printTicket'});
+    }
+    */
+
+    function doPrint(ticketData) {
+        // Get HTML to print from element
+        const prtHtml = "" //HTML to be rendered
+
+        // Get all stylesheets HTML
+        let stylesHtml = '';
+        for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+            stylesHtml += node.outerHTML;
+        }
+
+        // Open the print window
+        const WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+
+        WinPrint.document.write(`<!DOCTYPE html>
+        <html>
+            <head>
+                ${stylesHtml}
+            </head>
+            <body>
+                ${prtHtml}
+            </body>
+        </html>`);
+
+        WinPrint.document.close();
+        WinPrint.focus();
+        WinPrint.print();
+        WinPrint.close();
+    }
+
 
 </script>
 
@@ -96,10 +133,20 @@
                     <td>{{ticket.ticketType.name}}</td>
                     <td>{{ticket.ticketType.price}} €</td>
                     <td>{{ticket.uuid}}</td>
-                    <td><button >Print</button></td>
+                    <td><button @click="doPrint(ticket)">Print</button></td>
                 </tr>
             </template>
         </tbody>
+
+
+        <div className="ticketviewer">
+            <img src="https://via.placeholder.com/350x350?text=QR code">
+            <div className="info">
+                <p>Selectd ticket data goes here</p>
+
+
+            </div>
+        </div>
 
 
     </div>
@@ -108,7 +155,19 @@
 
 
 <style scoped>
+    .ticketviewer {
+        background-color: #ffffff;
+        border: 2px solid black;
 
+    }
 
+    .info {
+        background-color: #cfcfcfcf;
+    }
+
+    img {
+        border-radius: 10px;
+        padding: 5px;
+    }
 
 </style>
