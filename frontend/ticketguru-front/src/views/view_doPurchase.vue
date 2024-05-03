@@ -29,6 +29,8 @@
     //console.log(localStorage.getItem("purchaseData"))
 
 
+    let model_viewTicketOnPage : Ref<unknown> = ref("")
+
     //Group all ticket's properly to a dict with event's id as their key
     let ticketTypesForEvents = {}
     for (let i = 0; i < purchaseData.value.length; i++) {
@@ -79,9 +81,14 @@
     }
     */
 
-    function doPrint(ticketData) {
+    function enlargeTicket(ticketData) {
+        model_viewTicketOnPage.value = ticketData
+        console.log(model_viewTicketOnPage.value)
+    }
+
+    function doPrint() {
         // Get HTML to print from element
-        const prtHtml = "" //HTML to be rendered
+        const prtHtml = document.querySelector("#printwrapper").innerHTML
 
         // Get all stylesheets HTML
         let stylesHtml = '';
@@ -126,27 +133,39 @@
         </tbody>
         <tbody>
             <template v-for="item in response_items.successfulPurchases">
-                <tr v-for="ticket in item.tickets">
+                <tr v-for="ticket in item.tickets" @click="enlargeTicket(ticket)">
                     <td>{{item.purchaseDate}}</td>
                     <td>{{ticket.ticketType.event}}</td>
                     <td>{{item.appUser.username}}</td>
                     <td>{{ticket.ticketType.name}}</td>
                     <td>{{ticket.ticketType.price}} €</td>
                     <td>{{ticket.uuid}}</td>
-                    <td><button @click="doPrint(ticket)">Print</button></td>
                 </tr>
             </template>
         </tbody>
 
 
-        <div className="ticketviewer">
-            <img src="https://via.placeholder.com/350x350?text=QR code">
-            <div className="info">
-                <p>Selectd ticket data goes here</p>
 
-
+        <template v-if="model_viewTicketOnPage != ''">
+            <div id="printwrapper">
+                <div className="ticketviewer">
+                    <h3>Ticketguru</h3>
+                    <p>Tapahtumalippu</p>
+                    <img src="../assets/qr350.png">
+                    <div className="info">
+                        <table>
+                            <tbody>
+                                <tr><td>{{model_viewTicketOnPage.uuid}}</td></tr>
+                                <tr><td>{{model_viewTicketOnPage.ticketType.event}}</td></tr>
+                                <tr><td>{{model_viewTicketOnPage.ticketType.name}}</td></tr>
+                                <tr><td>{{model_viewTicketOnPage.ticketType.price}}.00€</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
+            <button @click="doPrint()">Tulosta</button>
+        </template>
 
 
     </div>
@@ -158,16 +177,35 @@
     .ticketviewer {
         background-color: #ffffff;
         border: 2px solid black;
+        borde-radius: 10px;
+        margin-top: 25px;
+        margin-bottom: 25px;
+        //max-width: 25vw;
+        float:left;
+        padding: 10px;
 
     }
 
-    .info {
-        background-color: #cfcfcfcf;
+    .info td {
+        border: 2px solid black;
+        border-radius: 5px;
+
+    }
+
+    .info tr {
+        margin-botton: 5px;
     }
 
     img {
         border-radius: 10px;
         padding: 5px;
+        width: 80%;
+        margin-left: auto;
+        margin-right:auto;
+    }
+
+    h4,h3 {
+        margin: 0px;
     }
 
 </style>
