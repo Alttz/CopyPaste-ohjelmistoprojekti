@@ -177,10 +177,10 @@
     .ticketviewer {
         background-color: #ffffff;
         border: 2px solid black;
-        borde-radius: 10px;
+        border-radius: 10px;
         margin-top: 25px;
         margin-bottom: 25px;
-        //max-width: 25vw;
+        max-width: 25vw;
         float:left;
         padding: 10px;
 
@@ -193,7 +193,7 @@
     }
 
     .info tr {
-        margin-botton: 5px;
+        margin-bottom: 5px;
     }
 
     img {
