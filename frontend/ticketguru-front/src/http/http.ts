@@ -71,14 +71,14 @@ export class Http {
 		}
 	}
 
-	static async patch(url: string) {
+	static async put(url: string, data: any) {
 		const authHeader = this.getAuthHeader();
 		try {
-			const response = await axios.patch(this.apiurl + url, { headers: authHeader });
+			const response = await axios.put(this.apiurl + url, data, { headers: authHeader });
 			return response.data;
 		} catch (error) {
 			// Handle error
-			console.error("PATCH request failed:", error);
+			console.error("PUT request failed:", error);
 			throw error;
 		}
 	}

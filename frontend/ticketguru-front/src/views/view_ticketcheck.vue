@@ -62,7 +62,7 @@ const markTicketAsUsed = async () => {
     }
     isLoading.value = true;
     try {
-        await Http.patch(`/tickets/markAsUsed?uuid=${ticketCode.value}`);
+        await Http.put(`/tickets/markAsUsed?uuid=${ticketCode.value}`);
         ticketData.value.used = true;  // Update the local state to reflect the change
         ticketValidity.value = true;  // Assume ticket is now valid and marked as used
         alert("Ticket has been marked as used successfully.");
