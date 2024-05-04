@@ -4,12 +4,15 @@ import { ref } from 'vue';
 
 const ticketCode = ref('');
 const ticketData = ref(null);
-const ticketValidity = ref(null);  // Ensure this is reset appropriately
+const ticketValidity = ref(null);
+const eventData = ref(null);  // Reactive reference for event data
 const isLoading = ref(false);
 const error = ref('');
 
 const fetchTicket = async () => {
     error.value = '';
+    ticketData.value = null;  // Reset ticket data before new fetch
+    eventData.value = null;  // Reset ticket data before new fetch
     ticketValidity.value = null;  // Reset validity when searching for new ticket
     if (!ticketCode.value) {
         error.value = "Please enter a ticket code.";
@@ -17,13 +20,15 @@ const fetchTicket = async () => {
     }
     isLoading.value = true;
     try {
-        const response = await Http.get('myyntitapahtumat');
-        const tickets = response.flatMap(event => event.liputDto);
-        const foundTicket = tickets.find(ticket => ticket.tarkistuskoodi === ticketCode.value);
-        if (foundTicket) {
-            ticketData.value = foundTicket;
+        // Adjust endpoint to fetch ticket details by UUID
+        const response = await Http.get(`/tickets/byUuid?uuid=${ticketCode.value}`);
+        console.log("Received data:", response); // Log to see what the API returns
+        const data = response[0];
+        if (data) {
+            ticketData.value = data;  // Assuming the API directly returns ticket data
+            console.log("Received data:", data); // Log to see what the API returns
+            await fetchEventDetails(data.event);
         } else {
-            ticketData.value = null;
             error.value = "No ticket found with the provided code.";
         }
     } catch (err) {
@@ -34,23 +39,43 @@ const fetchTicket = async () => {
     }
 };
 
-const fetchTicketValidity = async () => {
+const fetchEventDetails = async (eventId) => {
+    try {
+        const response = await Http.get(`/events/${eventId}`);
+        const eventInfo = response[0];
+        console.log("Received event data:", eventInfo); // Log to see what the API returns¨
+        if (eventInfo) {
+            eventData.value = eventInfo;  // Store the event data in the reactive property
+        } else {
+            error.value = "Failed to fetch event details.";
+        }
+    } catch (err) {
+        console.error("Failed to fetch event details:", err);
+        error.value = "Failed to fetch event details.";
+    }
+};
+
+const markTicketAsUsed = async () => {
     if (!ticketCode.value) {
-        error.value = "Please enter a ticket code for validation.";
+        error.value = "Please enter a ticket code to mark as used.";
         return;
     }
     isLoading.value = true;
     try {
-        const response = await Http.get(`tarkastukset/${ticketCode.value}`);
-        ticketValidity.value = response.response;  // Use the response directly
+        await Http.patch(`/tickets/markAsUsed?uuid=${ticketCode.value}`);
+        ticketData.value.used = true;  // Update the local state to reflect the change
+        ticketValidity.value = true;  // Assume ticket is now valid and marked as used
+        alert("Ticket has been marked as used successfully.");
     } catch (err) {
-        error.value = "Failed to validate ticket.";
+        error.value = "Failed to mark the ticket as used.";
         console.error(err);
     } finally {
         isLoading.value = false;
     }
 };
+
 </script>
+
 
 
 <template>
@@ -62,30 +87,47 @@ const fetchTicketValidity = async () => {
 
         <div v-if="error" class="error">{{ error }}</div>
 
-        <div v-if="ticketData">
+        <div v-if="ticketData && eventData">
             <h3>Lipun tiedot:</h3>
-            <p>Tapahtuman nimi: {{ ticketData.tapahtumanNimi }}</p>
-            <p>Ajankohta: {{ ticketData.tapahtumaAika }}</p>
-            <p>Paikka: {{ ticketData.tapahtumaPaikka }}</p>
-            <p>Lipputyyppi: {{ ticketData.lipputyyppi }}</p>
-            <p>Hinta: {{ ticketData.hinta }} €</p>
-            
+            <table class="ticket-details">
+                <tbody>
+                    <tr>
+                        <th>Tapahtuman nimi</th>
+                        <td>{{ eventData.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Ajankohta</th>
+                        <td>{{ eventData.date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Paikka</th>
+                        <td>{{ eventData.place }}</td>
+                    </tr>
+                    <tr>
+                        <th>Kaupunki</th>
+                        <td>{{ eventData.city }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lipputyyppi</th>
+                        <td>{{ ticketData.ticketType.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Hinta</th>
+                        <td>{{ ticketData.ticketType.price }} €</td>
+                    </tr>
+                    <tr>
+                        <th>Tila</th>
+                        <td>{{ ticketData.used ? 'Käytetty' : 'Käyttämätön' }}</td>
+                    </tr>
+                </tbody>
+            </table>
             <!-- Button for checking ticket validity -->
-            <button @click="fetchTicketValidity" :disabled="isLoading">
-                {{ isLoading ? 'Tarkastetaan...' : 'Tarkasta lippu' }}
+            <button @click="markTicketAsUsed" :disabled="isLoading || ticketData.used">
+                Merkitse käytetyksi
             </button>
-        </div>
-
-        <div v-if="ticketValidity !== null">
-            <h3>Lipun tila:</h3>
-            <p v-if="ticketValidity">{{ ticketCode.value }} Lippu on validi ja merkattu nyt käytetyksi.</p>
-            <p v-else>{{ ticketCode.value }} Lippu on jo käytetty tai sitä ei ole olemassa.</p>
         </div>
     </div>
 </template>
-
-
-
 
 <style scoped>
 .error {
@@ -95,4 +137,10 @@ const fetchTicketValidity = async () => {
 button[disabled] {
     opacity: 0.5;
 }
+
+table {
+    width: 500px;
+    margin-top: 20px;
+}
 </style>
+

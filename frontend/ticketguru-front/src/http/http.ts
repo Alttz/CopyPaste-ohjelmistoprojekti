@@ -50,9 +50,7 @@ export class Http {
 
 	static async get(url: string) {
 		try {
-			const response = await axios.get(this.apiurl + url, {
-				headers: this.getAuthHeader(),
-			});
+			const response = await axios.get(this.apiurl + url, { headers: this.getAuthHeader(),});
 			return response.data;
 		} catch (error) {
 			// Handle error
@@ -69,6 +67,18 @@ export class Http {
 		} catch (error) {
 			// Handle error
 			console.error("POST request failed:", error);
+			throw error;
+		}
+	}
+
+	static async patch(url: string) {
+		const authHeader = this.getAuthHeader();
+		try {
+			const response = await axios.patch(this.apiurl + url, { headers: authHeader });
+			return response.data;
+		} catch (error) {
+			// Handle error
+			console.error("PATCH request failed:", error);
 			throw error;
 		}
 	}
