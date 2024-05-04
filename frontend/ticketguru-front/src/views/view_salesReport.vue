@@ -48,14 +48,15 @@ function processPurchases(purchases) {
     totalRevenue.value = ticketTypes.value.reduce((acc, type) => acc + type.totalRevenue, 0);
 }
 
-
-
-
 function backToEvents() {
     router.push({ name: 'event_management' });
 }
-</script>
 
+function goToSalesEvents() {
+    router.push({ name: 'sales_events' });
+}
+
+</script>
 
 <template>
     <div>
@@ -83,6 +84,7 @@ function backToEvents() {
                 </tr>
             </tbody>
         </table>
+        <button @click="goToSalesEvents">Myyntitapahtumat</button>
     </div>
 </template>
 

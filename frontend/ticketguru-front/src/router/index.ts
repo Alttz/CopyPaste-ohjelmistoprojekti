@@ -13,6 +13,7 @@ import view_landing from '@/views/view_landing.vue'
 import view_pagenotfound from '@/views/view_pagenotfound.vue'
 import view_salesReport from '@/views/view_salesReport.vue'
 import view_doPurchase from '@/views/view_doPurchase.vue'
+import view_salesEvents from '@/views/view_salesEvents.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -88,6 +89,13 @@ const router = createRouter({
       component: view_salesReport,
       props: true
   },
+
+  {
+    path: '/sales_events/:id',
+    name: 'sales_events',
+    component: view_salesEvents,
+    props: true
+},
 
     {
       path: '/about',
