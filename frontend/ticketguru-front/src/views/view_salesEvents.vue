@@ -108,13 +108,8 @@ function backToSalesReport() {
 
 <style scoped>
 table {
-    width: 100%;
+    width: 500px;
     margin-top: 20px;
-    border-collapse: collapse;
-}
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
 }
 .modal {
     position: fixed;
