@@ -16,8 +16,8 @@ const newTicketType = ref({
 onMounted(async () => {
     const eventId = route.params.id;
     try {
-        const eventData = await Http.get(`/events/${eventId}`);
-        event.value = eventData;
+        const response = await Http.get(`/events/${eventId}`);
+        event.value = response[0];
     } catch (error) {
         console.error('Failed to fetch event details:', error);
     }

@@ -16,7 +16,7 @@ if (localStorage.getItem("token") !== null) {
     isTokenStillValid.value = Http.checkTokenValidity(temp_token)
     if(isTokenStillValid) {
         Http.setToken(temp_token)
-        router.push('/events')
+        router.push('/landing')
     }
 
 }
@@ -28,7 +28,7 @@ async function Login() {
     if (!loginSuccessful) {
         message.value = "Käyttäjätunnus tai salasana on väärä";
     } else {
-        router.push('/events');  // Navigate on successful login
+        window.location.reload();
     }
 }
 

@@ -6,13 +6,9 @@ import { Http,} from '@/http/http';
 import router from '@/router';
 import { type Ref, ref } from 'vue';
 
-Http.setToken("user has logged out")
-localStorage.clear()
-
 function goToLogin() {
     router.push({ name: 'login' });
 }
-
 
 </script>
 
@@ -24,6 +20,7 @@ function goToLogin() {
     </div>
 
 </template>
+
 
 
 <style scoped>

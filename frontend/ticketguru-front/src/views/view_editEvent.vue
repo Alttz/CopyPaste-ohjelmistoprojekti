@@ -9,7 +9,7 @@ const router = useRouter();
 const eventData = ref({
     id: null,
     name: '',
-    date: '',
+    date: null,
     city: '',
     place: '',
     ticketCount: 0
@@ -19,8 +19,9 @@ onMounted(async () => {
     const eventId = route.params.id;
     if (eventId) {
         try {
-            const data = await Http.get(`/events/${eventId}`);
-            console.log("Received data:", data); // Log to see what the API returns
+            const response = await Http.get(`/events/${eventId}`);
+            console.log("Received data:", response); // Log to see what the API returns
+            const data = response[0]; // Extract the first element from the array
             eventData.value = { ...eventData.value, ...data };
         } catch (error) {
             console.error('Failed to fetch event:', error);
@@ -28,6 +29,8 @@ onMounted(async () => {
         }
     }
 });
+
+
 
 async function updateEvent() {
     try {
@@ -55,7 +58,7 @@ function goBack() {
             <form @submit.prevent="updateEvent">
                 <div class="form-group">
                     <label for="eventDate">Aika: </label>
-                    <input type="text" id="eventDate" v-model="eventData.date" required>
+                    <input type="date" id="eventDate" v-model="eventData.date" required>
                 </div>
                 <div class="form-group">
                     <label for="eventPlace">Paikka: </label>
