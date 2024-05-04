@@ -12,6 +12,10 @@ export class Http {
 
 	private static token: string | null = localStorage.getItem("token");
 
+	static isAuthenticated() {
+		return this.token !== null && this.checkTokenValidity(this.token);
+	  }
+	
 
 	static checkTokenValidity(passed_token:string) {
 		try {

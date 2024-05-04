@@ -80,6 +80,7 @@ const markTicketAsUsed = async () => {
 
 <template>
     <div>
+        <br>
         <input v-model="ticketCode" type="text" placeholder="Lisää tarkastuskoodi" />
         <button @click="fetchTicket" :disabled="isLoading">
             {{ isLoading ? 'Tarkastetaan...' : 'Hae lipun tiedot' }}

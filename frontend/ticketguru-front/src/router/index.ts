@@ -14,6 +14,7 @@ import view_pagenotfound from '@/views/view_pagenotfound.vue'
 import view_salesReport from '@/views/view_salesReport.vue'
 import view_doPurchase from '@/views/view_doPurchase.vue'
 import view_salesEvents from '@/views/view_salesEvents.vue'
+import { Http } from '@/http/http'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,30 +43,35 @@ const router = createRouter({
     {
       path: '/buy',
       name: 'buy',
-      component: view_buy2
+      component: view_buy2,
+      meta: { requiresAuth: true } 
     },
 
     {
       path: '/doPurchase',
       name: 'doPurchase',
-      component: view_doPurchase
+      component: view_doPurchase,
+      meta: { requiresAuth: true } 
     },
 
     {
       path: '/event_management',
       name: 'event_management',
-      component: view_eventManagement
+      component: view_eventManagement,
+      meta: { requiresAuth: true } 
     },
     {
       path: '/createevent',
       name: 'createevent',
-      component: view_createEvent
+      component: view_createEvent,
+      meta: { requiresAuth: true } 
     },
 
     {
       path: '/editevent/:id',
       name: 'editevent',
       component: view_editEvent,
+      meta: { requiresAuth: true } ,
       props: true
     },
 
@@ -73,13 +79,15 @@ const router = createRouter({
     {
       path: '/ticketcheck',
       name: 'ticketcheck',
-      component: view_ticketcheck
+      component: view_ticketcheck,
+      meta: { requiresAuth: true } 
     },
 
     {
       path: '/ticket-types/:id',
       name: 'ticketTypes',
       component: view_ticketTypes,
+      meta: { requiresAuth: true } ,
       props: true
     },
 
@@ -87,6 +95,7 @@ const router = createRouter({
       path: '/sales_report/:id',
       name: 'sales_report',
       component: view_salesReport,
+      meta: { requiresAuth: true } ,
       props: true
   },
 
@@ -94,6 +103,7 @@ const router = createRouter({
     path: '/sales_events/:id',
     name: 'sales_events',
     component: view_salesEvents,
+    meta: { requiresAuth: true } ,
     props: true
 },
 
@@ -107,6 +117,24 @@ const router = createRouter({
     }
 
   ]
+})
+
+// Navigation guard
+router.beforeEach((to, from, next) => {
+  // Check if the route requires authentication
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    // Check if user is authenticated
+    if (!Http.isAuthenticated()) {
+      // If not authenticated, redirect to login page
+      next('/login')
+    } else {
+      // If authenticated, proceed to the route
+      next()
+    }
+  } else {
+    // If route doesn't require authentication, proceed as normal
+    next()
+  }
 })
 
 export default router
