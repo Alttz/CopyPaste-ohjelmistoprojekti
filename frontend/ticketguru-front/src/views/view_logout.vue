@@ -6,6 +6,9 @@ import { Http,} from '@/http/http';
 import router from '@/router';
 import { type Ref, ref } from 'vue';
 
+localStorage.clear();
+  Http.setToken("user has logged out");
+
 function goToLogin() {
     router.push({ name: 'login' });
 }
