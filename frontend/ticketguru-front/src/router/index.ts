@@ -75,7 +75,6 @@ const router = createRouter({
       props: true
     },
 
-
     {
       path: '/ticketcheck',
       name: 'ticketcheck',
