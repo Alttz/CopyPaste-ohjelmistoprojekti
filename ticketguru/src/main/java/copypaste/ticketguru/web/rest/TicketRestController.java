@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +66,7 @@ public class TicketRestController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
     }
 
-	@PatchMapping(value = "/api/tickets/markAsUsed")
+	@PutMapping(value = "/api/tickets/markAsUsed")
 	public ResponseEntity<?> markTicketAsUsed(
 		@RequestParam("uuid") String uuid,
         @RequestHeader(value = "Authorization", required = false) String authHeader
