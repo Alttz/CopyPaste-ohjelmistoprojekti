@@ -31,7 +31,7 @@
     var temp = await Http.get("/events")
     let events : Ref<unknown> = ref({})
     for (let i = 0; i < temp.length; i++) {
-        events.value[temp[i]] = i
+        events.value[temp[i].id] = temp[i]
     }
 
 
@@ -138,11 +138,10 @@
 
         </tbody>
         <tbody>
-            {{events}}
             <template v-for="item in response_items.successfulPurchases">
                 <tr v-for="ticket in item.tickets" @click="enlargeTicket(ticket)">
                     <td>{{item.purchaseDate}}</td>
-                    <td>{{ticket.ticketType.event}}</td>
+                    <td>{{events[ticket.ticketType.event].name}}</td>
                     <td>{{item.appUser.username}}</td>
                     <td>{{ticket.ticketType.name}}</td>
                     <td>{{ticket.ticketType.price}} €</td>
@@ -187,7 +186,7 @@
         border-radius: 10px;
         margin-top: 25px;
         margin-bottom: 25px;
-        max-width: 25vw;
+        max-width: auto;
         float:left;
         padding: 10px;
 

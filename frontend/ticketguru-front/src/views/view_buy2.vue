@@ -62,7 +62,9 @@ function doPurchase() {
 
 <template>
     <div>
+        <h4>Valitse tapahtuma</h4>
         <select v-model="model_select">
+            <option value="" disabled selected>Valitse tapahtuma</option>
             <option v-for="event in response_events" :value="event" >
                 {{event.date}} |
                 {{event.city}} |
@@ -72,33 +74,32 @@ function doPurchase() {
             </option>
         </select>
 
-
         <div v-if="model_select != ''">
+            <h4>Valitse ostettavat liput</h4>
             <select v-model="model_tickettype">
+                <option value="" disabled selected>Valitse lippu</option>
                 <option v-for="ticket in model_select.ticketTypes" :value="ticket.id" >
                     {{ticket.name}} {{ticket.price}} €
                 </option>
             </select>
 
 
-            <input type="number" value=1 v-model="model_amount">
-            <button @click="addToCart()" :disabled="model_tickettype == ''">Add to cart</button>
+            <input type="number" min="1" value=1 v-model="model_amount" style="min-width:none;">
+            <button @click="addToCart()" :disabled="model_tickettype == ''">Lisää ostoskoriin</button>
         </div>
         
-        <h3>Shopping Cart</h3>
-        <button @click="clearCartItems()">Clear Items</button>
+        <h3>Ostoskori</h3>
+        <button @click="clearCartItems()">Tyhjennä ostoskori</button>
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
-                    <th>Date</th>
-                    <th>City</th>
-                    <th>Place</th>
-                    <th>Name</th>
-                    <th>TicketType</th>
-                    <th>Price</th>
+                    <th>Päivämäärä</th>
+                    <th>Kaupunki</th>
+                    <th>Paikka</th>
+                    <th>Nimi</th>
+                    <th>Lippu</th>
+                    <th>Hinta</th>
                     <th></th>
-
-
                 </tr>
             </thead>
 
@@ -121,7 +122,7 @@ function doPurchase() {
                     <td></td>
                     <td></td>
                     <td>{{model_totalPrice}} €</td>
-                    <td><button @click="doPurchase()">Buy</button></td>
+                    <td><button @click="doPurchase()" style="color:green; font-weight:bold;">Osta</button></td>
                 </tr>
             </tbody>
         </table>
@@ -135,13 +136,14 @@ function doPurchase() {
         margin-top:20px;
         padding: 15px;
         font-size: 16px;
-        width: 35vw;
+        //min-width: 35vw;
         font-family: Consas, monospace;
         margin-right: 15px;
     }
     
-    input {
-        width: 100px;
+    h4 {
+        margin: 0px;
+        margin-top:35px;
     }
 
 </style>
