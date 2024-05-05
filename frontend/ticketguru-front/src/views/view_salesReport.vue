@@ -5,21 +5,24 @@ import { Http } from '@/http/http';
 
 const route = useRoute();
 const router = useRouter();
-const eventId = ref(Number(route.params.id)); 
+const eventId = ref(Number(route.params.id));
+const event = ref(null);
 const ticketTypes = ref([]);
 const totalRevenue = ref(0);
 
 onMounted(async () => {
     if (!eventId.value) {
-        console.error('Event ID is required to fetch purchases');
+        console.error('Event ID is required');
         return;
     }
 
     try {
+        const eventResponse = await Http.get(`/events/${eventId.value}`); // Fetch event details
+        event.value = eventResponse[0];
         const purchases = await Http.get('/purchases');
         processPurchases(purchases);
     } catch (error) {
-        console.error('Failed to load purchases:', error);
+        console.error('Failed to load data:', error);
     }
 });
 
@@ -28,16 +31,11 @@ function processPurchases(purchases) {
 
     for (const purchase of purchases) {
         for (const ticket of purchase.tickets) {
-            if (ticket.event !== eventId.value) {
-                continue;
-            }
-
+            if (ticket.event !== eventId.value) continue;
             const { name, price } = ticket.ticketType;
-
             if (!revenueMap.has(name)) {
                 revenueMap.set(name, { name, count: 0, totalRevenue: 0, id: ticket.ticketType.id });
             }
-
             let current = revenueMap.get(name);
             current.totalRevenue += price;
             current.count += 1;
@@ -60,9 +58,8 @@ function goToSalesEvents() {
 
 <template>
     <div>
-        <br>
         <button @click="backToEvents">Takaisin</button>
-        <h1>Myyntiraportti</h1>
+        <h1>Myyntiraportti | {{ event?.name }}</h1> <!-- Display the event name here -->
         <table class="table">
             <thead>
                 <tr>
@@ -87,6 +84,7 @@ function goToSalesEvents() {
         <button @click="goToSalesEvents">Myyntitapahtumat</button>
     </div>
 </template>
+
 
 
 
