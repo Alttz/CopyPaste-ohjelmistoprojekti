@@ -1,35 +1,52 @@
 <script setup lang="ts">
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, onMounted, computed } from 'vue';
 import { Http } from '@/http/http';
 import router from '@/router';
 
 const emit = defineEmits(['addToCart'])
 
-
 const props = defineProps<{
-	toFetch: string
-	allowClick?: boolean
-	clickRedirectTarget?: string
-	allowEdit?: boolean
-	showDeleted?: boolean
-	shownColumns?: any
-	allowSearch?: boolean
-	passedComponents?: any
+    toFetch: string,
+    allowClick?: boolean,
+    clickRedirectTarget?: string,
+    allowEdit?: boolean,
+    showDeleted?: boolean,
+    shownColumns?: any,
+    allowSearch?: boolean,
+    passedComponents?: any
 }>()
 
-var editMode: Ref<boolean> = ref(false)
-var temp = (await Http.get(props.toFetch))
-var items: Ref<any> = ref(temp)
+const itemsPerPage: Ref<number> = ref(15);
+const currentPage: Ref<number> = ref(1);
+var items: Ref<any[]> = ref([]);
+var totalPages: Ref<number> = ref(0);
+
+onMounted(async () => {
+    const temp = await Http.get(props.toFetch);
+    items.value = temp.sort((b, a) => new Date(a.date) - new Date(b.date));
+    totalPages.value = Math.ceil(items.value.length / itemsPerPage.value);
+});
+
+const paginatedItems = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+    return items.value.slice(startIndex, startIndex + itemsPerPage.value);
+});
+
+function nextPage() {
+    if (currentPage.value < totalPages.value) currentPage.value++;
+}
+
+function prevPage() {
+    if (currentPage.value > 1) currentPage.value--;
+}
 
 console.log(props)
 
 function clickAction(id: number, event: any) {
-	if (props.allowClick) {
-		console.log(router)
-		//router.push(props.what+"/"+id)
-		//router.push(props.what+"/"+id,{state:{id:id}})
-		router.push({ name: "event", query: { id: id } })
-	}
+    if (props.allowClick) {
+        console.log(router)
+        router.push({ name: "event", query: { id: id } })
+    }
 }
 
 function addNewEvent() {
@@ -37,8 +54,8 @@ function addNewEvent() {
 }
 
 function editEvent(id: number) {
-	console.log('Editing event with ID:', id);  // This should log the correct id
-  router.push({ name: 'editevent', params: { id } });
+    console.log('Editing event with ID:', id);
+    router.push({ name: 'editevent', params: { id } });
 }
 
 function viewTicketTypes(id: number) {
@@ -59,10 +76,8 @@ function formatDate(dateString) {
 
     return `${day}.${month}.${year} klo ${hours}.${minutes}`;
 }
-
-
-//: before passed prop means it's literal type not a string for example. (list can be passed this way)
 </script>
+
 
 
 <template>
@@ -77,15 +92,15 @@ function formatDate(dateString) {
 			</tr>
 		</thead>
 		<tbody v-if="editMode">
-			<tr v-for="data in items">
+			<tr v-for="data in paginatedItems" :key="data.id">
 				<td v-for="d in data">
-					<input className="form-control" :value="d">
+					<input class="form-control" :value="d">
 				</td>
 			</tr>
 		</tbody>
 
 		<tbody v-if="!editMode">
-			<tr v-for="data in items" @click="clickAction(data['id'], $event)">
+			<tr v-for="data in paginatedItems" :key="data.id" @click="clickAction(data['id'], $event)">
 				<td>{{ formatDate(data['date']) }}</td>
 				<td>{{ data['city'] }}</td>
 				<td>{{ data['name'] }}</td>
@@ -97,9 +112,41 @@ function formatDate(dateString) {
 			</tr>
 		</tbody>
 	</table>
+	<nav aria-label="Page navigation">
+		<div class="pagination">
+			<a class="page-item" :class="{ disabled: currentPage === 1 }">
+				<button class="page-link" @click="prevPage">Previous</button>
+			</a>
+			<span class="page-status">{{ currentPage }} / {{ totalPages }}</span>
+			<a class="page-item" :class="{ disabled: currentPage === totalPages }">
+				<button class="page-link" @click="nextPage">Next</button>
+			</a>
+		</div>
+	</nav>
 </template>
 
+
 <style scoped>
+
+.pagination .page-link {
+    margin: 8px;
+    border-radius: 5px; /* rounded corners for links */
+}
+
+.pagination .active .page-link {
+    background-color: #007bff; /* active link color */
+    color: white;
+}
+
+.pagination .disabled .page-link {
+    color: grey;
+    pointer-events: none; /* prevent clicks on disabled links */
+}
+
+.pagination .page-link:hover {
+    background-color: #0056b3; /* hover state color */
+    color: white;
+}
 .search-button {
 	margin-bottom: 25px;
 }
