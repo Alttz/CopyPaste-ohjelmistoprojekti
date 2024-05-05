@@ -162,7 +162,7 @@
                         <table>
                             <tbody>
                                 <tr><td>{{model_viewTicketOnPage.uuid}}</td></tr>
-                                <tr><td>{{model_viewTicketOnPage.ticketType.event}}</td></tr>
+                                <tr><td>{{events[model_viewTicketOnPage.ticketType.event].name}}</td></tr>
                                 <tr><td>{{model_viewTicketOnPage.ticketType.name}}</td></tr>
                                 <tr><td>{{model_viewTicketOnPage.ticketType.price}}.00€</td></tr>
                             </tbody>
