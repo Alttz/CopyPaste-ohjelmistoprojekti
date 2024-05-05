@@ -28,6 +28,12 @@
     let displayOnPage : Ref<string> = ref("")
     //console.log(localStorage.getItem("purchaseData"))
 
+    var temp = await Http.get("/events")
+    let events : Ref<unknown> = ref({})
+    for (let i = 0; i < temp.length; i++) {
+        events.value[temp[i]] = i
+    }
+
 
     let model_viewTicketOnPage : Ref<unknown> = ref("")
 
@@ -120,18 +126,19 @@
 
 <template>
     <div>
-        <h3>Thankyou for your Purchase!</h3>
+        <h3>Kiitos ostoksestasi!</h3>
 
         <tbody>
-            <th>Date</th>
-            <th>Event</th>
-            <th>Username</th>
-            <th>TicketType</th>
-            <th>Price</th>
-            <th>Verification code</th>
+            <th>Päivämäärä</th>
+            <th>Tapahtuma</th>
+            <th>Nimi</th>
+            <th>Lippu</th>
+            <th>Hinta</th>
+            <th>Varmistuskoodi</th>
 
         </tbody>
         <tbody>
+            {{events}}
             <template v-for="item in response_items.successfulPurchases">
                 <tr v-for="ticket in item.tickets" @click="enlargeTicket(ticket)">
                     <td>{{item.purchaseDate}}</td>
