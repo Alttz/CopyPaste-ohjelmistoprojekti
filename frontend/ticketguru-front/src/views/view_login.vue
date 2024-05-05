@@ -16,7 +16,7 @@ if (localStorage.getItem("token") !== null) {
     isTokenStillValid.value = Http.checkTokenValidity(temp_token)
     if(isTokenStillValid) {
         Http.setToken(temp_token)
-        router.push('/landing')
+        router.push('/event_management')
     }
 
 }
@@ -44,8 +44,8 @@ async function Login() {
           <button v-on:click="Login">Kirjaudu sisään</button>
           <p>{{ message }}</p>
 
-          <p style="margin-top:150px; color:purple;">Token: {{storage}}</p>
-          <p style="color:purple">isTokenStillValid: {{isTokenStillValid}}</p>
+          <!-- <p style="margin-top:150px; color:purple;">Token: {{storage}}</p>
+          <p style="color:purple">isTokenStillValid: {{isTokenStillValid}}</p> -->
       </div>
     </div>
 </template>

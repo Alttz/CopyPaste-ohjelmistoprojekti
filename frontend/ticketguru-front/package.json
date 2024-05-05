@@ -15,6 +15,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^8.5.1",
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
     "qrcode.vue": "^3.4.1",

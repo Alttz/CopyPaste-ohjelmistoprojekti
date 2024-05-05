@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Http } from '@/http/http';
 
@@ -7,22 +7,45 @@ const route = useRoute();
 const router = useRouter();
 const eventId = ref(Number(route.params.id));
 const purchases = ref([]);
+const event = ref(null);
 const filteredEvents = ref([]);
-const showModal = ref(false);  // State to control modal visibility
-const selectedPurchase = ref(null);  // State to hold the selected purchase details
+const showModal = ref(false);
+const selectedPurchase = ref(null);
+
+const currentPage = ref(1);
+const itemsPerPage = ref(15);
+const pageCount = computed(() => Math.ceil(filteredEvents.value.length / itemsPerPage.value));
+const paginatedEvents = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    return filteredEvents.value.slice(start, end);
+});
+
+function prevPage() {
+    if (currentPage.value > 1) {
+        currentPage.value--;
+    }
+}
+
+function nextPage() {
+    if (currentPage.value < pageCount.value) {
+        currentPage.value++;
+    }
+}
 
 onMounted(async () => {
     try {
+        const eventResponse = await Http.get(`/events/${eventId.value}`);
+        event.value = eventResponse[0];
         const response = await Http.get('/purchases');
-        console.log("Received data:", response);
         purchases.value = response;
         filterEvents();
-
     } catch (error) {
         console.error('Failed to load purchases:', error);
-    }});
+    }
+});
 
-    function filterEvents() {
+function filterEvents() {
     filteredEvents.value = purchases.value
         .filter(purchase => purchase.tickets.some(ticket => ticket.event === eventId.value))
         .map(purchase => {
@@ -31,34 +54,48 @@ onMounted(async () => {
                 .reduce((sum, ticket) => sum + ticket.ticketType.price, 0);
             return {
                 ...purchase,
-                purchaseId: purchase.id, // Assuming 'id' is the name of the property
-                totalPrice
+                purchaseId: purchase.id,
+                totalPrice,
+                purchaseDate: new Date(purchase.purchaseDate)
             };
-        });
-    console.log('Filtered Events:', filteredEvents.value); // Debug log to check the output
+        })
+        .sort((b, a) => a.purchaseDate - b.purchaseDate);
 }
 
 function performAction(purchaseId) {
     const purchaseDetails = purchases.value.find(purchase => purchase.id === purchaseId);
     if (purchaseDetails) {
         selectedPurchase.value = purchaseDetails;
-        showModal.value = true; // Open the modal with the details
+        showModal.value = true;
     }
 }
 
 function closeModal() {
-    showModal.value = false; // Close the modal
+    showModal.value = false;
 }
 
 function backToSalesReport() {
     router.push({ name: 'sales_report' });
 }
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    date.setHours(date.getHours() + 3);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${day}.${month}.${year} klo ${hours}:${minutes}`;
+}
 </script>
+
+
 
 <template>
     <div>
         <button @click="backToSalesReport">Takaisin</button>
-        <h1>Myyntitapahtumat: {{ eventId }}</h1>
+        <h1>Myyntitapahtumat | {{ event?.name }}</h1>
         <table class="table">
             <thead>
                 <tr>
@@ -69,8 +106,8 @@ function backToSalesReport() {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(event, index) in filteredEvents" :key="event.purchaseId">
-                    <td>{{ event.purchaseDate }}</td>
+                <tr v-for="(event, index) in paginatedEvents" :key="event.purchaseId">
+                    <td>{{ formatDate(event.purchaseDate) }}</td>
                     <td>{{ event.purchaseId }}</td>
                     <td>{{ event.totalPrice.toFixed(2) }}</td>
                     <td>
@@ -79,6 +116,17 @@ function backToSalesReport() {
                 </tr>
             </tbody>
         </table>
+        <nav aria-label="Page navigation">
+            <div class="pagination">
+                <a class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <button class="page-link" @click="prevPage">Previous</button>
+                </a>
+                <span class="page-status">{{ currentPage }} / {{ pageCount }}</span>
+                <a class="page-item" :class="{ disabled: currentPage === pageCount }">
+                    <button class="page-link" @click="nextPage">Next</button>
+                </a>
+            </div>
+        </nav>
         <div v-if="showModal" class="modal">
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
@@ -86,8 +134,9 @@ function backToSalesReport() {
                 <table class="details-table">
                     <thead>
                         <tr>
-                            <th>Lippu ID</th>
-                            <th>Lippu</th>
+                            <th>Lippu id</th>
+                            <th>Lippukoodi</th>
+                            <th>Lipputyyppi</th>
                             <th>Hinta (€)</th>
                             <th>Status</th>
                         </tr>
@@ -95,6 +144,7 @@ function backToSalesReport() {
                     <tbody>
                         <tr v-for="ticket in selectedPurchase.tickets" :key="ticket.id">
                             <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.uuid }}</td>
                             <td>{{ ticket.ticketType.name }}</td>
                             <td>{{ ticket.ticketType.price.toFixed(2) }}</td>
                             <td>{{ ticket.used ? 'Käytetty' : 'Käyttämätön' }}</td>
@@ -105,6 +155,8 @@ function backToSalesReport() {
         </div>
     </div>
 </template>
+
+
 
 <style scoped>
 table {
@@ -133,6 +185,11 @@ table {
     font-size: 28px;
     cursor: pointer;
 }
+
+.details-table {
+    width: 100%;
+}
+
 .details-table th {
     background-color: #f2f2f2;
 }

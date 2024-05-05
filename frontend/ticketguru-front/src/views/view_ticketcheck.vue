@@ -74,6 +74,20 @@ const markTicketAsUsed = async () => {
     }
 };
 
+function formatDate(dateString) {
+    if (!dateString) return ''; // Handle null or undefined dates
+
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${day}.${month}.${year} klo ${hours}:${minutes}`;
+}
+
+
 </script>
 
 
@@ -98,7 +112,7 @@ const markTicketAsUsed = async () => {
                     </tr>
                     <tr>
                         <th>Ajankohta</th>
-                        <td>{{ eventData.date }}</td>
+                        <td>{{ formatDate(eventData.date) }}</td> <!-- Formatted date -->
                     </tr>
                     <tr>
                         <th>Paikka</th>
@@ -129,6 +143,7 @@ const markTicketAsUsed = async () => {
         </div>
     </div>
 </template>
+
 
 <style scoped>
 .error {

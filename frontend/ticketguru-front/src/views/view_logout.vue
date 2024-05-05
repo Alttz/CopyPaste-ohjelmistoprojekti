@@ -18,7 +18,7 @@ function goToLogin() {
 <template>
 
     <div>
-        <p>You have been logged out</p>
+        <p>Sinut on kirjattu ulos</p>
         <button @click="goToLogin">Kirjaudu sisään</button>
     </div>
 
