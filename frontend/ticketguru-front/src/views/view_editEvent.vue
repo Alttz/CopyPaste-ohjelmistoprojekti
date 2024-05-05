@@ -3,6 +3,9 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Http } from '@/http/http';
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 const route = useRoute();
 const router = useRouter();
 
@@ -14,6 +17,17 @@ const eventData = ref({
     place: '',
     ticketCount: 0
 });
+
+const format = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  const hours = date.getHours().toString().padStart(2, '0'); // Ensures two digits
+  const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensures two digits
+
+  return `${day}.${month}.${year} klo ${hours}:${minutes}`;
+}
 
 onMounted(async () => {
     const eventId = route.params.id;
@@ -33,8 +47,23 @@ onMounted(async () => {
 
 
 async function updateEvent() {
+    let adjustedDate = eventData.value.date; // Copy the original date
+
+    // Check if the date is set and create a new date object for adjustments
+    if (adjustedDate) {
+        let tempDate = new Date(adjustedDate);
+        tempDate.setHours(tempDate.getHours() + 3); // Adjust hours here
+        adjustedDate = tempDate.toISOString(); // Convert the adjusted date back to ISO string
+    }
+
+    // Create a copy of eventData to send to the server
+    let dataToSend = {
+        ...eventData.value,
+        date: adjustedDate // Use the adjusted date
+    };
+
     try {
-        const response = await Http.update(`/events/${eventData.value.id}`, eventData.value);
+        const response = await Http.update(`/events/${dataToSend.id}`, dataToSend);
         console.log('Event updated successfully:', response);
         alert('Event updated successfully!');
         router.push({ name: 'event_management' });
@@ -43,6 +72,8 @@ async function updateEvent() {
         alert('Failed to update event.');
     }
 }
+
+
 
 function goBack() {
     router.push({ name: 'event_management' });
@@ -58,7 +89,7 @@ function goBack() {
             <form @submit.prevent="updateEvent">
                 <div class="form-group">
                     <label for="eventDate">Aika: </label>
-                    <input type="date" id="eventDate" v-model="eventData.date" required>
+                    <VueDatePicker id="eventDate" v-model="eventData.date" :utc="false" locale="fi" cancelText="peruuta" selectText="valmis" required :format="format"></VueDatePicker>
                 </div>
                 <div class="form-group">
                     <label for="eventPlace">Paikka: </label>
