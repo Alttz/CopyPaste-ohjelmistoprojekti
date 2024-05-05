@@ -12,7 +12,7 @@ function goToEvents() {
 
 <template>
     <div>
-        <h3>Tapahtumat</h3>
+        <h3>Tapahtuman hallinta</h3>
         <Suspense>
             <CompEventManagementTable to-fetch="/events" :passed-components="{'ticketTypes': Select}"/>
         </Suspense>
