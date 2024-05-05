@@ -2,13 +2,6 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { Http } from '@/http/http' // Import Http module to check authentication status
 
-function logout() {
-  // Perform logout logic here
-  localStorage.clear();
-  Http.setToken("user has logged out");
-  // After logout logic, reload the page
-  window.location.href = '/logout'; // Redirect to the login page and refresh
-}
 </script>
 
 <template>
@@ -16,7 +9,7 @@ function logout() {
     <RouterLink v-if="Http.isAuthenticated()" to="/event_management">Event Management</RouterLink>
     <RouterLink v-if="Http.isAuthenticated()" to="/buy">Buy Tickets</RouterLink>
     <RouterLink v-if="Http.isAuthenticated()" to="/ticketcheck">Lipun tarkastus</RouterLink>
-    <a href="#" v-if="Http.isAuthenticated()" @click.prevent="logout">Logout</a>
+    <RouterLink v-if="Http.isAuthenticated()" to="/logout">Logout</RouterLink>
   </nav>
 
   <Suspense>
