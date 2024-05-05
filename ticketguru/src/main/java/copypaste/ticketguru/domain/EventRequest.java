@@ -1,11 +1,11 @@
 package copypaste.ticketguru.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EventRequest {
 	private String name;
-	private LocalDate date;
+	private LocalDateTime date;
 	private String place;
 	private String city;
 	private int ticketCount;
@@ -19,11 +19,11 @@ public class EventRequest {
 		this.name = name;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import copypaste.ticketguru.domain.Event;
+import copypaste.ticketguru.domain.EventRepository;
 import copypaste.ticketguru.domain.RESTError;
 import copypaste.ticketguru.domain.Ticket;
 import copypaste.ticketguru.domain.TicketRepository;
@@ -22,6 +23,10 @@ import copypaste.ticketguru.service.JwtValidatorService;
 public class TicketRestController {
 	@Autowired
 	TicketRepository ticketRepository;
+
+	@Autowired
+	EventRepository eventRepository;
+
 	@Autowired
 	private JwtValidatorService jwtValidatorService;
 
@@ -47,6 +52,23 @@ public class TicketRestController {
             } else {
                 return ResponseEntity.notFound().build();
             }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
+    }
+
+	// Find all the tickets to this event's ID
+	@GetMapping(value = "/api/tickets/byEvent/{id}")
+    public ResponseEntity<?> getTicketsByEventId(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (jwtValidatorService.validateToken(authHeader)) {
+			Optional<Event> event = eventRepository.findById(id);
+
+			if(!event.isPresent()) {
+				return ResponseEntity.notFound().build();
+			}
+
+			return ResponseEntity.ok(ticketRepository.findAllByEvent(event.get()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
     }

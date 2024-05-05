@@ -1,7 +1,6 @@
 package copypaste.ticketguru.domain;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -22,7 +21,7 @@ public class Purchase {
 
 	@NotNull(message = "Purchase date is required.")
 	@PastOrPresent(message = "Purchase date must be in the past or today.")
-	private LocalDate purchaseDate;
+	private LocalDateTime purchaseDate;
 
 	@OneToMany(mappedBy = "purchase")
 	@JsonManagedReference
@@ -36,13 +35,13 @@ public class Purchase {
 		super();
 	}
 
-	public Purchase(LocalDate purchaseDate, List<Ticket> tickets) {
+	public Purchase(LocalDateTime purchaseDate, List<Ticket> tickets) {
 		super();
 		this.purchaseDate = purchaseDate;
 		this.tickets = tickets;
 	}
 
-	public Purchase(LocalDate purchaseDate, List<Ticket> tickets, AppUser appUser) {
+	public Purchase(LocalDateTime purchaseDate, List<Ticket> tickets, AppUser appUser) {
 		super();
 		this.purchaseDate = purchaseDate;
 		this.tickets = tickets;
@@ -57,11 +56,11 @@ public class Purchase {
 		this.id = id;
 	}
 
-	public LocalDate getPurchaseDate() {
+	public LocalDateTime getPurchaseDate() {
 		return purchaseDate;
 	}
 
-	public void setPurchaseDate(LocalDate purchaseDate) {
+	public void setPurchaseDate(LocalDateTime purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
 

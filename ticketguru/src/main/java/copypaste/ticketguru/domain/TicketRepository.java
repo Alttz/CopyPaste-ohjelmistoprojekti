@@ -8,7 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
-    Ticket findByEvent(Event event);
     List<Ticket> findByTicketType(TicketType ticketType);
     Optional<Ticket> findByUuid(String uuid);
+    Optional<Ticket> findByEvent(Event event);
+    List<Ticket> findAllByEvent(Event event);
 }

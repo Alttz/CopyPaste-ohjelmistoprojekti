@@ -3,6 +3,7 @@ package copypaste.ticketguru.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -25,7 +26,7 @@ public class Event {
 	// Removed for now
 	// @NotNull
 	// @FutureOrPresent
-	private LocalDate date;
+	private LocalDateTime date;
 
 	@NotBlank
 	private String place;
@@ -48,7 +49,7 @@ public class Event {
 	public Event() {
 	}
 
-	public Event(LocalDate date, String place, String city, String name, int ticketCount) {
+	public Event(LocalDateTime date, String place, String city, String name, int ticketCount) {
 		super();
 		this.date = date;
 		this.place = place;
@@ -57,7 +58,7 @@ public class Event {
 		this.ticketCount = ticketCount;
 	}
 
-	public Event(LocalDate date, String place, String city, String name, int ticketCount, List<Ticket> tickets,
+	public Event(LocalDateTime date, String place, String city, String name, int ticketCount, List<Ticket> tickets,
 			List<TicketType> ticketTypes) {
 		super();
 		this.date = date;
@@ -93,11 +94,11 @@ public class Event {
 		this.city = city;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return this.date;
 	}
 

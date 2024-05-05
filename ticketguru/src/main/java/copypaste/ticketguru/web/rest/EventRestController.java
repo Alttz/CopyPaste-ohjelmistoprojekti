@@ -2,6 +2,7 @@ package copypaste.ticketguru.web.rest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +36,9 @@ public class EventRestController {
 
 	@Autowired
 	TicketRepository ticketRepository;
+
+	@Autowired
+	PurchaseRepository purchaseRepository;
 
 	private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	private Validator validator = factory.getValidator();
@@ -123,6 +127,30 @@ public class EventRestController {
 				return ResponseEntity.noContent().build();
 			}
 			return ResponseEntity.ok(events);
+		}
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
+	}
+
+	/*
+	 * Search for associated events by a purchase's ID
+	 */
+
+	@GetMapping(value = "/api/events/byPurchase/{id}")
+	public ResponseEntity<?> findEventsByPurchase(@RequestParam("id") int purchaseId, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+		if (jwtValidatorService.validateToken(authHeader)) {
+			Optional<Purchase> result = purchaseRepository.findById((long)purchaseId);
+
+			if(result.isEmpty()) {
+				return ResponseEntity.notFound().build();
+			}
+
+			HashSet<Event> ret = new HashSet<>();
+
+			for(var ticket : result.get().getTickets()) {
+				ret.add(ticket.getEvent());				
+			}
+
+			return ResponseEntity.ok(ret);
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RESTError("Invalid or missing token"));
 	}
