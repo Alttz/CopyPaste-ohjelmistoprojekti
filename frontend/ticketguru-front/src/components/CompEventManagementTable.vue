@@ -49,6 +49,18 @@ function viewReport(id: number) {
     router.push({ name: 'sales_report', params: { id } });
 }
 
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${day}.${month}.${year} klo ${hours}.${minutes}`;
+}
+
+
 //: before passed prop means it's literal type not a string for example. (list can be passed this way)
 </script>
 
@@ -74,7 +86,7 @@ function viewReport(id: number) {
 
 		<tbody v-if="!editMode">
 			<tr v-for="data in items" @click="clickAction(data['id'], $event)">
-				<td>{{ data['date'] }}</td>
+				<td>{{ formatDate(data['date']) }}</td>
 				<td>{{ data['city'] }}</td>
 				<td>{{ data['name'] }}</td>
 				<td>

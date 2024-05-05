@@ -44,8 +44,8 @@ async function Login() {
           <button v-on:click="Login">Kirjaudu sisään</button>
           <p>{{ message }}</p>
 
-          <p style="margin-top:150px; color:purple;">Token: {{storage}}</p>
-          <p style="color:purple">isTokenStillValid: {{isTokenStillValid}}</p>
+          <!-- <p style="margin-top:150px; color:purple;">Token: {{storage}}</p>
+          <p style="color:purple">isTokenStillValid: {{isTokenStillValid}}</p> -->
       </div>
     </div>
 </template>
