@@ -16,7 +16,7 @@ if (localStorage.getItem("token") !== null) {
     isTokenStillValid.value = Http.checkTokenValidity(temp_token)
     if(isTokenStillValid) {
         Http.setToken(temp_token)
-        router.push('/landing')
+        router.push('/event_management')
     }
 
 }

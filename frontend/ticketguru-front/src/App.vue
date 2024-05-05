@@ -6,9 +6,8 @@ import { Http } from '@/http/http' // Import Http module to check authentication
 
 <template>
   <nav>
-    <RouterLink v-if="Http.isAuthenticated()" to="/landing">Home</RouterLink>
-    <RouterLink v-if="Http.isAuthenticated()" to="/buy">Buy Tickets</RouterLink>
     <RouterLink v-if="Http.isAuthenticated()" to="/event_management">Event Management</RouterLink>
+    <RouterLink v-if="Http.isAuthenticated()" to="/buy">Buy Tickets</RouterLink>
     <RouterLink v-if="Http.isAuthenticated()" to="/ticketcheck">Lipun tarkastus</RouterLink>
     <RouterLink v-if="Http.isAuthenticated()" to="/logout">Logout</RouterLink>
   </nav>
