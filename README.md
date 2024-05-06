@@ -185,12 +185,29 @@ lähettämiseen.
 
 ## Testaus
 
-Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
-testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
-Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
-erillisiin dokumentteihin.
+Projektin aikana suoritettiin kattava testausprosessi varmistaakseen ohjelmiston oikea toiminta ja tulosten laatu. Testaus
+jaettiin eri tasoihin ja vaiheisiin, joista jokainen keskittyy tiettyyn osa-alueeseen sovelluksessa.
+Esimerkkejä:
 
-Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
+**Yksikkötestit:**
+        EventRepository-luokka: Testaa findById-metodin toiminnallisuutta.
+
+**API-testit:**
+        Käyttäjän authorisointi: Testaa käyttäjän autentikoinnin APIin ja virheidenkäsittelyn toimivuutta.
+        EventApiTests-luokka: Testaa HTTP-pyyntöjen käsittelyä API:ssa.
+
+**End-to-End -testit:**
+        Koko sovelluksen toiminnan simulointi: Simuloi sovelluksen prosessin alusta loppuun.
+
+**Testien tarkoitus:**
+
+Yksikkötestit varmistavat yksittäisten komponenttien toiminnan.
+API-testit testaavat API-rajapintojen toimintaa ja autentikointia.
+End-to-End -testit tarkastavat sovelluksen kokonaisuuden toiminnan.
+
+Tarkemmat testien selitykset löytyvät [täältä](testien_selitykset.md) ja testausraportti [täältä](testausraportti.md).
+
+
 
 ## Asennustiedot
 
