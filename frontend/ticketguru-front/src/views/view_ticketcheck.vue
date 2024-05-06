@@ -94,6 +94,7 @@ function formatDate(dateString) {
 
 <template>
     <div>
+        <h3>Lipun tarkastus</h3>
         <br>
         <input v-model="ticketCode" type="text" placeholder="Lisää tarkastuskoodi" />
         <button @click="fetchTicket" :disabled="isLoading">
@@ -146,8 +147,16 @@ function formatDate(dateString) {
 
 
 <style scoped>
+input {
+    width: 250px;
+}
+
 .error {
     color: red;
+}
+
+button {
+    margin: 3px;
 }
 
 button[disabled] {

@@ -224,7 +224,12 @@
     }
 
     h4,h3 {
-        margin: 0px;
+        margin: 8px;
+        margin-top: 25px;
+    }
+
+    button {
+        margin: 5px;
     }
 
 </style>

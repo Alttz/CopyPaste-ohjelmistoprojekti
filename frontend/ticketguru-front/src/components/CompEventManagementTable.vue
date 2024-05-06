@@ -128,6 +128,10 @@ function formatDate(dateString) {
 
 <style scoped>
 
+button {
+	margin: 3px;
+}
+
 .pagination .page-link {
     margin: 8px;
     border-radius: 5px; /* rounded corners for links */

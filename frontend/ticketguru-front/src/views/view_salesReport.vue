@@ -58,8 +58,9 @@ function goToSalesEvents() {
 
 <template>
     <div>
+        <br>
         <button @click="backToEvents">Takaisin</button>
-        <h1>Myyntiraportti | {{ event?.name }}</h1> <!-- Display the event name here -->
+        <h3>Myyntiraportti | {{ event?.name }}</h3> 
         <table class="table">
             <thead>
                 <tr>
@@ -92,5 +93,9 @@ function goToSalesEvents() {
 table {
     width: 500px;
     margin-top: 20px;
+}
+
+button {
+	margin: 3px;
 }
 </style>

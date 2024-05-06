@@ -94,8 +94,9 @@ function formatDate(dateString) {
 
 <template>
     <div>
+        <br>
         <button @click="backToSalesReport">Takaisin</button>
-        <h1>Myyntitapahtumat | {{ event?.name }}</h1>
+        <h3>Myyntitapahtumat | {{ event?.name }}</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -192,6 +193,9 @@ table {
 
 .details-table th {
     background-color: #f2f2f2;
+}
+button {
+	margin: 3px;
 }
 </style>
 

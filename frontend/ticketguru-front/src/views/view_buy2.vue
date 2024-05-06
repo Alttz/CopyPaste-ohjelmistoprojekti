@@ -79,6 +79,7 @@ const sortedEvents = computed(() => {
 
 <template>
     <div>
+        <h3>Lipun myynti</h3>
         <h4>Valitse tapahtuma</h4>
         <select v-model="model_select">
             <option value="" disabled selected>Valitse tapahtuma</option>
