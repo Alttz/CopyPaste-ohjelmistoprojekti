@@ -144,7 +144,6 @@
         <tbody>
             <th>Päivämäärä</th>
             <th>Tapahtuma</th>
-            <th>Nimi</th>
             <th>Lippu</th>
             <th>Hinta</th>
             <th>Varmistuskoodi</th>
@@ -155,7 +154,6 @@
                 <tr v-for="ticket in item.tickets" @click="enlargeTicket(ticket)">
                     <td>{{ formattedPurchaseDate(item.purchaseDate) }}</td>
                     <td>{{events[ticket.ticketType.event].name}}</td>
-                    <td>{{item.appUser.username}}</td>
                     <td>{{ticket.ticketType.name}}</td>
                     <td>{{ticket.ticketType.price}} €</td>
                     <td>{{ticket.uuid}}</td>
