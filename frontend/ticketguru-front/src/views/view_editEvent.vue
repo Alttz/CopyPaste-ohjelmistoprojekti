@@ -84,7 +84,7 @@ function goBack() {
     <div>
         <br>
         <button class="btn btn-secondary" @click="goBack">Takaisin</button>
-        <h1>Muokkaa tapahtumaa</h1>
+        <h3>Muokkaa tapahtumaa</h3>
         <div v-if="eventData.id">
             <form @submit.prevent="updateEvent">
                 <div class="form-group">

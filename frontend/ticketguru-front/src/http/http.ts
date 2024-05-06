@@ -45,7 +45,6 @@ export class Http {
 		this.token = passed_token
 	}
 
-
 	/*
 	static setCredentials(username: string, password: string) {
 		this.token = btoa(username + ':' + password);  // Encode credentials only once

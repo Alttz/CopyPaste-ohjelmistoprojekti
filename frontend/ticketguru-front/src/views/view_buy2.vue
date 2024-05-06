@@ -2,7 +2,7 @@
 
 import { Http,} from '@/http/http';
 import router from '@/router';
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, computed } from 'vue';
 
 var cartItems : Ref<any> = ref([])
 var boughtTickets : Ref<any> = ref([])
@@ -58,60 +58,79 @@ function doPurchase() {
     router.push({name: 'doPurchase'});
 }
 
+const sortedEvents = computed(() => {
+    return response_events.value.sort((b, a) => {
+        const dateB = new Date(b.date);
+        const dateA = new Date(a.date);
+        return dateA - dateB;
+    }).map(event => {
+        const formattedDate = new Date(event.date).toLocaleString('fi-FI', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        return { ...event, formattedDate };
+    });
+});
+
 </script>
 
 <template>
     <div>
+        <h3>Lipun myynti</h3>
+        <h4>Valitse tapahtuma</h4>
         <select v-model="model_select">
-            <option v-for="event in response_events" :value="event" >
-                {{event.date}} |
-                {{event.city}} |
-                {{event.place}} |
-                {{event.name}} |
-                Lippuja: {{event.ticketCount}}
+            <option value="" disabled selected>Valitse tapahtuma</option>
+            <option v-for="event in sortedEvents" :value="event">
+                {{ event.formattedDate.substr(0, 10) }} klo {{ event.formattedDate.substr(11) }} |
+                {{ event.name }} |
+                {{ event.city }} |
+                {{ event.place }} |
+                Lippuja: {{ event.ticketCount }}
             </option>
         </select>
 
-
         <div v-if="model_select != ''">
+            <h4>Valitse ostettavat liput</h4>
             <select v-model="model_tickettype">
+                <option value="" disabled selected>Valitse lippu</option>
                 <option v-for="ticket in model_select.ticketTypes" :value="ticket.id" >
                     {{ticket.name}} {{ticket.price}} €
                 </option>
             </select>
 
 
-            <input type="number" value=1 v-model="model_amount">
-            <button @click="addToCart()" :disabled="model_tickettype == ''">Add to cart</button>
+            <input type="number" min="1" value=1 v-model="model_amount" style="min-width:none;">
+            <button @click="addToCart()" :disabled="model_tickettype == ''">Lisää ostoskoriin</button>
         </div>
         
-        <h3>Shopping Cart</h3>
-        <button @click="clearCartItems()">Clear Items</button>
+        <h3>Ostoskori</h3>
+        <button @click="clearCartItems()">Tyhjennä ostoskori</button>
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
-                    <th>Date</th>
-                    <th>City</th>
-                    <th>Place</th>
-                    <th>Name</th>
-                    <th>TicketType</th>
-                    <th>Price</th>
+                    <th>Ajankohta</th>
+                    <th>Kaupunki</th>
+                    <th>Paikka</th>
+                    <th>Nimi</th>
+                    <th>Lippu</th>
+                    <th>Hinta</th>
                     <th></th>
-
-
                 </tr>
             </thead>
 
             <tbody>
                 <tr v-for="item in cartItems">
-                    <td>{{item.ticket.date}}</td>
+                    <td>{{ item.ticket.formattedDate.substr(0, 10) }} klo {{ item.ticket.formattedDate.substr(11) }}</td>
                     <td>{{item.ticket.city}}</td>
                     <td>{{item.ticket.place}}</td>
                     <td>{{item.ticket.name}}</td>
                     <!-- item.type has all data about the sold ticket type in it -->
                     <td>{{item.type.name}}</td>
                     <td>{{item.type.price}} €</td>
-                    <td><button @click="deleteFromCart(item)">delete</button></td>
+                    <td><button @click="deleteFromCart(item)">Poista</button></td>
                 </tr>
 
                 <tr>
@@ -121,7 +140,7 @@ function doPurchase() {
                     <td></td>
                     <td></td>
                     <td>{{model_totalPrice}} €</td>
-                    <td><button @click="doPurchase()">Buy</button></td>
+                    <td><button @click="doPurchase()" style="color:green; font-weight:bold;">Osta</button></td>
                 </tr>
             </tbody>
         </table>
@@ -135,13 +154,14 @@ function doPurchase() {
         margin-top:20px;
         padding: 15px;
         font-size: 16px;
-        width: 35vw;
+        //min-width: 35vw;
         font-family: Consas, monospace;
         margin-right: 15px;
     }
     
-    input {
-        width: 100px;
+    h4 {
+        margin: 0px;
+        margin-top:35px;
     }
 
 </style>

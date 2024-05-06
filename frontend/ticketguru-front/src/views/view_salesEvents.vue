@@ -94,8 +94,9 @@ function formatDate(dateString) {
 
 <template>
     <div>
+        <br>
         <button @click="backToSalesReport">Takaisin</button>
-        <h1>Myyntitapahtumat | {{ event?.name }}</h1>
+        <h3>Myyntitapahtumat | {{ event?.name }}</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -119,11 +120,11 @@ function formatDate(dateString) {
         <nav aria-label="Page navigation">
             <div class="pagination">
                 <a class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <button class="page-link" @click="prevPage">Previous</button>
+                    <button class="page-link" @click="prevPage">Takaisin</button>
                 </a>
                 <span class="page-status">{{ currentPage }} / {{ pageCount }}</span>
                 <a class="page-item" :class="{ disabled: currentPage === pageCount }">
-                    <button class="page-link" @click="nextPage">Next</button>
+                    <button class="page-link" @click="nextPage">Seuraava</button>
                 </a>
             </div>
         </nav>
@@ -192,6 +193,9 @@ table {
 
 .details-table th {
     background-color: #f2f2f2;
+}
+button {
+	margin: 3px;
 }
 </style>
 

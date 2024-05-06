@@ -115,11 +115,11 @@ function formatDate(dateString) {
 	<nav aria-label="Page navigation">
 		<div class="pagination">
 			<a class="page-item" :class="{ disabled: currentPage === 1 }">
-				<button class="page-link" @click="prevPage">Previous</button>
+				<button class="page-link" @click="prevPage">Takaisin</button>
 			</a>
 			<span class="page-status">{{ currentPage }} / {{ totalPages }}</span>
 			<a class="page-item" :class="{ disabled: currentPage === totalPages }">
-				<button class="page-link" @click="nextPage">Next</button>
+				<button class="page-link" @click="nextPage">Seuraava</button>
 			</a>
 		</div>
 	</nav>
@@ -127,6 +127,10 @@ function formatDate(dateString) {
 
 
 <style scoped>
+
+button {
+	margin: 3px;
+}
 
 .pagination .page-link {
     margin: 8px;

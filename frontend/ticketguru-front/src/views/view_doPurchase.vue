@@ -28,6 +28,12 @@
     let displayOnPage : Ref<string> = ref("")
     //console.log(localStorage.getItem("purchaseData"))
 
+    var temp = await Http.get("/events")
+    let events : Ref<unknown> = ref({})
+    for (let i = 0; i < temp.length; i++) {
+        events.value[temp[i].id] = temp[i]
+    }
+
 
     let model_viewTicketOnPage : Ref<unknown> = ref("")
 
@@ -115,28 +121,39 @@
         WinPrint.close();
     }
 
+    const formattedPurchaseDate = (dateString) => {
+    let date = new Date(dateString);
+    date.setHours(date.getHours() + 3); // Adding 3 hours
+    const formattedDate = date.toLocaleString('fi-FI', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    return formattedDate.replace(' ', ' klo '); // Insert "klo" between date and time
+};
+
 
 </script>
 
 <template>
     <div>
-        <h3>Thankyou for your Purchase!</h3>
+        <h3>Kiitos ostoksestasi!</h3>
 
         <tbody>
-            <th>Date</th>
-            <th>Event</th>
-            <th>Username</th>
-            <th>TicketType</th>
-            <th>Price</th>
-            <th>Verification code</th>
+            <th>Päivämäärä</th>
+            <th>Tapahtuma</th>
+            <th>Lippu</th>
+            <th>Hinta</th>
+            <th>Varmistuskoodi</th>
 
         </tbody>
         <tbody>
             <template v-for="item in response_items.successfulPurchases">
                 <tr v-for="ticket in item.tickets" @click="enlargeTicket(ticket)">
-                    <td>{{item.purchaseDate}}</td>
-                    <td>{{ticket.ticketType.event}}</td>
-                    <td>{{item.appUser.username}}</td>
+                    <td>{{ formattedPurchaseDate(item.purchaseDate) }}</td>
+                    <td>{{events[ticket.ticketType.event].name}}</td>
                     <td>{{ticket.ticketType.name}}</td>
                     <td>{{ticket.ticketType.price}} €</td>
                     <td>{{ticket.uuid}}</td>
@@ -156,7 +173,7 @@
                         <table>
                             <tbody>
                                 <tr><td>{{model_viewTicketOnPage.uuid}}</td></tr>
-                                <tr><td>{{model_viewTicketOnPage.ticketType.event}}</td></tr>
+                                <tr><td>{{events[model_viewTicketOnPage.ticketType.event].name}}</td></tr>
                                 <tr><td>{{model_viewTicketOnPage.ticketType.name}}</td></tr>
                                 <tr><td>{{model_viewTicketOnPage.ticketType.price}}.00€</td></tr>
                             </tbody>
@@ -180,7 +197,7 @@
         border-radius: 10px;
         margin-top: 25px;
         margin-bottom: 25px;
-        max-width: 25vw;
+        max-width: auto;
         float:left;
         padding: 10px;
 
@@ -205,7 +222,12 @@
     }
 
     h4,h3 {
-        margin: 0px;
+        margin: 8px;
+        margin-top: 25px;
+    }
+
+    button {
+        margin: 5px;
     }
 
 </style>
