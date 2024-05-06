@@ -2,7 +2,7 @@
 
 import { Http,} from '@/http/http';
 import router from '@/router';
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, computed } from 'vue';
 
 var cartItems : Ref<any> = ref([])
 var boughtTickets : Ref<any> = ref([])
@@ -58,6 +58,23 @@ function doPurchase() {
     router.push({name: 'doPurchase'});
 }
 
+const sortedEvents = computed(() => {
+    return response_events.value.sort((b, a) => {
+        const dateB = new Date(b.date);
+        const dateA = new Date(a.date);
+        return dateA - dateB;
+    }).map(event => {
+        const formattedDate = new Date(event.date).toLocaleString('fi-FI', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        return { ...event, formattedDate };
+    });
+});
+
 </script>
 
 <template>
@@ -65,12 +82,12 @@ function doPurchase() {
         <h4>Valitse tapahtuma</h4>
         <select v-model="model_select">
             <option value="" disabled selected>Valitse tapahtuma</option>
-            <option v-for="event in response_events" :value="event" >
-                {{event.date}} |
-                {{event.city}} |
-                {{event.place}} |
-                {{event.name}} |
-                Lippuja: {{event.ticketCount}}
+            <option v-for="event in sortedEvents" :value="event">
+                {{ event.formattedDate.substr(0, 10) }} klo {{ event.formattedDate.substr(11) }} |
+                {{ event.name }} |
+                {{ event.city }} |
+                {{ event.place }} |
+                Lippuja: {{ event.ticketCount }}
             </option>
         </select>
 
@@ -93,7 +110,7 @@ function doPurchase() {
         <table class="table table-bordered border-primary">
             <thead class="thead-dark">
                 <tr>
-                    <th>Päivämäärä</th>
+                    <th>Ajankohta</th>
                     <th>Kaupunki</th>
                     <th>Paikka</th>
                     <th>Nimi</th>
@@ -105,14 +122,14 @@ function doPurchase() {
 
             <tbody>
                 <tr v-for="item in cartItems">
-                    <td>{{item.ticket.date}}</td>
+                    <td>{{ item.ticket.formattedDate.substr(0, 10) }} klo {{ item.ticket.formattedDate.substr(11) }}</td>
                     <td>{{item.ticket.city}}</td>
                     <td>{{item.ticket.place}}</td>
                     <td>{{item.ticket.name}}</td>
                     <!-- item.type has all data about the sold ticket type in it -->
                     <td>{{item.type.name}}</td>
                     <td>{{item.type.price}} €</td>
-                    <td><button @click="deleteFromCart(item)">delete</button></td>
+                    <td><button @click="deleteFromCart(item)">Poista</button></td>
                 </tr>
 
                 <tr>

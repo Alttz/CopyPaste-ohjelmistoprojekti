@@ -121,6 +121,19 @@
         WinPrint.close();
     }
 
+    const formattedPurchaseDate = (dateString) => {
+    let date = new Date(dateString);
+    date.setHours(date.getHours() + 3); // Adding 3 hours
+    const formattedDate = date.toLocaleString('fi-FI', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    return formattedDate.replace(' ', ' klo '); // Insert "klo" between date and time
+};
+
 
 </script>
 
@@ -140,7 +153,7 @@
         <tbody>
             <template v-for="item in response_items.successfulPurchases">
                 <tr v-for="ticket in item.tickets" @click="enlargeTicket(ticket)">
-                    <td>{{item.purchaseDate}}</td>
+                    <td>{{ formattedPurchaseDate(item.purchaseDate) }}</td>
                     <td>{{events[ticket.ticketType.event].name}}</td>
                     <td>{{item.appUser.username}}</td>
                     <td>{{ticket.ticketType.name}}</td>
