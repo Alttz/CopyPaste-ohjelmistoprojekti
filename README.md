@@ -131,24 +131,57 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 ## Tekninen kuvaus
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
+### Järjestelmän komponentit
+Järjestelmä koostuu Frontend-, Backend- ja Tietokantakomponentista:
 
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+**Frontend-komponentti:** On toteutettu Vue.js:llä, joka on moderni JavaScript ohjelmistokehys. Vue.js soveltui projektiin
+erinomaisesti helppokäyttöisyydensä ja tehokkuudensa ansiosta. Frontend kommunikoi backendin kanssa REST-rajapinnan 
+kautta. Projektin käyttöliittymä on deployattu GitHub pagesiin ja ajetaan käyttäjän selaimen kautta.
 
-Tämän lisäksi
+**Backend-komponentti:** Backend on toteutettu käyttäen Javan Spring Boot ohjelmistokehystä. Komponentti ajetaan Rahdin 
+pilvipalvelimella. Kommunikaatio tapahtuu REST-rajapinnan kautta.
 
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
+**Tietokantakomponentti:** Projekti käyttää MariaDB:tä tietokantana ja tietokanta pyörii Rahdin pilvipalvelimella.
+
+<img src="assets\images\järjestelmän tietovirta.png" alt="Tietovirtakaavio" style="height: 600px;"/>
+
+### Rajapinta
+
+Projektin API-rajapintana on käytetty projektia varten tehtyä RESTful API:a. Rajapinta mahdollistaa tietojen hallinnan
+sovelluksessa. Rajapinta tarjoaa toiminnallisuuden muokata, hakea sekä poistaa tapahtumatietoja. Rajapinta palauttaa 
+dataa JSON-muodossa. Ohessa esimerkkejä erilaisista pyyntötyypeistä ja -reiteistä joita rajapinta tarjoaa.
+
+
+
+- **Hae kaikki tapahtumat**: `GET /api/events`
+- **Hae tapahtuma ID:n perusteella**: `GET /api/events/1`
+- **Hae tapahtumia nimen perusteella**: `GET /api/events/byName?name=Lordi`
+- **Hae tapahtumia kaupungin perusteella**: `GET /api/events/byCity?city=Helsinki`
+- **Hae kaikki liput**: `GET /api/tickets`
+- **Hae lippu ID:n perusteella**: `GET /api/tickets/1`
+- **Hae lippu UUID:n perusteella**: `GET /api/tickets/byUuid?uuid=a93af710-cb1f-4945-a108-2d3f5e7a4352`
+- **Merkitse lippu käytetyksi**: `PATCH /api/tickets/markAsUsed?uuid=a93af710-cb1f-4945-a108-2d3f5e7a4352`
+- **Hae kaikki ostotapahtumat**: `GET /api/purchases`
+- **Lisää tapahtuma**: `POST /api/events`
+- **Lisää lipputyypit tapahtumaan**: `POST /api/events/5/tickettypes`
+- **Lisää ostotapahtuma ja luo liput**: `POST /api/purchases`
+- **Päivitä tapahtumaa**: `PUT /api/events/5`
+- **Päivitä tapahtuman lipputyypit**: `PUT /api/events/5/tickettypes`
+- **Päivitä tapahtuma**: `DELETE /api/delete/5`
+
+Tarkempi rajapintadokumentaatio esimerkkisyötteiden ja esimerkkivastausten kanssa löytyy [täältä](api_dokumentaatio.md).
+
+### Turvallisuus
+Projektin keskeinen turvallisuusratkaisu on tokenpohjainen autentikaatio. Autentikointiprosessissa käyttäjä lähettää
+kirjautumispyynnön käyttäjätunnuksella ja salasanalla. Onnistuneessa sisäänkirjautumistilanteessa palvelin luo ja 
+palauttaa käyttäjälle tokenin jota käytetään kaikissa autentikaatiota tarvitsevissa tilanteissa. Käyttäjä lähettää 
+tokenin jokaisessa pyynnössä ja palvelin tarkastaa tokenin aitouiden ja validoi sisällön. Jos tiedot ovat ok, palvelin
+antaa pääsyn pyydettyihin resursseihin. Vanhentuneen tokenin voi uusia kirjautumalla uudelleen onnistuneesti sisään.
+
+Esimerkiksi tapahtumia voi muokkaa vain sisäänkirjautunut käyttäjä jolla on oikeudet ja validi token kutsujen
+lähettämiseen.
+
+
 
 ## Testaus
 
