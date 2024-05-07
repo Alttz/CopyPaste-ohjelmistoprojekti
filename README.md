@@ -10,7 +10,7 @@ Projektin lopputuloksena pyritään tuottamaan järjestelmä, joka toteuttaa lip
 
 Päätelaitteina toimivat lipputoimiston tietokoneet.
 
-Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä MySQLia.
+Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä MariaDB:tä.
 
 ## Järjestelmän määrittely
 
@@ -47,13 +47,10 @@ Lipunmyyjänä haluan:
 - *kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
 - *Vaaditut toiminnot:*
     - Lipun ostaminen verkkokaupasta
-    - Tietojen tallentaminen profiiliin
-    - Aiempien ostojen tarkastelu <br/>
+    <br/>
 
 Asiakkaana haluan:
 - *Ostaa lippuja verkkokaupasta, valita lipputyypin ja suorittaa maksutapahtuman.*
-- *Tallentaa tietoni profiiliin, jotta voin tehdä tulevia ostoksia kätevämmin.*
-- *Tarkastella aiempia ostoksiani ja saada tietoa eri tapahtumista.*
 
 ## Käyttöliittymä
 
@@ -211,23 +208,70 @@ Tarkemmat testien selitykset löytyvät [täältä](testien_selitykset.md) ja te
 
 ## Asennustiedot
 
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
 
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
+Järjestelmän kehitysympäristön asentaminen toiseen koneeseen:
 
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
+- Asenna haluamasi kehitysympäristö (esim. IntelliJ IDEA, VSCode jne.)
+- Asenna MariaDB
+- Kloonaa projektin Git-repositorio
+- Avaa projekti kehitysympäristössä ja varmista konfiguraatiot
 
-Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
-käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
-käyttäjätunnus, salasana, tietokannan luonti yms.).
+Spring Boot-projektin asentaminen:
+
+- Käynnistä tietokantapalvelin ja varmista että tietokanta on käytettävissä
+- Käynnistä Spring Boot-sovellus kehitysympäristöstä
+
+
+
+
+Järjestelmän asentaminen tuotantoympäristöön:
+
+- Luo tarvittavat palvelimet ja asenna tarvittavat ohjelmistot (JDK, tietokanta jne.)
+- Siirrä ohjelmistokoodi tuotantoympäristöön Gitillä.
+- Luo tietokantaan tarvittavat käyttäjät, salasanat ja oikeudet.
+- Konfiguroi Spring Boot -projektiin tietokannan yhteysasetukset
+- Aseta tarvittavat ympäristömuuttujat tai konfiguraatiot
+   
+
 
 ## Käynnistys- ja käyttöohje
 
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
+Käynnistys:
+- Navigoi sivulle https://alttz.github.io/CopyPaste-ohjelmistoprojekti/
+- Kirjaudu sisään default käyttäjällä (käyttäjätunnus: admin , salasana: adminpass)
 
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
+Käyttöohje:
+
+Kirjaudu sisään
+
+<img src="assets\images\kirjautumisnäkymä.png" alt="Kirjautumisnäkymä"/>
+
+Hallintanäkymä
+
+<img src="assets\images\tapahtumienhallinta.png" alt="Hallintanäkymä"/>
+
+Tapahtuman muokkaus
+
+<img src="assets\images\tapahtumanmuokkaus.png" alt="Tapahtuman muokkaus"/>
+
+Lipputyyppien muokkaus
+
+<img src="assets\images\lipputyypit-muokkaus.png" alt="Lipputyyppien muokkaus"/>
+
+Tapahtuman lisääminen
+
+<img src="assets\images\uusitapahtuma.png" alt="Lisää uusi tapahtuma"/>
+
+Lipun osto
+
+<img src="assets\images\lipunostonäkymäesimerkillä.png" alt="Lipun osto"/>
+
+Onnistunut lipun osto
+
+<img src="assets\images\onnistunutosto.png" alt="Onnistunut lipun osto"/>
+
+Lipun tarkastus
+
+<img src="assets\images\tapahtumienhallinta.png" alt="Lipun tarkastus"/>
+
+
