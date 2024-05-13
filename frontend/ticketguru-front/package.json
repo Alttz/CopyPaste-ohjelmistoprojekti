@@ -3,18 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "homepage": "https://Alttz.github.io/CopyPaste-ohjelmistoprojekti/",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build",
     "preview": "vite preview",
-    "build-only": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "copy index.html 404.html && gh-pages -d dist",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^8.5.1",
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
+    "qrcode.vue": "^3.4.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
@@ -29,6 +33,7 @@
     "@vue/tsconfig": "^0.5.1",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
+    "gh-pages": "^6.1.1",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.0.3",
     "typescript": "~5.4.0",

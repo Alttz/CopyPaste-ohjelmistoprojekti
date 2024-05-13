@@ -16,8 +16,8 @@ const newTicketType = ref({
 onMounted(async () => {
     const eventId = route.params.id;
     try {
-        const eventData = await Http.get(`/events/${eventId}`);
-        event.value = eventData;
+        const response = await Http.get(`/events/${eventId}`);
+        event.value = response[0];
     } catch (error) {
         console.error('Failed to fetch event details:', error);
     }
@@ -107,7 +107,7 @@ function backToEventList() {
     <div>
         <br>
         <button @click="backToEventList">Takaisin</button>
-        <h1>Lipputyypit | {{ event?.name }}</h1>
+        <h3>Lipputyypit | {{ event?.name }}</h3>
         <table class="table" v-if="event && event.ticketTypes && event.ticketTypes.length > 0">
             <thead>
                 <tr>
@@ -155,3 +155,13 @@ function backToEventList() {
 
     </div>
 </template>
+
+<style scoped>
+input {
+    margin: 3px;
+}
+
+button {
+	margin: 3px;
+}
+</style>

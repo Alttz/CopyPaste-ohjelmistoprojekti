@@ -10,7 +10,7 @@ Projektin lopputuloksena pyritään tuottamaan järjestelmä, joka toteuttaa lip
 
 Päätelaitteina toimivat lipputoimiston tietokoneet.
 
-Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä MySQLia.
+Palvelinteknologiana käytetään Spring Bootia ja tietokantajärjestelmänä MariaDB:tä.
 
 ## Järjestelmän määrittely
 
@@ -47,13 +47,10 @@ Lipunmyyjänä haluan:
 - *kuvaus:* Ostaa lippuja myyntipisteistä sekä verkkokaupasta ja osallistuu tapahtumiin.
 - *Vaaditut toiminnot:*
     - Lipun ostaminen verkkokaupasta
-    - Tietojen tallentaminen profiiliin
-    - Aiempien ostojen tarkastelu <br/>
+    <br/>
 
 Asiakkaana haluan:
 - *Ostaa lippuja verkkokaupasta, valita lipputyypin ja suorittaa maksutapahtuman.*
-- *Tallentaa tietoni profiiliin, jotta voin tehdä tulevia ostoksia kätevämmin.*
-- *Tarkastella aiempia ostoksiani ja saada tietoa eri tapahtumista.*
 
 ## Käyttöliittymä
 
@@ -61,6 +58,39 @@ Ohessa yksinkertainen kuvaus lipunmyyntijärjestelmän käyttöliittymäkaaviost
 
 <img src="assets\images\Use_case_model.png" alt="Käyttöliittymäkaavio" style="height: 600px;"/>
 
+#### Kuvia käyttöliittymästä
+
+Kirjaudu sisään
+
+<img src="assets\images\kirjautumisnäkymä.png" alt="Kirjautumisnäkymä"/>
+
+Hallintanäkymä
+
+<img src="assets\images\tapahtumienhallinta.png" alt="Hallintanäkymä"/>
+
+Tapahtuman muokkaus
+
+<img src="assets\images\tapahtumanmuokkaus.png" alt="Tapahtuman muokkaus"/>
+
+Lipputyyppien muokkaus
+
+<img src="assets\images\lipputyypit-muokkaus.png" alt="Lipputyyppien muokkaus"/>
+
+Tapahtuman lisääminen
+
+<img src="assets\images\uusitapahtuma.png" alt="Lisää uusi tapahtuma"/>
+
+Lipun osto
+
+<img src="assets\images\lipunostonäkymäesimerkillä.png" alt="Lipun osto"/>
+
+Onnistunut lipun osto
+
+<img src="assets\images\onnistunutosto.png" alt="Onnistunut lipun osto"/>
+
+Lipun tarkastus
+
+<img src="assets\images\tapahtumienhallinta.png" alt="Lipun tarkastus"/>
 ## Tietokanta
 
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
@@ -131,53 +161,116 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 ## Tekninen kuvaus
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
+### Järjestelmän komponentit
+Järjestelmä koostuu Frontend-, Backend- ja Tietokantakomponentista:
 
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+**Frontend-komponentti:** On toteutettu Vue.js:llä, joka on moderni JavaScript ohjelmistokehys. Vue.js soveltui projektiin
+erinomaisesti helppokäyttöisyydensä ja tehokkuudensa ansiosta. Frontend kommunikoi backendin kanssa REST-rajapinnan 
+kautta. Projektin käyttöliittymä on deployattu GitHub pagesiin ja ajetaan käyttäjän selaimen kautta.
 
-Tämän lisäksi
+**Backend-komponentti:** Backend on toteutettu käyttäen Javan Spring Boot ohjelmistokehystä. Komponentti ajetaan Rahdin 
+pilvipalvelimella. Kommunikaatio tapahtuu REST-rajapinnan kautta.
 
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
+**Tietokantakomponentti:** Projekti käyttää MariaDB:tä tietokantana ja tietokanta pyörii Rahdin pilvipalvelimella.
+
+<img src="assets\images\järjestelmän tietovirta.png" alt="Tietovirtakaavio" style="height: 600px;"/>
+
+### Rajapinta
+
+Projektin API-rajapintana on käytetty projektia varten tehtyä RESTful API:a. Rajapinta mahdollistaa tietojen hallinnan
+sovelluksessa. Rajapinta tarjoaa toiminnallisuuden muokata, hakea sekä poistaa tapahtumatietoja. Rajapinta palauttaa 
+dataa JSON-muodossa. Ohessa esimerkkejä erilaisista pyyntötyypeistä ja -reiteistä joita rajapinta tarjoaa.
+
+
+
+- **Hae kaikki tapahtumat**: `GET /api/events`
+- **Hae tapahtuma ID:n perusteella**: `GET /api/events/1`
+- **Hae tapahtumia nimen perusteella**: `GET /api/events/byName?name=Lordi`
+- **Hae tapahtumia kaupungin perusteella**: `GET /api/events/byCity?city=Helsinki`
+- **Hae kaikki liput**: `GET /api/tickets`
+- **Hae lippu ID:n perusteella**: `GET /api/tickets/1`
+- **Hae lippu UUID:n perusteella**: `GET /api/tickets/byUuid?uuid=a93af710-cb1f-4945-a108-2d3f5e7a4352`
+- **Merkitse lippu käytetyksi**: `PATCH /api/tickets/markAsUsed?uuid=a93af710-cb1f-4945-a108-2d3f5e7a4352`
+- **Hae kaikki ostotapahtumat**: `GET /api/purchases`
+- **Lisää tapahtuma**: `POST /api/events`
+- **Lisää lipputyypit tapahtumaan**: `POST /api/events/5/tickettypes`
+- **Lisää ostotapahtuma ja luo liput**: `POST /api/purchases`
+- **Päivitä tapahtumaa**: `PUT /api/events/5`
+- **Päivitä tapahtuman lipputyypit**: `PUT /api/events/5/tickettypes`
+- **Päivitä tapahtuma**: `DELETE /api/delete/5`
+
+Tarkempi rajapintadokumentaatio esimerkkisyötteiden ja esimerkkivastausten kanssa löytyy [täältä](api_dokumentaatio.md).
+
+### Turvallisuus
+Projektin keskeinen turvallisuusratkaisu on tokenpohjainen autentikaatio. Autentikointiprosessissa käyttäjä lähettää
+kirjautumispyynnön käyttäjätunnuksella ja salasanalla. Onnistuneessa sisäänkirjautumistilanteessa palvelin luo ja 
+palauttaa käyttäjälle tokenin jota käytetään kaikissa autentikaatiota tarvitsevissa tilanteissa. Käyttäjä lähettää 
+tokenin jokaisessa pyynnössä ja palvelin tarkastaa tokenin aitouiden ja validoi sisällön. Jos tiedot ovat ok, palvelin
+antaa pääsyn pyydettyihin resursseihin. Vanhentuneen tokenin voi uusia kirjautumalla uudelleen onnistuneesti sisään.
+
+Esimerkiksi tapahtumia voi muokkaa vain sisäänkirjautunut käyttäjä jolla on oikeudet ja validi token kutsujen
+lähettämiseen.
+
+
 
 ## Testaus
 
-Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
-testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
-Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
-erillisiin dokumentteihin.
+Projektin aikana suoritettiin kattava testausprosessi varmistaakseen ohjelmiston oikea toiminta ja tulosten laatu. Testaus
+jaettiin eri tasoihin ja vaiheisiin, joista jokainen keskittyy tiettyyn osa-alueeseen sovelluksessa.
+Esimerkkejä:
 
-Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
+**Yksikkötestit:**
+        EventRepository-luokka: Testaa findById-metodin toiminnallisuutta.
+
+**API-testit:**
+        Käyttäjän authorisointi: Testaa käyttäjän autentikoinnin APIin ja virheidenkäsittelyn toimivuutta.
+        EventApiTests-luokka: Testaa HTTP-pyyntöjen käsittelyä API:ssa.
+
+**End-to-End -testit:**
+        Koko sovelluksen toiminnan simulointi: Simuloi sovelluksen prosessin alusta loppuun.
+
+**Testien tarkoitus:**
+
+Yksikkötestit varmistavat yksittäisten komponenttien toiminnan.
+API-testit testaavat API-rajapintojen toimintaa ja autentikointia.
+End-to-End -testit tarkastavat sovelluksen kokonaisuuden toiminnan.
+
+Tarkemmat testien selitykset löytyvät [täältä](testien_selitykset.md) ja testausraportti [täältä](testausraportti.md).
+
+
 
 ## Asennustiedot
 
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
 
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
+Järjestelmän kehitysympäristön asentaminen toiseen koneeseen:
 
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
+- Asenna haluamasi kehitysympäristö (esim. IntelliJ IDEA, VSCode jne.)
+- Asenna MariaDB
+- Kloonaa projektin Git-repositorio
+- Avaa projekti kehitysympäristössä ja varmista konfiguraatiot
 
-Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
-käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
-käyttäjätunnus, salasana, tietokannan luonti yms.).
+Spring Boot-projektin asentaminen:
+
+- Käynnistä tietokantapalvelin ja varmista että tietokanta on käytettävissä
+- Käynnistä Spring Boot-sovellus kehitysympäristöstä
+
+
+
+
+Järjestelmän asentaminen tuotantoympäristöön:
+
+- Luo tarvittavat palvelimet ja asenna tarvittavat ohjelmistot (JDK, tietokanta jne.)
+- Siirrä ohjelmistokoodi tuotantoympäristöön Gitillä.
+- Luo tietokantaan tarvittavat käyttäjät, salasanat ja oikeudet.
+- Konfiguroi Spring Boot -projektiin tietokannan yhteysasetukset
+- Aseta tarvittavat ympäristömuuttujat tai konfiguraatiot
+   
+
 
 ## Käynnistys- ja käyttöohje
 
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
+Käynnistys:
+- Navigoi sivulle https://alttz.github.io/CopyPaste-ohjelmistoprojekti/
+- Kirjaudu sisään default käyttäjällä (käyttäjätunnus: admin , salasana: adminpass)
 
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
+

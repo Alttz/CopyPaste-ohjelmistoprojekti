@@ -12,6 +12,10 @@ export class Http {
 
 	private static token: string | null = localStorage.getItem("token");
 
+	static isAuthenticated() {
+		return this.token !== null && this.checkTokenValidity(this.token);
+	  }
+	
 
 	static checkTokenValidity(passed_token:string) {
 		try {
@@ -41,7 +45,6 @@ export class Http {
 		this.token = passed_token
 	}
 
-
 	/*
 	static setCredentials(username: string, password: string) {
 		this.token = btoa(username + ':' + password);  // Encode credentials only once
@@ -50,9 +53,7 @@ export class Http {
 
 	static async get(url: string) {
 		try {
-			const response = await axios.get(this.apiurl + url, {
-				headers: this.getAuthHeader(),
-			});
+			const response = await axios.get(this.apiurl + url, { headers: this.getAuthHeader(),});
 			return response.data;
 		} catch (error) {
 			// Handle error
@@ -69,6 +70,18 @@ export class Http {
 		} catch (error) {
 			// Handle error
 			console.error("POST request failed:", error);
+			throw error;
+		}
+	}
+
+	static async put(url: string, data: any) {
+		const authHeader = this.getAuthHeader();
+		try {
+			const response = await axios.put(this.apiurl + url, data, { headers: authHeader });
+			return response.data;
+		} catch (error) {
+			// Handle error
+			console.error("PUT request failed:", error);
 			throw error;
 		}
 	}

@@ -6,24 +6,24 @@ import { Http,} from '@/http/http';
 import router from '@/router';
 import { type Ref, ref } from 'vue';
 
-Http.setToken("user has logged out")
-localStorage.clear()
+localStorage.clear();
+  Http.setToken("user has logged out");
 
 function goToLogin() {
     router.push({ name: 'login' });
 }
-
 
 </script>
 
 <template>
 
     <div>
-        <p>You have been logged out</p>
+        <p>Sinut on kirjattu ulos</p>
         <button @click="goToLogin">Kirjaudu sisään</button>
     </div>
 
 </template>
+
 
 
 <style scoped>
