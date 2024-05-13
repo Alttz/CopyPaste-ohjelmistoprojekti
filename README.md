@@ -58,6 +58,39 @@ Ohessa yksinkertainen kuvaus lipunmyyntijärjestelmän käyttöliittymäkaaviost
 
 <img src="assets\images\Use_case_model.png" alt="Käyttöliittymäkaavio" style="height: 600px;"/>
 
+#### Kuvia käyttöliittymästä
+
+Kirjaudu sisään
+
+<img src="assets\images\kirjautumisnäkymä.png" alt="Kirjautumisnäkymä"/>
+
+Hallintanäkymä
+
+<img src="assets\images\tapahtumienhallinta.png" alt="Hallintanäkymä"/>
+
+Tapahtuman muokkaus
+
+<img src="assets\images\tapahtumanmuokkaus.png" alt="Tapahtuman muokkaus"/>
+
+Lipputyyppien muokkaus
+
+<img src="assets\images\lipputyypit-muokkaus.png" alt="Lipputyyppien muokkaus"/>
+
+Tapahtuman lisääminen
+
+<img src="assets\images\uusitapahtuma.png" alt="Lisää uusi tapahtuma"/>
+
+Lipun osto
+
+<img src="assets\images\lipunostonäkymäesimerkillä.png" alt="Lipun osto"/>
+
+Onnistunut lipun osto
+
+<img src="assets\images\onnistunutosto.png" alt="Onnistunut lipun osto"/>
+
+Lipun tarkastus
+
+<img src="assets\images\tapahtumienhallinta.png" alt="Lipun tarkastus"/>
 ## Tietokanta
 
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
@@ -239,39 +272,5 @@ Järjestelmän asentaminen tuotantoympäristöön:
 Käynnistys:
 - Navigoi sivulle https://alttz.github.io/CopyPaste-ohjelmistoprojekti/
 - Kirjaudu sisään default käyttäjällä (käyttäjätunnus: admin , salasana: adminpass)
-
-Käyttöohje:
-
-Kirjaudu sisään
-
-<img src="assets\images\kirjautumisnäkymä.png" alt="Kirjautumisnäkymä"/>
-
-Hallintanäkymä
-
-<img src="assets\images\tapahtumienhallinta.png" alt="Hallintanäkymä"/>
-
-Tapahtuman muokkaus
-
-<img src="assets\images\tapahtumanmuokkaus.png" alt="Tapahtuman muokkaus"/>
-
-Lipputyyppien muokkaus
-
-<img src="assets\images\lipputyypit-muokkaus.png" alt="Lipputyyppien muokkaus"/>
-
-Tapahtuman lisääminen
-
-<img src="assets\images\uusitapahtuma.png" alt="Lisää uusi tapahtuma"/>
-
-Lipun osto
-
-<img src="assets\images\lipunostonäkymäesimerkillä.png" alt="Lipun osto"/>
-
-Onnistunut lipun osto
-
-<img src="assets\images\onnistunutosto.png" alt="Onnistunut lipun osto"/>
-
-Lipun tarkastus
-
-<img src="assets\images\tapahtumienhallinta.png" alt="Lipun tarkastus"/>
 
 
